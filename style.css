@@ -566,7 +566,7 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 }
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:22px;border-top:1px solid var(--stroke)}
 
-/* ---------- UPDATE LOG MODAL (single unified panel) ---------- */
+/* ---------- UPDATE LOG MODAL ---------- */
 .modal-panel-update{max-width:720px}
 
 .update-head{
@@ -598,9 +598,11 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   font-variant-numeric:tabular-nums;
 }
 .update-items{padding:8px 0}
+
+/* Đường kẻ phân cách giữa các item — đậm hơn để luôn thấy rõ */
 .update-item{
   padding:14px 18px;
-  border-top:1px solid rgba(255,255,255,.05);
+  border-top:1px solid rgba(255,255,255,.12);
 }
 .update-item:first-child{border-top:0}
 .update-item h3{
@@ -616,21 +618,26 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   color:#e6e0ff;border-radius:7px;
 }
 
-/* Snooze checkbox — thin divider style */
+/* Footer: checkbox bên trái + nút Okay bên phải */
+.update-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-top:18px;padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+
 .update-snooze{
-  display:flex;align-items:flex-start;gap:10px;
-  margin-top:0;padding:16px 4px 4px;
-  border-top:1px solid rgba(255,255,255,.08);
-  background:transparent;
+  display:flex;align-items:center;gap:10px;
+  background:transparent;border:0;padding:0;
   cursor:pointer;user-select:none;
   transition:color .2s ease;
+  flex:1;min-width:0;
 }
 .update-snooze:hover span{color:var(--text)}
 .update-snooze input[type="checkbox"]{
   appearance:none;-webkit-appearance:none;
   width:20px;height:20px;border-radius:6px;flex-shrink:0;
   background:rgba(0,0,0,.3);border:1.5px solid var(--stroke-2);
-  cursor:pointer;position:relative;margin-top:1px;
+  cursor:pointer;position:relative;
   transition:background .2s ease,border-color .2s ease;
 }
 .update-snooze input[type="checkbox"]:checked{
@@ -644,6 +651,25 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 }
 .update-snooze span{font-size:13.5px;color:var(--muted);line-height:1.5}
 .update-snooze input:focus-visible + span{color:var(--text)}
+
+/* Nút Okay màu trắng */
+.btn-okay{
+  appearance:none;
+  padding:10px 28px;border-radius:12px;
+  font-size:14.5px;font-weight:700;letter-spacing:-.01em;
+  color:#0a0a12;
+  background:linear-gradient(160deg,#ffffff,#e6e6ee);
+  border:0;
+  box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:transform .18s cubic-bezier(.34,1.3,.5,1),box-shadow .18s ease,background .18s ease;
+  cursor:pointer;flex-shrink:0;
+}
+.btn-okay:hover{
+  background:linear-gradient(160deg,#ffffff,#f0f0f7);
+  box-shadow:0 8px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.btn-okay:active{transform:scale(.96)}
+.btn-okay:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
 
 /* ---------- SCROLL REVEAL ---------- */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
@@ -683,6 +709,8 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   .search-bar{padding-left:14px}
   .discord-preview{padding:16px}
   .dc-embed{padding:16px}
+  .update-footer{flex-direction:column;align-items:stretch}
+  .btn-okay{width:100%}
 }
 @media (max-width:360px){
   .hero-stats{grid-template-columns:1fr}
