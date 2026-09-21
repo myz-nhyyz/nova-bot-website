@@ -1,7 +1,8 @@
 /* ============================================================
    NOVA — script.js
-   Language, sticky nav, Update Log, feature modals, command
-   search, Help preview, unified Slash/Prefix commands.
+   Language, sticky nav, auto Update Log with 24h snooze,
+   feature modals, command search, Help preview, unified
+   Slash/Prefix commands, temporary NEW badge logic.
    ============================================================ */
 'use strict';
 
@@ -18,7 +19,7 @@ const CONFIG = {
 };
 
 const LS_LANG = 'nova-lang';
-const LS_UPDATE_SEEN = 'nova_update_log_seen';
+const LS_SNOOZE = 'nova_update_log_snooze_until';
 
 const FALLBACK_AVATAR =
   "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
@@ -45,10 +46,8 @@ const I18N = {
     "nav.privacy": "Privacy",
     "nav.terms": "Terms",
     "nav.invite": "Mời Nova",
-    "nav.updates": "Cập nhật",
-    "nav.updatesLabel": "Cập nhật",
     "hero.badge": "AI Discord Bot · Qwen3.7-max",
-    "hero.sub": "Bot Discord thông minh cho AI, kiểm duyệt, điều phối War/Backup, sự kiện, bảo vệ Ban Zone, thông tin server và các công cụ riêng cho từng server.",
+    "hero.sub": "Bot Discord thông minh cho AI chat, tạo ảnh AI, kiểm duyệt, điều phối War/Backup, sự kiện, bảo vệ Ban Zone, thông tin server và các công cụ riêng cho từng server.",
     "hero.invite": "Mời Nova",
     "hero.support": "Tham gia Support Server",
     "hero.explore": "Khám phá tính năng",
@@ -74,9 +73,6 @@ const I18N = {
     "commands.type.prefix": "PREFIX",
     "commands.type.both": "SLASH/PREFIX",
     "commands.type.button": "BUTTON",
-    "new.vi": "✨ MỚI",
-    "new.en": "✨ NEW",
-    "new.short": "MỚI",
     "help.kicker": "Help",
     "help.title": "Xem trước Help Menu",
     "help.sub": "Đây là bản xem trước tương tác của Help Menu thật trong Discord. Chọn một nhóm bên dưới để xem nội dung.",
@@ -93,7 +89,7 @@ const I18N = {
     "help.tip1": "Dùng <code>/</code> để xem toàn bộ slash command của Nova.",
     "help.tip2": "Dùng tiền tố <code>!</code> cho các lệnh prefix như <code>!chat</code>, <code>!info</code>, <code>!help</code>.",
     "help.tip3": "Mỗi server có thể đặt prefix riêng bằng <code>!prefix &lt;ký tự&gt;</code>.",
-    "help.notFound": "Không tìm thấy tính năng này. Hãy thử: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo.",
+    "help.notFound": "Không tìm thấy tính năng này. Hãy thử: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo, bandebug, trust.",
     "footer.owned": "Được phát triển và duy trì bởi <strong>nova_.inovation</strong>.",
     "footer.model": "Mô hình AI công khai",
     "footer.links": "Liên kết",
@@ -120,10 +116,10 @@ const I18N = {
     "privacy.lead": "Tài liệu này giải thích Nova xử lý những dữ liệu nào khi bạn sử dụng bot, vì sao cần thiết và bạn có những quyền gì.",
     "terms.title": "Điều khoản dịch vụ",
     "terms.lead": "Khi mời Nova vào server hoặc sử dụng bất kỳ tính năng nào của bot, bạn đồng ý với các điều khoản dưới đây.",
-    "update.title": "✨ Nhật ký cập nhật",
     "update.sub": "Tính năng mới trong Nova",
-    "update.version": "Mới nhất",
-    "update.reopen": "Xem cập nhật"
+    "update.snoozeLabel": "Tắt bảng này trong 24 giờ",
+    "new.vi": "✨ MỚI",
+    "new.en": "✨ NEW"
   },
   en: {
     "meta.title": "Nova — AI Discord Bot",
@@ -135,10 +131,8 @@ const I18N = {
     "nav.privacy": "Privacy",
     "nav.terms": "Terms",
     "nav.invite": "Invite Nova",
-    "nav.updates": "Updates",
-    "nav.updatesLabel": "Updates",
     "hero.badge": "AI Discord Bot · Qwen3.7-max",
-    "hero.sub": "An intelligent Discord bot for AI, moderation, War/Backup coordination, Events, Ban Zone protection, server information, and server-specific tools.",
+    "hero.sub": "An intelligent Discord bot for AI chat, AI image generation, moderation, War/Backup coordination, Events, Ban Zone protection, server information, and server-specific tools.",
     "hero.invite": "Invite Nova",
     "hero.support": "Join Support Server",
     "hero.explore": "Explore Features",
@@ -164,9 +158,6 @@ const I18N = {
     "commands.type.prefix": "PREFIX",
     "commands.type.both": "SLASH/PREFIX",
     "commands.type.button": "BUTTON",
-    "new.vi": "✨ MỚI",
-    "new.en": "✨ NEW",
-    "new.short": "NEW",
     "help.kicker": "Help",
     "help.title": "Help Menu preview",
     "help.sub": "This is an interactive preview of the bot's real Help Menu in Discord. Pick a category below to see its content.",
@@ -183,7 +174,7 @@ const I18N = {
     "help.tip1": "Use <code>/</code> to browse all of Nova's slash commands.",
     "help.tip2": "Use the <code>!</code> prefix for prefix commands like <code>!chat</code>, <code>!info</code>, <code>!help</code>.",
     "help.tip3": "Each server can set its own prefix with <code>!prefix &lt;char&gt;</code>.",
-    "help.notFound": "Feature not found. Try: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo.",
+    "help.notFound": "Feature not found. Try: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo, bandebug, trust.",
     "footer.owned": "Owned and maintained by <strong>nova_.inovation</strong>.",
     "footer.model": "Public AI model",
     "footer.links": "Links",
@@ -210,55 +201,155 @@ const I18N = {
     "privacy.lead": "This document explains what data Nova processes when you use the bot, why it is needed, and what rights you have.",
     "terms.title": "Terms of Service",
     "terms.lead": "By inviting Nova to your server or using any of its features, you agree to the terms below.",
-    "update.title": "✨ Update Log",
     "update.sub": "What’s new in Nova",
-    "update.version": "Latest",
-    "update.reopen": "View updates"
+    "update.snoozeLabel": "Don't show this again for 24 hours",
+    "new.vi": "✨ MỚI",
+    "new.en": "✨ NEW"
   }
 };
 
 /* ============================================================
-   UPDATE LOG DATA MODEL
+   UPDATE LOG — single unified panel
+   isCurrent === true  → shows ✨ NEW / ✨ MỚI
+   isCurrent === false → historical (no NEW badge)
    ============================================================ */
 const UPDATE_LOG = [
   {
+    id: "UPDATE 01",
     date: "19/09/2026",
-    version: "Latest",
-    new: true,
     items: [
+      /* ---- Historical items (no NEW badge) ---- */
       {
         icon: "ℹ️",
-        new: true,
+        isCurrent: false,
         title: {
           vi: "!info — Thông tin bot",
           en: "!info — Bot Information"
         },
         description: {
-          vi: "`!info` là bản prefix mới của `/info`. Nó hiển thị cùng bảng thông tin bot như `/info`, bao gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, thông tin Ban Zone, kênh Help, số lượng lệnh, thông tin server hiện tại, chủ server, thông tin vai trò của bot và quyền của bot.",
-          en: "`!info` is the new prefix version of `/info`. It displays the same bot information panel as `/info`, including: bot information, uptime, latency, Python version, discord.py version, server count, user count, channel count, AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone information, Help channel, command counts, current server information, server owner, bot role information and bot permissions."
+          vi: "`!info` là bản prefix của `/info`. Cả hai hiển thị cùng một bảng thông tin bot, gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, Ban Zone, Help Channel, số lượng lệnh, thông tin server hiện tại, chủ server, vai trò của bot và quyền của bot.",
+          en: "`!info` is the prefix version of `/info`. Both display the same bot information panel, including: bot information, uptime, latency, Python version, discord.py version, server count, user count, channel count, AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone, Help Channel, command counts, current server information, server owner, bot role and bot permissions."
         },
-        footnote: {
-          vi: "`/info` và `!info` cung cấp cùng một bảng thông tin.",
-          en: "`/info` and `!info` provide the same information panel."
-        },
-        commands: ["!info", "/info"]
+        commands: ["/info • !info"]
       },
       {
         icon: "🔧",
-        new: true,
+        isCurrent: false,
         title: {
           vi: "Prefix riêng cho từng server",
           en: "Custom Server Prefix"
         },
         description: {
-          vi: "Nova giờ đây hỗ trợ prefix riêng cho từng server Discord. Prefix mặc định là `!`. Quản trị viên server có thể đổi bằng `!prefix ?`. Sau đó `?chat`, `?info`, `?help`, `?image` sẽ hoạt động trong server đó. Một server khác vẫn có thể dùng `!` hoặc `.`. Prefix được lưu độc lập theo từng server và không ảnh hưởng lẫn nhau. DM vẫn dùng mặc định `!`.",
-          en: "Nova now supports a custom command prefix for each Discord server. The default prefix is `!`. A server administrator/manager can change it using `!prefix ?`. After that, `?chat`, `?info`, `?help`, `?image` will work in that server. Another server can still use `!` or `.`. The prefix is stored independently per Guild/Server and does not affect another server. DM uses the default `!`."
+          vi: "Prefix mặc định là `!`. Quản trị viên server đổi bằng `!prefix ?` → sau đó dùng `?chat`, `?info`, `?help`, `?image`. Server khác có thể dùng `!prefix .` → `.chat`, `.info`, `.help`. Prefix được lưu độc lập theo từng Guild, đổi ở server này không ảnh hưởng server khác. DM vẫn dùng `!`. Lệnh này KHÔNG chỉ dành cho chủ bot — cần quyền Administrator / Manage Server / Manage Channels.",
+          en: "Default prefix is `!`. A server admin changes it with `!prefix ?` → then use `?chat`, `?info`, `?help`, `?image`. Another server can use `!prefix .` → `.chat`, `.info`, `.help`. Prefix is stored independently per Guild; changing one server does not affect another. DM keeps using `!`. This command is NOT bot-owner-only — requires Administrator / Manage Server / Manage Channels."
         },
-        footnote: {
-          vi: "Lệnh này KHÔNG chỉ dành cho chủ bot. Người dùng có quyền quản lý server (Administrator / Manage Server / Manage Channels) đều có thể dùng. Quyền thuộc về server Discord, không phải chủ bot.",
-          en: "This command is NOT bot-owner-only. It can be used by users with appropriate server management permissions (Administrator / Manage Server / Manage Channels). The permission belongs to the Discord server, not the bot owner."
+        commands: ["!prefix"]
+      },
+
+      /* ---- Current (NEW) items ---- */
+      {
+        icon: "🤖",
+        isCurrent: true,
+        title: {
+          vi: "AI Channel Toggle",
+          en: "AI Channel Toggle"
         },
-        commands: ["!prefix ?", "!prefix ."]
+        description: {
+          vi: "Bật/tắt chế độ AI cho kênh hiện tại bằng `true` hoặc `false`. Khi bật, người dùng chỉ cần nhắn tin bình thường, không cần gõ `!chat`. Cần quyền **Manage Channels**.",
+          en: "Enable or disable AI mode for the current channel with `true` or `false`. Once enabled, users just type normally — no `!chat` needed. Requires **Manage Channels**."
+        },
+        commands: ["/setai • !setai"]
+      },
+      {
+        icon: "🗃️",
+        isCurrent: true,
+        title: {
+          vi: "Shared History Toggle",
+          en: "Shared History Toggle"
+        },
+        description: {
+          vi: "Bật/tắt lịch sử chat chung cho kênh hiện tại bằng `true` hoặc `false`. Khi bật, cả kênh dùng chung một mạch hội thoại với AI. Cần quyền **Manage Channels**.",
+          en: "Enable or disable shared chat history for the current channel with `true` or `false`. When on, the whole channel shares one conversation history with the AI. Requires **Manage Channels**."
+        },
+        commands: ["/setsharedhistory • !setsharedhistory"]
+      },
+      {
+        icon: "🛡️",
+        isCurrent: true,
+        title: {
+          vi: "Moderation Prefix Commands",
+          en: "Moderation Prefix Commands"
+        },
+        description: {
+          vi: "Các lệnh kiểm duyệt giờ đây hỗ trợ cả Slash và Prefix: `ban`, `unban`, `mute`, `unmute`. Quyền và chức năng giữ nguyên như bản slash — **Ban Members** cho ban/unban, **Moderate Members** cho mute/unmute, timeout tối đa 28 ngày.",
+          en: "Moderation commands now support both Slash and Prefix: `ban`, `unban`, `mute`, `unmute`. Permissions and behaviour are unchanged — **Ban Members** for ban/unban, **Moderate Members** for mute/unmute, timeout up to 28 days."
+        },
+        commands: ["/ban • !ban", "/unban • !unban", "/mute • !mute", "/unmute • !unmute"]
+      },
+      {
+        icon: "🚫",
+        isCurrent: true,
+        title: {
+          vi: "Set Ban Channel Prefix",
+          en: "Set Ban Channel Prefix"
+        },
+        description: {
+          vi: "Bật/tắt Ban Zone cho kênh hiện tại bằng `true` hoặc `false`. Cấu hình được lưu riêng cho từng server.",
+          en: "Enable or disable Ban Zone for the current channel with `true` or `false`. Configuration is stored per server."
+        },
+        commands: ["/setbanchannel • !setbanchannel"]
+      },
+      {
+        icon: "☠️",
+        isCurrent: true,
+        title: {
+          vi: "Ban Zone Prefix",
+          en: "Ban Zone Prefix"
+        },
+        description: {
+          vi: "Chọn chế độ Ban Zone: `ban` hoặc `mute <duration>`. Cả hai chế độ đều tự động dọn tin nhắn 24 giờ gần nhất trên toàn server.",
+          en: "Choose the Ban Zone mode: `ban` or `mute <duration>`. Both modes clean the sender's messages from the last 24 hours across the whole server."
+        },
+        commands: ["/banzone • !banzone"]
+      },
+      {
+        icon: "🧪",
+        isCurrent: true,
+        title: {
+          vi: "Bandebug — Manager Access",
+          en: "Bandebug — Manager Access"
+        },
+        description: {
+          vi: "`/bandebug` giờ đây KHÔNG còn chỉ dành cho chủ bot. Server Manager (Administrator / Manage Server / Manage Channels) đều dùng được. Lệnh kiểm tra Nova có thể xử lý một thành viên theo thứ bậc vai trò và quy tắc Ban Zone hay không.",
+          en: "`/bandebug` is no longer bot-owner-only. Server Managers (Administrator / Manage Server / Manage Channels) can now use it. It checks whether Nova can act on a member under the Ban Zone hierarchy and permission rules."
+        },
+        commands: ["/bandebug • !bandebug"]
+      },
+      {
+        icon: "🤝",
+        isCurrent: true,
+        title: {
+          vi: "Trust Prefix",
+          en: "Trust Prefix"
+        },
+        description: {
+          vi: "`/trust` giờ hỗ trợ cả prefix. Người dùng Trusted nhận quyền quản lý War/Backup theo hệ thống phân quyền của bot.",
+          en: "`/trust` now supports both slash and prefix. Trusted users receive War/Backup management access according to the bot's permission system."
+        },
+        commands: ["/trust • !trust"]
+      },
+      {
+        icon: "📊",
+        isCurrent: true,
+        title: {
+          vi: "Serverinfo / Userinfo Prefix",
+          en: "Serverinfo / Userinfo Prefix"
+        },
+        description: {
+          vi: "Hai lệnh `/serverinfo` và `/userinfo` giờ có thêm bản prefix. Xem thông tin server hiện tại hoặc người dùng chỉ bằng cú pháp `!serverinfo`, `!userinfo @user`.",
+          en: "`/serverinfo` and `/userinfo` now have prefix versions. View current-server or user information with `!serverinfo`, `!userinfo @user`."
+        },
+        commands: ["/serverinfo • !serverinfo", "/userinfo • !userinfo"]
       }
     ]
   }
@@ -278,8 +369,8 @@ const FEATURES = [
       details: [
         "AI chat trực tiếp trong Discord với mô hình công khai Qwen3.7-max.",
         "Mỗi người dùng có lịch sử hội thoại riêng, không ảnh hưởng lẫn nhau.",
-        "AI Channel biến kênh hiện tại thành kênh chat AI, không cần gõ <code>!chat</code>.",
-        "Shared History cho phép cả kênh dùng chung một lịch sử hội thoại.",
+        "AI Channel: bật bằng <code>/setai value:true</code> hoặc <code>!setai true</code>, tắt bằng <code>false</code>.",
+        "Shared History: bật bằng <code>/setsharedhistory value:true</code> hoặc <code>!setsharedhistory true</code>, tắt bằng <code>false</code>.",
         "Persona cho phép đổi phong cách trả lời theo mã có sẵn hoặc mô tả tự do.",
         "Chọn ngôn ngữ trả lời AI (vi/en).",
         "Tạo ảnh AI từ mô tả văn bản. Cocolink là nhà cung cấp chính, Gemini làm dự phòng."
@@ -287,13 +378,16 @@ const FEATURES = [
       perms: [
         "Send Messages và Embed Links trong kênh sử dụng.",
         "Read Message History (để xử lý ngữ cảnh hội thoại).",
+        "Manage Channels — cho <code>setai</code> và <code>setsharedhistory</code>.",
         "Manage Webhooks nếu dùng tính năng AI Channel."
       ],
       examples: [
         "!chat Giải thích thuật toán sắp xếp nhanh bằng ví dụ đơn giản",
         "?image một phi hành gia mèo đang uống cà phê trên sao Hoả",
         "!persona custom: Trả lời ngắn gọn, thân thiện và dùng emoji",
-        "!language vi"
+        "!language vi",
+        "/setai value:true",
+        "!setsharedhistory true"
       ]
     },
     en: {
@@ -303,8 +397,8 @@ const FEATURES = [
       details: [
         "AI chat directly inside Discord using the public model Qwen3.7-max.",
         "Every user keeps their own conversation history, isolated from others.",
-        "AI Channel turns the current channel into an AI channel — no need to type <code>!chat</code>.",
-        "Shared History lets a whole channel share one conversation history.",
+        "AI Channel: enable with <code>/setai value:true</code> or <code>!setai true</code>; disable with <code>false</code>.",
+        "Shared History: enable with <code>/setsharedhistory value:true</code> or <code>!setsharedhistory true</code>; disable with <code>false</code>.",
         "Personas let you change the reply style using built-in codes or a free-form description.",
         "Pick the AI reply language (vi/en).",
         "Generate AI images from text prompts. Cocolink is primary, Gemini is fallback."
@@ -312,23 +406,24 @@ const FEATURES = [
       perms: [
         "Send Messages and Embed Links in the target channel.",
         "Read Message History (to process conversation context).",
+        "Manage Channels — for <code>setai</code> and <code>setsharedhistory</code>.",
         "Manage Webhooks if the AI Channel feature is used."
       ],
       examples: [
         "!chat Explain quicksort with a simple example",
         "?image a cat astronaut drinking coffee on Mars",
         "!persona custom: Reply briefly, stay friendly and use emojis",
-        "!language en"
+        "!language en",
+        "/setai value:true",
+        "!setsharedhistory true"
       ]
     },
     commands: [
       { name: "/chat • !chat", type: "both", vi: { d: "Trò chuyện với AI trong Discord.", p: "Send Messages" }, en: { d: "Chat with the AI inside Discord.", p: "Send Messages" }, ex: "!chat Xin chào Nova!" },
       { name: "/image • !image", type: "both", vi: { d: "Tạo ảnh AI từ mô tả văn bản.", p: "Send Messages, Attach Files" }, en: { d: "Generate an AI image from a text prompt.", p: "Send Messages, Attach Files" }, ex: "!image thành phố tương lai lúc hoàng hôn" },
       { name: "/clearchat • !clearchat", type: "both", vi: { d: "Xoá lịch sử hội thoại AI của riêng bạn.", p: "Send Messages" }, en: { d: "Clear your own AI conversation history.", p: "Send Messages" } },
-      { name: "/setai • !setai", type: "both", vi: { d: "Biến kênh hiện tại thành AI Channel.", p: "Manage Channels" }, en: { d: "Turn the current channel into an AI channel.", p: "Manage Channels" } },
-      { name: "!unsetai", type: "prefix", vi: { d: "Tắt chế độ AI Channel của kênh hiện tại.", p: "Manage Channels" }, en: { d: "Disable AI Channel mode for the current channel.", p: "Manage Channels" } },
-      { name: "/setsharedhistory • !setsharedhistory", type: "both", vi: { d: "Cho kênh dùng chung lịch sử hội thoại AI.", p: "Manage Channels" }, en: { d: "Let a channel use shared AI conversation history.", p: "Manage Channels" } },
-      { name: "!unsetsharedhistory", type: "prefix", vi: { d: "Tắt shared history của kênh.", p: "Manage Channels" }, en: { d: "Disable the channel's shared history.", p: "Manage Channels" } },
+      { name: "/setai • !setai", type: "both", isNew: true, vi: { d: "Bật/tắt AI mode cho kênh hiện tại. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable AI mode for the current channel. Use true|false.", p: "Manage Channels" }, ex: "/setai value:true" },
+      { name: "/setsharedhistory • !setsharedhistory", type: "both", isNew: true, vi: { d: "Bật/tắt lịch sử chat chung cho kênh. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable shared chat history for the channel. Use true|false.", p: "Manage Channels" }, ex: "/setsharedhistory value:true" },
       { name: "/persona • !persona", type: "both", vi: { d: "Đổi persona AI theo mã có sẵn.", p: "Send Messages" }, en: { d: "Change AI persona using a built-in code.", p: "Send Messages" }, ex: "!persona teacher" },
       { name: "!persona custom: <description>", type: "prefix", vi: { d: "Tạo persona AI tuỳ chỉnh bằng mô tả tự do.", p: "Send Messages" }, en: { d: "Create a custom AI persona with a free-form description.", p: "Send Messages" }, ex: "!persona custom: Nói chuyện như một cố vấn thân thiện" },
       { name: "/mypersona • !mypersona", type: "both", vi: { d: "Xem persona AI hiện tại của bạn.", p: "Send Messages" }, en: { d: "View your current AI persona.", p: "Send Messages" } },
@@ -342,56 +437,58 @@ const FEATURES = [
     vi: {
       title: "Moderation",
       short: "Công cụ kiểm duyệt thành viên.",
-      lead: "Bộ lệnh kiểm duyệt: ban, unban, timeout và gỡ timeout — kèm kiểm tra thứ bậc vai trò.",
+      lead: "Bộ lệnh kiểm duyệt: ban, unban, timeout và gỡ timeout — kèm kiểm tra thứ bậc vai trò. Hỗ trợ cả Slash và Prefix.",
       details: [
-        "<code>/ban</code> cấm một thành viên khỏi server.",
-        "<code>/unban</code> bỏ cấm bằng User ID để nhận diện chính xác.",
-        "<code>/mute</code> timeout thành viên, thời lượng tối đa 28 ngày.",
-        "<code>/unmute</code> gỡ timeout của thành viên.",
+        "<code>/ban • !ban</code> — cấm một thành viên khỏi server.",
+        "<code>/unban • !unban</code> — bỏ cấm bằng User ID để nhận diện chính xác.",
+        "<code>/mute • !mute</code> — timeout thành viên, thời lượng tối đa 28 ngày.",
+        "<code>/unmute • !unmute</code> — gỡ timeout của thành viên.",
         "Bot cần thứ bậc vai trò cao hơn mục tiêu mới có thể hành động.",
         "Chủ server không thể bị bot ban."
       ],
       perms: [
-        "Ban Members — cho <code>/ban</code> và <code>/unban</code>.",
-        "Moderate Members — cho <code>/mute</code> và <code>/unmute</code>.",
+        "Ban Members — cho <code>ban</code> và <code>unban</code>.",
+        "Moderate Members — cho <code>mute</code> và <code>unmute</code>.",
         "Vai trò của bot phải nằm cao hơn vai trò của mục tiêu."
       ],
       examples: [
         "/ban user: @Spammer reason: Spam quảng cáo",
-        "/unban user_id: 123456789012345678",
+        "!ban @Spammer Spam quảng cáo",
         "/mute user: @Noisy duration: 10m reason: Spam chat",
-        "/mute user: @Noisy duration: 7d reason: Vi phạm nhiều lần"
+        "!mute @Noisy 10m Spam chat",
+        "/unban user_id: 123456789012345678"
       ]
     },
     en: {
       title: "Moderation",
       short: "Member moderation toolkit.",
-      lead: "A focused moderation set: ban, unban, timeout and untimeout — with proper role hierarchy checks.",
+      lead: "A focused moderation set: ban, unban, timeout and untimeout — with proper role hierarchy checks. Works as both slash and prefix.",
       details: [
-        "<code>/ban</code> bans a member from the server.",
-        "<code>/unban</code> unbans a user by precise User ID.",
-        "<code>/mute</code> times out a member, maximum duration 28 days.",
-        "<code>/unmute</code> removes a member's timeout.",
+        "<code>/ban • !ban</code> — bans a member from the server.",
+        "<code>/unban • !unban</code> — unbans a user by precise User ID.",
+        "<code>/mute • !mute</code> — times out a member, maximum duration 28 days.",
+        "<code>/unmute • !unmute</code> — removes a member's timeout.",
         "The bot needs a higher role than the target to act.",
         "The server owner can never be banned by the bot."
       ],
       perms: [
-        "Ban Members — for <code>/ban</code> and <code>/unban</code>.",
-        "Moderate Members — for <code>/mute</code> and <code>/unmute</code>.",
+        "Ban Members — for <code>ban</code> and <code>unban</code>.",
+        "Moderate Members — for <code>mute</code> and <code>unmute</code>.",
         "The bot's role must sit above the target's highest role."
       ],
       examples: [
         "/ban user: @Spammer reason: Advertising spam",
-        "/unban user_id: 123456789012345678",
+        "!ban @Spammer Advertising spam",
         "/mute user: @Noisy duration: 10m reason: Chat spam",
-        "/mute user: @Noisy duration: 7d reason: Repeated violations"
+        "!mute @Noisy 10m Chat spam",
+        "/unban user_id: 123456789012345678"
       ]
     },
     commands: [
-      { name: "/ban", type: "slash", vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" }, ex: "/ban user: @User reason: Spam" },
-      { name: "/unban", type: "slash", vi: { d: "Bỏ cấm người dùng bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" }, ex: "/unban user_id: 123456789012345678" },
-      { name: "/mute", type: "slash", vi: { d: "Timeout thành viên. Thời lượng tối đa 28 ngày (10m, 2h, 7d).", p: "Moderate Members" }, en: { d: "Timeout a member. Max 28 days (10m, 2h, 7d).", p: "Moderate Members" }, ex: "/mute user: @User duration: 2h reason: Spam" },
-      { name: "/unmute", type: "slash", vi: { d: "Gỡ timeout cho thành viên.", p: "Moderate Members" }, en: { d: "Remove a member's timeout.", p: "Moderate Members" }, ex: "/unmute user: @User" }
+      { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" }, ex: "/ban user: @User reason: Spam" },
+      { name: "/unban • !unban", type: "both", isNew: true, vi: { d: "Bỏ cấm người dùng bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" }, ex: "/unban user_id: 123456789012345678" },
+      { name: "/mute • !mute", type: "both", isNew: true, vi: { d: "Timeout thành viên. Thời lượng tối đa 28 ngày (10m, 2h, 7d).", p: "Moderate Members" }, en: { d: "Timeout a member. Max 28 days (10m, 2h, 7d).", p: "Moderate Members" }, ex: "/mute user: @User duration: 2h reason: Spam" },
+      { name: "/unmute • !unmute", type: "both", isNew: true, vi: { d: "Gỡ timeout cho thành viên.", p: "Moderate Members" }, en: { d: "Remove a member's timeout.", p: "Moderate Members" }, ex: "/unmute user: @User" }
     ]
   },
   {
@@ -402,30 +499,33 @@ const FEATURES = [
       short: "Hệ thống bảo vệ server.",
       lead: "Ban Zone là hệ thống bảo vệ server: khi kênh bị xâm phạm, Nova xử lý người vi phạm theo chế độ đã cấu hình, kèm whitelist theo từng server và dọn tin nhắn 24 giờ.",
       details: [
-        "Chế độ Ban: <code>/banzone mode:ban</code> — xử lý người vi phạm bằng ban.",
-        "Chế độ Mute: <code>/banzone mode:mute duration:10m</code> — xử lý bằng timeout.",
-        "Dọn tin nhắn 24 giờ theo hành vi của bot.",
-        "<code>/setbanchannel true|false</code> đặt kênh hiện tại làm kênh Ban Zone và bật/tắt hệ thống.",
+        "Chế độ Ban: <code>/banzone ban</code> hoặc <code>!banzone ban</code>.",
+        "Chế độ Mute: <code>/banzone mute duration:10m</code> hoặc <code>!banzone mute 10m</code>.",
+        "Cả 2 chế độ đều dọn tin nhắn 24 giờ của người vi phạm trên toàn server.",
+        "<code>/setbanchannel value:true|false</code> hoặc <code>!setbanchannel true|false</code> đặt kênh hiện tại làm kênh Ban Zone và bật/tắt.",
         "Whitelist theo từng server: whitelist ở Server A <strong>không</strong> ảnh hưởng Server B.",
-        "Chỉ chủ server quản lý được whitelist Ban Zone. Administrator / Manage Server không đủ điều kiện cho lệnh whitelist.",
-        "<code>/bandebug @user</code> kiểm tra bot có thể hành động lên thành viên được chọn.",
+        "Chỉ chủ server quản lý được whitelist Ban Zone qua <code>/banwhitelist</code>.",
+        "<code>/bandebug</code> / <code>!bandebug</code> kiểm tra bot có thể hành động lên thành viên được chọn.",
         "Thứ bậc vai trò quan trọng — chủ server không thể bị bot ban.",
         "Cấu hình kênh được cô lập theo từng server.",
-        "Bảo vệ xoá kênh: nếu kênh Ban Zone bị xoá, Nova cố gắng xác định người thực hiện qua audit log và xử lý theo logic bảo vệ. Nova <strong>không</strong> ban người đã mời bot chỉ vì một kênh bị xoá."
+        "Bảo vệ xoá kênh: nếu kênh Ban Zone bị xoá, Nova tự khôi phục kênh và xử lý theo logic bảo vệ."
       ],
       perms: [
         "Manage Channels — để cấu hình kênh Ban Zone.",
         "Ban Members / Moderate Members — tuỳ chế độ đã chọn.",
         "Chỉ <strong>chủ server</strong> được quản lý whitelist Ban Zone.",
-        "Vai trò của bot phải cao hơn vai trò của mục tiêu."
+        "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."
       ],
       examples: [
-        "/setbanchannel true",
-        "/banzone mode:ban",
-        "/banzone mode:mute duration:10m",
+        "/setbanchannel value:true",
+        "!setbanchannel true",
+        "/banzone ban",
+        "!banzone ban",
+        "/banzone mute duration:10m",
+        "!banzone mute 10m",
         "/banwhitelist add @TrustedUser",
-        "/banwhitelist list",
-        "/bandebug @SomeUser"
+        "/bandebug @SomeUser",
+        "!bandebug @SomeUser"
       ]
     },
     en: {
@@ -433,40 +533,40 @@ const FEATURES = [
       short: "Server protection system.",
       lead: "Ban Zone is a server protection system: when a channel is compromised, Nova processes offenders according to the configured mode, with a per-server whitelist and 24-hour message cleanup.",
       details: [
-        "Ban Mode: <code>/banzone mode:ban</code> — process offenders with a ban.",
-        "Mute Mode: <code>/banzone mode:mute duration:10m</code> — process offenders with a timeout.",
-        "24-hour message cleanup according to the bot behaviour.",
-        "<code>/setbanchannel true|false</code> configures the current channel as the Ban Zone channel and enables or disables the system.",
+        "Ban Mode: <code>/banzone ban</code> or <code>!banzone ban</code>.",
+        "Mute Mode: <code>/banzone mute duration:10m</code> or <code>!banzone mute 10m</code>.",
+        "Both modes clean the offender's last-24-hour messages across the whole server.",
+        "<code>/setbanchannel value:true|false</code> or <code>!setbanchannel true|false</code> sets the current channel as the Ban Zone channel and enables/disables it.",
         "Whitelist is per-server: a whitelist in Server A does <strong>not</strong> affect Server B.",
-        "Only the server owner can manage the Ban Zone whitelist. Administrator / Manage Server alone is not enough for whitelist commands.",
-        "<code>/bandebug @user</code> tests whether the bot can act on the selected member.",
+        "Only the server owner can manage the Ban Zone whitelist via <code>/banwhitelist</code>.",
+        "<code>/bandebug</code> / <code>!bandebug</code> tests whether the bot can act on the selected member.",
         "Role hierarchy matters — the server owner can never be banned by the bot.",
         "Channel configuration is isolated per server.",
-        "Channel deletion protection: if the configured Ban Zone channel is deleted, Nova attempts to detect the executor through Discord audit logs and handles them according to its protection logic. Nova does <strong>not</strong> ban the person who originally invited the bot merely because a channel was deleted."
+        "Channel deletion protection: if the Ban Zone channel is deleted, Nova recreates it and handles the executor according to its protection logic."
       ],
       perms: [
         "Manage Channels — to configure the Ban Zone channel.",
         "Ban Members / Moderate Members — depending on the selected mode.",
         "Only the <strong>server owner</strong> can manage the Ban Zone whitelist.",
-        "The bot's role must be higher than the target's role."
+        "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."
       ],
       examples: [
-        "/setbanchannel true",
-        "/banzone mode:ban",
-        "/banzone mode:mute duration:10m",
+        "/setbanchannel value:true",
+        "!setbanchannel true",
+        "/banzone ban",
+        "!banzone ban",
+        "/banzone mute duration:10m",
+        "!banzone mute 10m",
         "/banwhitelist add @TrustedUser",
-        "/banwhitelist list",
-        "/bandebug @SomeUser"
+        "/bandebug @SomeUser",
+        "!bandebug @SomeUser"
       ]
     },
     commands: [
-      { name: "/banzone mode:ban", type: "slash", vi: { d: "Đặt Ban Zone ở chế độ Ban.", p: "Manage Channels" }, en: { d: "Set Ban Zone to Ban Mode.", p: "Manage Channels" } },
-      { name: "/banzone mode:mute duration:10m", type: "slash", vi: { d: "Đặt Ban Zone ở chế độ Mute với thời lượng.", p: "Manage Channels" }, en: { d: "Set Ban Zone to Mute Mode with a duration.", p: "Manage Channels" }, ex: "/banzone mode:mute duration:10m" },
-      { name: "/setbanchannel true|false", type: "slash", vi: { d: "Cấu hình kênh hiện tại làm kênh Ban Zone, bật hoặc tắt.", p: "Manage Channels" }, en: { d: "Configure the current channel as the Ban Zone channel, enable or disable.", p: "Manage Channels" } },
-      { name: "/banwhitelist add @user", type: "slash", vi: { d: "Thêm người dùng vào whitelist Ban Zone của server.", p: "Server Owner" }, en: { d: "Add a user to the server's Ban Zone whitelist.", p: "Server Owner" } },
-      { name: "/banwhitelist remove @user", type: "slash", vi: { d: "Xoá người dùng khỏi whitelist Ban Zone.", p: "Server Owner" }, en: { d: "Remove a user from the Ban Zone whitelist.", p: "Server Owner" } },
-      { name: "/banwhitelist list", type: "slash", vi: { d: "Xem danh sách whitelist Ban Zone của server.", p: "Server Owner" }, en: { d: "View the server's Ban Zone whitelist.", p: "Server Owner" } },
-      { name: "/bandebug @user", type: "slash", vi: { d: "Kiểm tra bot có thể hành động lên thành viên được chọn.", p: "Manage Channels" }, en: { d: "Test whether the bot can act on the selected member.", p: "Manage Channels" }, ex: "/bandebug @User" }
+      { name: "/setbanchannel • !setbanchannel", type: "both", isNew: true, vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" }, ex: "!setbanchannel true" },
+      { name: "/banzone • !banzone", type: "both", isNew: true, vi: { d: "Chọn chế độ Ban Zone: ban hoặc mute <duration>.", p: "Server Owner" }, en: { d: "Choose Ban Zone mode: ban or mute <duration>.", p: "Server Owner" }, ex: "!banzone mute 10m" },
+      { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server (chỉ Server Owner).", p: "Server Owner" }, en: { d: "Manage the server's Ban Zone whitelist (Server Owner only).", p: "Server Owner" } },
+      { name: "/bandebug • !bandebug", type: "both", isNew: true, vi: { d: "Kiểm tra bot có thể hành động lên thành viên được chọn theo Ban Zone.", p: "Manager" }, en: { d: "Test whether the bot can act on the selected member under Ban Zone rules.", p: "Manager" }, ex: "!bandebug @User" }
     ]
   },
   {
@@ -484,7 +584,7 @@ const FEATURES = [
         "Kết thúc toàn bộ: <code>/end all</code> kết thúc mọi phiên War/Backup đang hoạt động.",
         "Call Hacker: <code>/callhacker show</code> và <code>/callhacker hide</code>.",
         "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
-        "Trusted users: <code>/trust add</code>, <code>/trust remove</code>, <code>/trust list</code>."
+        "Trusted users: <code>/trust • !trust</code>."
       ],
       perms: [
         "Manage Roles — để cấu hình các vai trò War/Backup.",
@@ -495,7 +595,7 @@ const FEATURES = [
         "/end all",
         "/callhacker show",
         "/callhacker hide",
-        "/trust add @User",
+        "!trust add @User",
         "/trust list"
       ]
     },
@@ -511,7 +611,7 @@ const FEATURES = [
         "Global ending: <code>/end all</code> ends all active War/Backup sessions.",
         "Call Hacker: <code>/callhacker show</code> and <code>/callhacker hide</code>.",
         "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
-        "Trusted users: <code>/trust add</code>, <code>/trust remove</code>, <code>/trust list</code>."
+        "Trusted users: <code>/trust • !trust</code>."
       ],
       perms: [
         "Manage Roles — to configure the War/Backup roles.",
@@ -522,7 +622,7 @@ const FEATURES = [
         "/end all",
         "/callhacker show",
         "/callhacker hide",
-        "/trust add @User",
+        "!trust add @User",
         "/trust list"
       ]
     },
@@ -533,9 +633,7 @@ const FEATURES = [
       { name: "LOSE", type: "button", vi: { d: "Đánh dấu kết quả là thua.", p: "Configurable" }, en: { d: "Mark the result as a loss.", p: "Configurable" } },
       { name: "END", type: "button", vi: { d: "Kết thúc phiên hiện tại.", p: "Configurable" }, en: { d: "End the current session.", p: "Configurable" } },
       { name: "/end all", type: "slash", vi: { d: "Kết thúc mọi phiên War/Backup đang hoạt động trong server.", p: "Manage Threads" }, en: { d: "End all active War/Backup sessions in the server.", p: "Manage Threads" } },
-      { name: "/trust add", type: "slash", vi: { d: "Thêm người dùng vào danh sách tin cậy.", p: "Manager" }, en: { d: "Add a user to the trusted list.", p: "Manager" } },
-      { name: "/trust remove", type: "slash", vi: { d: "Xoá người dùng khỏi danh sách tin cậy.", p: "Manager" }, en: { d: "Remove a user from the trusted list.", p: "Manager" } },
-      { name: "/trust list", type: "slash", vi: { d: "Xem danh sách người dùng tin cậy.", p: "Manager" }, en: { d: "View the trusted users list.", p: "Manager" } },
+      { name: "/trust • !trust", type: "both", isNew: true, vi: { d: "Quản lý danh sách Trusted (add / remove / list).", p: "Manager" }, en: { d: "Manage the Trusted list (add / remove / list).", p: "Manager" }, ex: "!trust add @User" },
       { name: "/helppanel", type: "slash", vi: { d: "Gửi bảng hướng dẫn War/Backup vào kênh.", p: "Manage Channels" }, en: { d: "Send the War/Backup help panel to a channel.", p: "Manage Channels" } },
       { name: "/callhacker show", type: "slash", vi: { d: "Hiện nút Call Hacker.", p: "Manager" }, en: { d: "Show the Call Hacker button.", p: "Manager" } },
       { name: "/callhacker hide", type: "slash", vi: { d: "Ẩn nút Call Hacker.", p: "Manager" }, en: { d: "Hide the Call Hacker button.", p: "Manager" } }
@@ -610,14 +708,13 @@ const FEATURES = [
     vi: {
       title: "Server Information",
       short: "Thông tin bot, server và người dùng.",
-      lead: "Nhóm lệnh thông tin giúp bạn xem chi tiết về bot, server và thành viên — bao gồm cả bản prefix mới <code>!info</code>.",
+      lead: "Nhóm lệnh thông tin giúp bạn xem chi tiết về bot, server và thành viên — cả bản slash và prefix.",
       details: [
-        "<code>/info</code> và <code>!info</code> cùng mở bảng thông tin bot. <code>!info</code> là bản prefix mới được thêm.",
+        "<code>/info</code> và <code>!info</code> cùng mở bảng thông tin bot.",
         "Bảng thông tin bot gồm: tên bot, Bot ID, chủ sở hữu, thời gian tạo, độ trễ, uptime, phiên bản Python, phiên bản discord.py, tổng server, tổng người dùng, tổng kênh.",
         "Bảng còn hiển thị: trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, kênh Ban Zone, số lượng whitelist Ban Zone, kênh Help, chế độ Ban Zone, số slash command, số prefix command.",
-        "Chi tiết server hiện tại: thông tin server, chủ server, số thành viên, thứ bậc vai trò của bot, quyền của bot.",
-        "<code>/serverinfo</code>: tên server, Server ID, chủ sở hữu, số thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.",
-        "<code>/userinfo</code>: thông tin người dùng, ngày tạo tài khoản, ngày tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, trạng thái timeout."
+        "<code>/serverinfo</code> / <code>!serverinfo</code>: tên server, Server ID, chủ sở hữu, số thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.",
+        "<code>/userinfo</code> / <code>!userinfo</code>: thông tin người dùng, ngày tạo tài khoản, ngày tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, trạng thái timeout."
       ],
       perms: [
         "Send Messages và Embed Links trong kênh sử dụng.",
@@ -627,20 +724,21 @@ const FEATURES = [
         "/info",
         "!info",
         "/serverinfo",
-        "/userinfo user: @Member"
+        "!serverinfo",
+        "/userinfo user: @Member",
+        "!userinfo @Member"
       ]
     },
     en: {
       title: "Server Information",
       short: "Bot, server and user information.",
-      lead: "Information commands to inspect the bot, server and members — including the newly added prefix version <code>!info</code>.",
+      lead: "Information commands to inspect the bot, server and members — both slash and prefix versions.",
       details: [
-        "<code>/info</code> and <code>!info</code> both open the bot information panel. <code>!info</code> is the newly added prefix version.",
+        "<code>/info</code> and <code>!info</code> both open the bot information panel.",
         "The bot information panel includes: bot name, Bot ID, owner, creation time, latency, uptime, Python version, discord.py version, total servers, total users, total channels.",
         "Also shows: AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone channel, Ban whitelist count, Help channel, Ban Zone mode, slash command count, prefix command count.",
-        "Current server details: server info, server owner, member count, bot role hierarchy, bot permissions.",
-        "<code>/serverinfo</code>: server name, Server ID, owner, member counts, channels, roles, boosts, verification, features, icon/banner.",
-        "<code>/userinfo</code>: user information, account creation, server join, roles, status, platform, activity, nickname, boost, timeout status."
+        "<code>/serverinfo</code> / <code>!serverinfo</code>: server name, Server ID, owner, member counts, channels, roles, boosts, verification, features, icon/banner.",
+        "<code>/userinfo</code> / <code>!userinfo</code>: user information, account creation, server join, roles, status, platform, activity, nickname, boost, timeout status."
       ],
       perms: [
         "Send Messages and Embed Links in the target channel.",
@@ -650,13 +748,15 @@ const FEATURES = [
         "/info",
         "!info",
         "/serverinfo",
-        "/userinfo user: @Member"
+        "!serverinfo",
+        "/userinfo user: @Member",
+        "!userinfo @Member"
       ]
     },
     commands: [
-      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
-      { name: "/serverinfo", type: "slash", vi: { d: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", p: "Send Messages" }, en: { d: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", p: "Send Messages" } },
-      { name: "/userinfo", type: "slash", vi: { d: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", p: "Send Messages" }, en: { d: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", p: "Send Messages" } }
+      { name: "/info • !info", type: "both", vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
+      { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current-server information.", p: "Send Messages" }, ex: "!serverinfo" },
+      { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin người dùng.", p: "Send Messages" }, en: { d: "View user information.", p: "Send Messages" }, ex: "!userinfo @Member" }
     ]
   },
   {
@@ -726,24 +826,24 @@ const FEATURES = [
       short: "Hệ thống trợ giúp.",
       lead: "<code>!help</code> mở Help Menu chính. <code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của riêng tính năng đó.",
       details: [
-        "<code>!help</code> / <code>/help</code> mở Help Menu chính theo danh mục.",
+        "<code>/help • !help</code> mở Help Menu chính theo danh mục.",
         "<code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của tính năng được yêu cầu — không hiển thị toàn bộ danh mục.",
-        "Ví dụ: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>."
+        "Ví dụ: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>, <code>!help bandebug</code>."
       ],
       perms: ["Send Messages trong kênh sử dụng."],
-      examples: ["!help", "/help", "!help chat", "!help info", "!help warping"]
+      examples: ["!help", "/help", "!help chat", "!help info", "!help prefix", "!help bandebug"]
     },
     en: {
       title: "Help System",
       short: "Help system.",
       lead: "<code>!help</code> opens the main Help Menu. <code>!help &lt;feature&gt;</code> shows only the detailed help for that specific feature.",
       details: [
-        "<code>!help</code> / <code>/help</code> opens the main Categories Help Menu.",
+        "<code>/help • !help</code> opens the main Categories Help Menu.",
         "<code>!help &lt;feature&gt;</code> shows only the detailed help for the requested feature — the entire category is not shown.",
-        "Examples: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>."
+        "Examples: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>, <code>!help bandebug</code>."
       ],
       perms: ["Send Messages in the target channel."],
-      examples: ["!help", "/help", "!help chat", "!help info", "!help warping"]
+      examples: ["!help", "/help", "!help chat", "!help info", "!help prefix", "!help bandebug"]
     },
     commands: [
       { name: "/help • !help", type: "both", vi: { d: "Mở Help Menu chính theo danh mục.", p: "Send Messages" }, en: { d: "Open the main Categories Help Menu.", p: "Send Messages" } },
@@ -760,12 +860,11 @@ const FEATURES = [
       details: [
         "Mặc định prefix là <code>!</code>.",
         "Đổi prefix bằng <code>!prefix &lt;ký tự&gt;</code>.",
-        "Ví dụ: <code>!prefix ?</code> → sau đó dùng <code>?chat</code>, <code>?info</code>, <code>?help</code>.",
-        "Server khác có thể dùng <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>.",
+        "Ví dụ: <code>!prefix ?</code> → sau đó dùng <code>?chat</code>, <code>?info</code>, <code>?help</code>, <code>?image</code>, <code>?ban</code>.",
+        "Server khác có thể dùng <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>, <code>.ban</code>.",
         "Mỗi server (Guild) có prefix riêng, không ảnh hưởng lẫn nhau.",
         "DM vẫn dùng mặc định <code>!</code>.",
-        "Prefix được lưu lại sau khi bot khởi động lại.",
-        "Prefix hỗ trợ các ký tự như <code>!</code>, <code>?</code>, <code>.</code>, <code>$</code>, <code>-</code>, <code>&gt;</code>."
+        "Prefix được lưu lại sau khi bot khởi động lại."
       ],
       perms: [
         "<strong>KHÔNG</strong> chỉ dành cho chủ bot.",
@@ -777,7 +876,7 @@ const FEATURES = [
         "?chat",
         "?info",
         "?help",
-        "?image"
+        "?ban"
       ]
     },
     en: {
@@ -787,12 +886,11 @@ const FEATURES = [
       details: [
         "Default prefix is <code>!</code>.",
         "Change the prefix with <code>!prefix &lt;char&gt;</code>.",
-        "Example: <code>!prefix ?</code> → then use <code>?chat</code>, <code>?info</code>, <code>?help</code>.",
-        "Another server can use <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>.",
+        "Example: <code>!prefix ?</code> → then use <code>?chat</code>, <code>?info</code>, <code>?help</code>, <code>?image</code>, <code>?ban</code>.",
+        "Another server can use <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>, <code>.ban</code>.",
         "Each Guild has its own prefix and does not affect other servers.",
         "DM uses the default <code>!</code>.",
-        "The prefix is saved after bot restart.",
-        "Supported example prefixes: <code>!</code>, <code>?</code>, <code>.</code>, <code>$</code>, <code>-</code>, <code>&gt;</code>."
+        "The prefix is saved after bot restart."
       ],
       perms: [
         "NOT bot-owner-only.",
@@ -804,12 +902,11 @@ const FEATURES = [
         "?chat",
         "?info",
         "?help",
-        "?image"
+        "?ban"
       ]
     },
-    isNew: true,
     commands: [
-      { name: "/prefix • !prefix", type: "both", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
+      { name: "!prefix", type: "prefix", vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
     ]
   }
 ];
@@ -825,13 +922,13 @@ const HELP_CATEGORIES = [
     viBody: {
       title: "AI Chatbot",
       text: "Chat với AI trực tiếp trong Discord, kèm lịch sử hội thoại riêng, tạo ảnh AI và persona tuỳ chỉnh.",
-      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "!unsetai", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/setsharedhistory • !setsharedhistory", "!unsetsharedhistory", "/language • !language"],
+      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "/setsharedhistory • !setsharedhistory", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/language • !language"],
       note: "Mô hình công khai: Qwen3.7-max. Cocolink là nhà cung cấp ảnh chính, Gemini làm dự phòng."
     },
     enBody: {
       title: "AI Chatbot",
       text: "Chat with AI inside Discord, with personal conversation history, AI image generation and custom personas.",
-      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "!unsetai", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/setsharedhistory • !setsharedhistory", "!unsetsharedhistory", "/language • !language"],
+      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "/setsharedhistory • !setsharedhistory", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/language • !language"],
       note: "Public model: Qwen3.7-max. Cocolink is primary image provider, Gemini is fallback."
     }
   },
@@ -842,13 +939,13 @@ const HELP_CATEGORIES = [
     viBody: {
       title: "War Ping / Backup Ping",
       text: "Tạo yêu cầu War hoặc Backup, mở thread điều phối với các nút hành động.",
-      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust add", "/trust remove", "/trust list", "/helppanel", "/callhacker show", "/callhacker hide"],
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show", "/callhacker hide"],
       note: "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
     },
     enBody: {
       title: "War Ping / Backup Ping",
       text: "Create a War or Backup request and open a coordination thread with action buttons.",
-      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust add", "/trust remove", "/trust list", "/helppanel", "/callhacker show", "/callhacker hide"],
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show", "/callhacker hide"],
       note: "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
     }
   },
@@ -876,49 +973,47 @@ const HELP_CATEGORIES = [
     viBody: {
       title: "Ban Zone",
       text: "Hệ thống bảo vệ server: khi kênh bị xâm phạm, Nova xử lý người vi phạm theo chế độ đã cấu hình.",
-      cmds: ["/banzone mode:ban", "/banzone mode:mute duration:10m", "/setbanchannel true|false", "/banwhitelist add @user", "/banwhitelist remove @user", "/banwhitelist list", "/bandebug @user"],
-      note: "Whitelist theo từng server và chỉ chủ server quản lý được. Thứ bậc vai trò của bot rất quan trọng."
+      cmds: ["/setbanchannel • !setbanchannel", "/banzone • !banzone", "/banwhitelist add|remove|list", "/bandebug • !bandebug"],
+      note: "Whitelist theo từng server và chỉ chủ server quản lý được. Bandebug dùng được bởi Manager."
     },
     enBody: {
       title: "Ban Zone",
       text: "Server protection system: when a channel is compromised, Nova processes offenders according to the configured mode.",
-      cmds: ["/banzone mode:ban", "/banzone mode:mute duration:10m", "/setbanchannel true|false", "/banwhitelist add @user", "/banwhitelist remove @user", "/banwhitelist list", "/bandebug @user"],
-      note: "The whitelist is per-server and only the server owner can manage it. Bot role hierarchy matters."
+      cmds: ["/setbanchannel • !setbanchannel", "/banzone • !banzone", "/banwhitelist add|remove|list", "/bandebug • !bandebug"],
+      note: "The whitelist is per-server and only the server owner can manage it. Bandebug is Manager-accessible."
     }
   },
   {
     id: "serverinfo", icon: "📊",
-    vi: { name: "Server Information", desc: "Thông tin bot và server hiện tại" },
-    en: { name: "Server Information", desc: "Bot and current-server information" },
-    isNew: true,
+    vi: { name: "Server Information", desc: "Thông tin bot, server và người dùng" },
+    en: { name: "Server Information", desc: "Bot, server and user information" },
     viBody: {
       title: "Server Information",
-      text: "Xem Nova và thông tin server hiện tại.",
-      cmds: ["/info • !info", "/serverinfo", "/userinfo"],
-      note: "`!info` là bản prefix mới. `/info` và `!info` cung cấp cùng một bảng thông tin."
+      text: "Xem thông tin bot, server hiện tại và người dùng.",
+      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo"],
+      note: "`/info` và `!info` cung cấp cùng một bảng thông tin."
     },
     enBody: {
       title: "Server Information",
-      text: "View Nova and current-server information.",
-      cmds: ["/info • !info", "/serverinfo", "/userinfo"],
-      note: "`!info` is the new prefix version. `/info` and `!info` provide the same information panel."
+      text: "View bot, current-server and user information.",
+      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo"],
+      note: "`/info` and `!info` provide the same information panel."
     }
   },
   {
     id: "prefix", icon: "🔧",
     vi: { name: "Prefix riêng từng server", desc: "Đổi prefix riêng cho mỗi server" },
     en: { name: "Custom Server Prefix", desc: "Set a different prefix per server" },
-    isNew: true,
     viBody: {
       title: "Prefix riêng từng server",
       text: "Mỗi server Discord có thể dùng prefix riêng. Mặc định là `!`. Dùng `!prefix ?` để đổi.",
-      cmds: ["/prefix • !prefix", "!prefix ?", "!prefix ."],
+      cmds: ["!prefix", "!prefix ?", "!prefix ."],
       note: "Không chỉ dành cho chủ bot. Cần quyền Administrator / Manage Server / Manage Channels."
     },
     enBody: {
       title: "Custom Server Prefix",
       text: "Each Discord server can use its own prefix. Default is `!`. Use `!prefix ?` to change it.",
-      cmds: ["/prefix • !prefix", "!prefix ?", "!prefix ."],
+      cmds: ["!prefix", "!prefix ?", "!prefix ."],
       note: "Not bot-owner-only. Requires Administrator / Manage Server / Manage Channels."
     }
   }
@@ -931,18 +1026,24 @@ const HELP_FEATURES = {
   chat: { icon: "🤖",
     vi: { title: "/chat • !chat", body: "Trò chuyện với AI trực tiếp trong Discord. Mỗi người dùng có lịch sử hội thoại riêng.", cmds: ["/chat • !chat"], perm: "Send Messages" },
     en: { title: "/chat • !chat", body: "Chat with the AI directly inside Discord. Each user keeps their own conversation history.", cmds: ["/chat • !chat"], perm: "Send Messages" } },
-  info: { icon: "ℹ️", isNew: true,
+  info: { icon: "ℹ️",
     vi: { title: "/info • !info", body: "`!info` hoặc `/info` — Xem Nova và thông tin server hiện tại. Bao gồm uptime, độ trễ, AI, War/Backup, Ban Zone và chi tiết server.", cmds: ["/info • !info"], perm: "Send Messages" },
     en: { title: "/info • !info", body: "`!info` or `/info` — View Nova and current-server information. Includes uptime, latency, AI, War/Backup, Ban Zone and server details.", cmds: ["/info • !info"], perm: "Send Messages" } },
-  prefix: { icon: "🔧", isNew: true,
-    vi: { title: "/prefix • !prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["/prefix • !prefix"], perm: "Administrator / Manage Server / Manage Channels" },
-    en: { title: "/prefix • !prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["/prefix • !prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
-  ban: { icon: "🔨",
-    vi: { title: "/ban", body: "Ban thành viên được chọn khỏi server. Bot cần quyền Ban Members và vai trò cao hơn mục tiêu.", cmds: ["/ban"], perm: "Ban Members" },
-    en: { title: "/ban", body: "Ban the selected member from the server. The bot needs Ban Members and a higher role than the target.", cmds: ["/ban"], perm: "Ban Members" } },
-  mute: { icon: "🔇",
-    vi: { title: "/mute", body: "Timeout thành viên. Thời lượng tối đa 28 ngày. Ví dụ: 10m, 2h, 7d.", cmds: ["/mute"], perm: "Moderate Members" },
-    en: { title: "/mute", body: "Timeout a member. Maximum duration is 28 days. Examples: 10m, 2h, 7d.", cmds: ["/mute"], perm: "Moderate Members" } },
+  prefix: { icon: "🔧",
+    vi: { title: "!prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" },
+    en: { title: "!prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
+  ban: { icon: "🔨", isNew: true,
+    vi: { title: "/ban • !ban", body: "Ban thành viên được chọn khỏi server. Bot cần quyền Ban Members và vai trò cao hơn mục tiêu.", cmds: ["/ban • !ban"], perm: "Ban Members" },
+    en: { title: "/ban • !ban", body: "Ban the selected member from the server. The bot needs Ban Members and a higher role than the target.", cmds: ["/ban • !ban"], perm: "Ban Members" } },
+  unban: { icon: "🔓", isNew: true,
+    vi: { title: "/unban • !unban", body: "Bỏ cấm người dùng bằng User ID. Cần quyền Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" },
+    en: { title: "/unban • !unban", body: "Unban a user using their User ID. Requires Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" } },
+  mute: { icon: "🔇", isNew: true,
+    vi: { title: "/mute • !mute", body: "Timeout thành viên. Thời lượng tối đa 28 ngày. Ví dụ: 10m, 2h, 7d. Cần quyền Moderate Members.", cmds: ["/mute • !mute"], perm: "Moderate Members" },
+    en: { title: "/mute • !mute", body: "Timeout a member. Maximum duration is 28 days. Examples: 10m, 2h, 7d. Requires Moderate Members.", cmds: ["/mute • !mute"], perm: "Moderate Members" } },
+  unmute: { icon: "🔊", isNew: true,
+    vi: { title: "/unmute • !unmute", body: "Gỡ timeout cho thành viên. Cần quyền Moderate Members.", cmds: ["/unmute • !unmute"], perm: "Moderate Members" },
+    en: { title: "/unmute • !unmute", body: "Remove a member's timeout. Requires Moderate Members.", cmds: ["/unmute • !unmute"], perm: "Moderate Members" } },
   warping: { icon: "⚔️",
     vi: { title: "War Ping / Backup Ping", body: "Tạo yêu cầu War/Backup, mở thread điều phối và dùng các nút WAR/BACKUP/WIN/LOSE/END.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" },
     en: { title: "War Ping / Backup Ping", body: "Create a War/Backup request, open a coordination thread and use the WAR/BACKUP/WIN/LOSE/END buttons.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" } },
@@ -952,9 +1053,18 @@ const HELP_FEATURES = {
   event: { icon: "🏆",
     vi: { title: "/event", body: "Gửi sự kiện, xem người tham gia, đếm, xoá và quản lý blacklist sự kiện.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" },
     en: { title: "/event", body: "Send events, view participants, count, remove and manage the event blacklist.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" } },
-  banzone: { icon: "☠️",
-    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được.", cmds: ["/banzone", "/setbanchannel", "/banwhitelist", "/bandebug"], perm: "Manage Channels / Server Owner" },
-    en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it.", cmds: ["/banzone", "/setbanchannel", "/banwhitelist", "/bandebug"], perm: "Manage Channels / Server Owner" } },
+  banzone: { icon: "☠️", isNew: true,
+    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được. `/banzone` và `!banzone` hỗ trợ cả ban và mute.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" },
+    en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it. `/banzone` and `!banzone` support both ban and mute.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" } },
+  setbanchannel: { icon: "🚫", isNew: true,
+    vi: { title: "/setbanchannel • !setbanchannel", body: "Bật/tắt Ban Zone cho kênh hiện tại bằng `true` hoặc `false`. Chỉ Server Owner dùng được.", cmds: ["/setbanchannel • !setbanchannel"], perm: "Server Owner" },
+    en: { title: "/setbanchannel • !setbanchannel", body: "Enable or disable Ban Zone for the current channel with `true` or `false`. Server Owner only.", cmds: ["/setbanchannel • !setbanchannel"], perm: "Server Owner" } },
+  bandebug: { icon: "🧪", isNew: true,
+    vi: { title: "/bandebug • !bandebug", body: "Kiểm tra Nova có thể xử lý một thành viên theo thứ bậc vai trò và quy tắc Ban Zone hay không. Dùng được bởi Manager (Administrator / Manage Server / Manage Channels).", cmds: ["/bandebug • !bandebug"], perm: "Manager" },
+    en: { title: "/bandebug • !bandebug", body: "Check whether Nova can act on a member under the Ban Zone role hierarchy and permission rules. Manager-accessible (Administrator / Manage Server / Manage Channels).", cmds: ["/bandebug • !bandebug"], perm: "Manager" } },
+  trust: { icon: "🤝", isNew: true,
+    vi: { title: "/trust • !trust", body: "Quản lý người dùng Trusted. Người dùng Trusted nhận quyền quản lý War/Backup theo hệ thống phân quyền của bot.", cmds: ["/trust • !trust"], perm: "Manager" },
+    en: { title: "/trust • !trust", body: "Manage Trusted users. Trusted users receive War/Backup management access according to the bot's permission system.", cmds: ["/trust • !trust"], perm: "Manager" } },
   persona: { icon: "🎭",
     vi: { title: "Persona", body: "Đổi phong cách trả lời của AI theo mã có sẵn hoặc mô tả tự do.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" },
     en: { title: "Persona", body: "Change the AI reply style using a built-in code or a free-form description.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" } },
@@ -964,12 +1074,12 @@ const HELP_FEATURES = {
   help: { icon: "📖",
     vi: { title: "/help • !help", body: "`!help` mở Help Menu chính. `!help <feature>` chỉ hiển thị hướng dẫn chi tiết của tính năng đó.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" },
     en: { title: "/help • !help", body: "`!help` opens the main Categories Help Menu. `!help <feature>` shows only that feature's detailed help.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" } },
-  serverinfo: { icon: "📊",
-    vi: { title: "/serverinfo", body: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", cmds: ["/serverinfo"], perm: "Send Messages" },
-    en: { title: "/serverinfo", body: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", cmds: ["/serverinfo"], perm: "Send Messages" } },
-  userinfo: { icon: "👤",
-    vi: { title: "/userinfo", body: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", cmds: ["/userinfo"], perm: "Send Messages" },
-    en: { title: "/userinfo", body: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", cmds: ["/userinfo"], perm: "Send Messages" } }
+  serverinfo: { icon: "📊", isNew: true,
+    vi: { title: "/serverinfo • !serverinfo", body: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", cmds: ["/serverinfo • !serverinfo"], perm: "Send Messages" },
+    en: { title: "/serverinfo • !serverinfo", body: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", cmds: ["/serverinfo • !serverinfo"], perm: "Send Messages" } },
+  userinfo: { icon: "👤", isNew: true,
+    vi: { title: "/userinfo • !userinfo", body: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", cmds: ["/userinfo • !userinfo"], perm: "Send Messages" },
+    en: { title: "/userinfo • !userinfo", body: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", cmds: ["/userinfo • !userinfo"], perm: "Send Messages" } }
 };
 
 /* ============================================================
@@ -1178,9 +1288,6 @@ const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const t  = (k) => (I18N[lang] && I18N[lang][k]) || (I18N.vi[k] || k);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function newBadge() {
-  return `<span class="badge-new">${esc(t('new.vi').replace('✨ ', '') === 'MỚI' && lang === 'vi' ? '✨ ' + t('new.short') : '✨ ' + t('new.short'))}</span>`;
-}
 function newLabel() {
   return lang === 'vi' ? '✨ MỚI' : '✨ NEW';
 }
@@ -1235,7 +1342,8 @@ function setLang(next, save = true) {
   renderHelpChips();
   if (lastHelpFeature) renderHelpFeature(lastHelpFeature);
   applySearch();
-  if (!$('#updateModal').hidden) renderUpdateLog();
+  const um = $('#updateModal');
+  if (um && !um.hidden) renderUpdateLog();
 
   const page = document.body.dataset.page;
   if (page === 'privacy') document.title = (lang === 'vi' ? 'Chính sách bảo mật' : 'Privacy Policy') + ' — Nova';
@@ -1244,39 +1352,70 @@ function setLang(next, save = true) {
 }
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — single unified panel
    ============================================================ */
 function renderUpdateLog() {
   const body = $('#updateBody');
   if (!body) return;
-  const latest = UPDATE_LOG[0];
-  const dateLabel = latest.date;
-  const versionLabel = t('update.version');
+  const update = UPDATE_LOG[0];
+  if (!update) { body.innerHTML = ''; return; }
 
-  const itemsHtml = latest.items.map(it => {
-    const title = it.title[lang];
-    const desc = it.description[lang];
-    const foot = it.footnote ? it.footnote[lang] : '';
-    const cmds = it.commands.map(c => `<code>${esc(c)}</code>`).join('');
+  const itemsHtml = update.items.map(item => {
+    const title = item.title[lang];
+    const desc = item.description[lang];
+    const cmds = item.commands.map(c => `<code>${esc(c)}</code>`).join('');
+    const newMark = item.isCurrent ? `<span class="badge-new">${newLabel()}</span>` : '';
     return `
       <div class="update-item">
         <h3>
-          <span aria-hidden="true">${it.icon}</span>
+          <span aria-hidden="true">${item.icon}</span>
           <span>${esc(title)}</span>
-          ${it.new ? `<span class="badge-new">${newLabel()}</span>` : ''}
+          ${newMark}
         </h3>
         <p>${desc.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
-        ${foot ? `<p>${foot.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>` : ''}
-        <div class="update-cmds">${cmds}</div>
+        ${cmds ? `<div class="update-cmds">${cmds}</div>` : ''}
       </div>`;
   }).join('');
 
   body.innerHTML = `
-    <h2 class="update-head" id="updateTitle">${esc(t('update.title'))}</h2>
+    <h2 class="update-head" id="updateTitle">✨ ${esc(update.id)}</h2>
     <p class="update-sub">${esc(t('update.sub'))}</p>
-    <p><span class="update-version">${esc(versionLabel)} · ${esc(dateLabel)}</span></p>
-    <div class="update-list">${itemsHtml}</div>
+    <div class="update-panel">
+      <div class="update-panel-header">
+        <span class="up-id">${esc(update.id)}</span>
+        <span class="up-date">${esc(update.date)}</span>
+      </div>
+      <div class="update-items">${itemsHtml}</div>
+    </div>
+    <label class="update-snooze" for="snoozeCheck">
+      <input type="checkbox" id="snoozeCheck">
+      <span>${esc(t('update.snoozeLabel'))}</span>
+    </label>
   `;
+
+  const snooze = $('#snoozeCheck');
+  if (snooze) {
+    snooze.addEventListener('change', () => {
+      if (snooze.checked) {
+        const until = Date.now() + 24 * 60 * 60 * 1000;
+        try { localStorage.setItem(LS_SNOOZE, String(until)); } catch (e) {}
+      } else {
+        try { localStorage.removeItem(LS_SNOOZE); } catch (e) {}
+      }
+    });
+  }
+}
+
+function isSnoozed() {
+  try {
+    const until = parseInt(localStorage.getItem(LS_SNOOZE) || '0', 10);
+    if (!Number.isFinite(until)) return false;
+    if (until > Date.now()) return true;
+    localStorage.removeItem(LS_SNOOZE);
+    return false;
+  } catch (e) {
+    return false;
+  }
 }
 
 function openUpdateLog() {
@@ -1296,7 +1435,6 @@ function closeUpdateLog() {
   m.hidden = true;
   document.body.style.overflow = '';
   document.removeEventListener('keydown', onUpdateKey);
-  try { localStorage.setItem(LS_UPDATE_SEEN, '1'); } catch (e) {}
   if (lastFocused && lastFocused.focus) lastFocused.focus();
 }
 function onUpdateKey(e) {
@@ -1319,13 +1457,14 @@ function renderFeatures() {
   if (!grid) return;
   grid.innerHTML = FEATURES.map(f => {
     const loc = f[lang];
+    const hasNew = f.commands.some(c => c.isNew);
     return `
       <article class="feature-card reveal" tabindex="0" role="button"
                aria-label="${esc(loc.title)}" data-feature="${f.id}">
         <div class="feature-icon" aria-hidden="true">${f.icon}</div>
         <h3>
           <span>${esc(loc.title)}</span>
-          ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+          ${hasNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
         </h3>
         <p>${esc(loc.short)}</p>
         <div class="feature-meta">
@@ -1358,6 +1497,7 @@ function openFeature(id) {
   if (!f) return;
   const loc = f[lang];
   const body = $('#modalBody');
+  const hasNew = f.commands.some(c => c.isNew);
 
   const cmdsHtml = f.commands.map(c => `
     <div class="modal-cmd">
@@ -1380,7 +1520,7 @@ function openFeature(id) {
       <div class="m-icon" aria-hidden="true">${f.icon}</div>
       <h2 id="modalTitle">
         <span>${esc(loc.title)}</span>
-        ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+        ${hasNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
       </h2>
     </div>
     <p class="modal-lead">${esc(loc.lead)}</p>
@@ -1454,7 +1594,7 @@ function renderChips() {
   const wrap = $('#categoryChips');
   if (!wrap) return;
   const cats = [{ id: 'all', icon: '✨', title: t('commands.all'), isNew: false }]
-    .concat(FEATURES.map(f => ({ id: f.id, icon: f.icon, title: f[lang].title, isNew: !!f.isNew })));
+    .concat(FEATURES.map(f => ({ id: f.id, icon: f.icon, title: f[lang].title, isNew: f.commands.some(c => c.isNew) })));
 
   wrap.innerHTML = cats.map(c => `
     <button type="button" class="chip${activeCategory === c.id ? ' active' : ''}"
@@ -1478,13 +1618,14 @@ function renderCommands() {
 
   wrap.innerHTML = groups.map(f => {
     const loc = f[lang];
+    const hasNew = f.commands.some(c => c.isNew);
     return `
       <div class="cmd-group" data-group="${f.id}">
         <div class="cmd-group-head">
           <span class="g-icon" aria-hidden="true">${f.icon}</span>
           <h3>
             <span>${esc(loc.title)}</span>
-            ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+            ${hasNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
           </h3>
           <span class="count">${f.commands.length} ${esc(t('features.commands'))}</span>
         </div>
@@ -1568,15 +1709,18 @@ function applySearch() {
         <span class="count">${featHits.length} ${esc(t('commands.results'))}</span>
       </div>
       <div class="cmd-list">
-        ${featHits.map(f => `
+        ${featHits.map(f => {
+          const hasNew = f.commands.some(c => c.isNew);
+          return `
           <article class="cmd-card" data-jump="${f.id}" tabindex="0" role="button">
             <div class="cmd-top">
               <span class="cmd-name">${f.icon} ${esc(f[lang].title)}</span>
-              ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+              ${hasNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
             </div>
             <p class="cmd-desc">${esc(f[lang].short)}</p>
             <div class="cmd-foot"><span><b>${esc(t('features.view'))}</b></span></div>
-          </article>`).join('')}
+          </article>`;
+        }).join('')}
       </div>
     </div>`;
   }
@@ -1604,7 +1748,6 @@ function applySearch() {
           <article class="cmd-card" data-help="${h.id}" tabindex="0" role="button">
             <div class="cmd-top">
               <span class="cmd-name">${h.icon} ${esc(h[lang].name)}</span>
-              ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
             </div>
             <p class="cmd-desc">${esc(h[lang].desc)}</p>
           </article>`).join('')}
@@ -1641,7 +1784,6 @@ function renderHelpCategories() {
       <span>
         <b>
           <span>${esc(h[lang].name)}</span>
-          ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
         </b>
         <span>${esc(h[lang].desc)}</span>
       </span>
@@ -1653,14 +1795,14 @@ function renderHelpSelect() {
   if (!sel) return;
   const current = sel.value;
   sel.innerHTML = `<option value="">${esc(t('help.selectPlaceholder'))}</option>` +
-    HELP_CATEGORIES.map(h => `<option value="${h.id}">${h.icon} ${esc(h[lang].name)}${h.isNew ? ' — ' + newLabel() : ''}</option>`).join('');
+    HELP_CATEGORIES.map(h => `<option value="${h.id}">${h.icon} ${esc(h[lang].name)}</option>`).join('');
   if (current) sel.value = current;
 }
 
 function renderHelpChips() {
   const wrap = $('#helpChips');
   if (!wrap) return;
-  const keys = ['chat', 'info', 'prefix', 'ban', 'mute', 'warping', 'image', 'event', 'banzone', 'persona', 'config', 'help', 'serverinfo', 'userinfo'];
+  const keys = ['chat', 'info', 'prefix', 'ban', 'unban', 'mute', 'unmute', 'bandebug', 'trust', 'warping', 'image', 'event', 'banzone', 'persona', 'config', 'help', 'serverinfo', 'userinfo'];
   wrap.innerHTML = keys.map(k => `<button type="button" class="chip" data-hf="${k}">!help ${esc(k)}</button>`).join('');
   $$('[data-hf]', wrap).forEach(b => {
     b.addEventListener('click', () => {
@@ -1681,7 +1823,6 @@ function renderHelpCategory(id) {
     <div class="help-out-card">
       <h4>
         <span>${h.icon} ${esc(body.title)}</span>
-        ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
       </h4>
       <div class="hc-cmds">
         ${body.cmds.map(c => `<span class="cmd-name">${esc(c)}</span>`).join('')}
@@ -1792,15 +1933,6 @@ function init() {
 
   $$('[data-close-modal]').forEach(el => el.addEventListener('click', closeModal));
   $$('[data-close-update]').forEach(el => el.addEventListener('click', closeUpdateLog));
-  $$('[data-open-updates]').forEach(el => el.addEventListener('click', openUpdateLog));
-  const updatesBtn = $('#updatesBtn');
-  if (updatesBtn) updatesBtn.addEventListener('click', openUpdateLog);
-  const mobileUpdates = $('#mobileUpdatesBtn');
-  if (mobileUpdates) mobileUpdates.addEventListener('click', () => {
-    const menu = $('#mobileMenu');
-    if (menu && !menu.hidden) menu.hidden = true;
-    openUpdateLog();
-  });
 
   const input = $('#searchInput');
   if (input) {
@@ -1838,11 +1970,9 @@ function init() {
     renderHelpFeature('info');
   }
 
-  // Auto-show update log on first visit
-  let seen = null;
-  try { seen = localStorage.getItem(LS_UPDATE_SEEN); } catch (e) {}
-  if (!seen) {
-    setTimeout(() => openUpdateLog(), 700);
+  // AUTO-OPEN Update Log on every page load unless snoozed for 24h
+  if (!isSnoozed()) {
+    setTimeout(() => openUpdateLog(), 600);
   }
 }
 
