@@ -211,7 +211,7 @@ const I18N = {
 };
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — !info và !prefix được đánh dấu isCurrent:true
    ============================================================ */
 const UPDATE_LOG = [
   {
@@ -219,7 +219,7 @@ const UPDATE_LOG = [
     date: "19/09/2026",
     items: [
       {
-        icon: "ℹ️", isCurrent: false,
+        icon: "ℹ️", isCurrent: true,
         title: { vi: "!info — Thông tin bot", en: "!info — Bot Information" },
         description: {
           vi: "`!info` là bản prefix của `/info`. Cả hai hiển thị cùng một bảng thông tin bot, gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, Ban Zone, Help Channel, số lượng lệnh, thông tin server hiện tại, chủ server, vai trò của bot và quyền của bot.",
@@ -228,7 +228,7 @@ const UPDATE_LOG = [
         commands: ["/info • !info"]
       },
       {
-        icon: "🔧", isCurrent: false,
+        icon: "🔧", isCurrent: true,
         title: { vi: "Prefix riêng cho từng server", en: "Custom Server Prefix" },
         description: {
           vi: "Prefix mặc định là `!`. Quản trị viên server đổi bằng `!prefix ?` → sau đó dùng `?chat`, `?info`, `?help`, `?image`. Server khác có thể dùng `!prefix .` → `.chat`, `.info`, `.help`. Prefix được lưu độc lập theo từng Guild, đổi ở server này không ảnh hưởng server khác. DM vẫn dùng `!`. Lệnh này KHÔNG chỉ dành cho chủ bot — cần quyền Administrator / Manage Server / Manage Channels.",
@@ -313,7 +313,7 @@ const UPDATE_LOG = [
 ];
 
 /* ============================================================
-   FEATURES (public — no Admin)
+   FEATURES
    ============================================================ */
 const FEATURES = [
   {
@@ -603,7 +603,7 @@ const FEATURES = [
       examples: ["/info", "!info", "/serverinfo", "!serverinfo", "/userinfo user: @Member", "!userinfo @Member"]
     },
     commands: [
-      { name: "/info • !info", type: "both", vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
+      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
       { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current-server information.", p: "Send Messages" }, ex: "!serverinfo" },
       { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin người dùng.", p: "Send Messages" }, en: { d: "View user information.", p: "Send Messages" }, ex: "!userinfo @Member" }
     ]
@@ -718,7 +718,7 @@ const FEATURES = [
       examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
     },
     commands: [
-      { name: "!prefix", type: "prefix", vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
+      { name: "!prefix", type: "prefix", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
     ]
   }
 ];
@@ -838,10 +838,10 @@ const HELP_FEATURES = {
   chat: { icon: "🤖",
     vi: { title: "/chat • !chat", body: "Trò chuyện với AI trực tiếp trong Discord. Mỗi người dùng có lịch sử hội thoại riêng.", cmds: ["/chat • !chat"], perm: "Send Messages" },
     en: { title: "/chat • !chat", body: "Chat with the AI directly inside Discord. Each user keeps their own conversation history.", cmds: ["/chat • !chat"], perm: "Send Messages" } },
-  info: { icon: "ℹ️",
+  info: { icon: "ℹ️", isNew: true,
     vi: { title: "/info • !info", body: "`!info` hoặc `/info` — Xem Nova và thông tin server hiện tại. Bao gồm uptime, độ trễ, AI, War/Backup, Ban Zone và chi tiết server.", cmds: ["/info • !info"], perm: "Send Messages" },
     en: { title: "/info • !info", body: "`!info` or `/info` — View Nova and current-server information. Includes uptime, latency, AI, War/Backup, Ban Zone and server details.", cmds: ["/info • !info"], perm: "Send Messages" } },
-  prefix: { icon: "🔧",
+  prefix: { icon: "🔧", isNew: true,
     vi: { title: "!prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" },
     en: { title: "!prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
   ban: { icon: "🔨", isNew: true,
@@ -1164,7 +1164,7 @@ function setLang(next, save = true) {
 }
 
 /* ============================================================
-   UPDATE LOG — có nút Okay + đường kẻ đậm hơn
+   UPDATE LOG
    ============================================================ */
 function renderUpdateLog() {
   const body = $('#updateBody');
@@ -1275,11 +1275,15 @@ function renderFeatures() {
   if (!grid) return;
   grid.innerHTML = FEATURES.map(f => {
     const loc = f[lang];
+    const hasNew = f.commands.some(c => c.isNew);
     return `
       <article class="feature-card reveal" tabindex="0" role="button"
                aria-label="${esc(loc.title)}" data-feature="${f.id}">
         <div class="feature-icon" aria-hidden="true">${f.icon}</div>
-        <h3><span>${esc(loc.title)}</span></h3>
+        <h3>
+          <span>${esc(loc.title)}</span>
+          ${hasNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+        </h3>
         <p>${esc(loc.short)}</p>
         <div class="feature-meta">
           <span>${f.commands.length} ${esc(t('features.commands'))}</span>
