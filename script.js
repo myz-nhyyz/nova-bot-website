@@ -117,7 +117,7 @@ const I18N = {
     "terms.title": "Điều khoản dịch vụ",
     "terms.lead": "Khi mời Nova vào server hoặc sử dụng bất kỳ tính năng nào của bot, bạn đồng ý với các điều khoản dưới đây.",
     "update.sub": "Tính năng mới trong Nova",
-    "update.snoozeLabel": "Tắt bảng này trong 24 giờ",
+    "update.snoozeLabel": "Tắt update-logs trong 24h",
     "new.vi": "✨ MỚI",
     "new.en": "✨ NEW"
   },
@@ -202,7 +202,7 @@ const I18N = {
     "terms.title": "Terms of Service",
     "terms.lead": "By inviting Nova to your server or using any of its features, you agree to the terms below.",
     "update.sub": "What’s new in Nova",
-    "update.snoozeLabel": "Don't show this again for 24 hours",
+    "update.snoozeLabel": "Don't show update-logs for 24 hours",
     "new.vi": "✨ MỚI",
     "new.en": "✨ NEW"
   }
