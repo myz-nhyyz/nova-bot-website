@@ -566,22 +566,42 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 }
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:22px;border-top:1px solid var(--stroke)}
 
-/* ---------- UPDATE LOG MODAL ---------- */
-.modal-panel-update{max-width:720px}
+/* ---------- UPDATE LOG MODAL (khung đóng) ---------- */
+.modal-panel-update{
+  max-width:720px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.modal-panel-update .modal-body{
+  display:flex;
+  flex-direction:column;
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+  padding:clamp(24px,4vw,36px);
+}
 
 .update-head{
+  flex:0 0 auto;
   margin:0 0 6px;font-size:clamp(22px,3.5vw,28px);font-weight:780;letter-spacing:-.03em;
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 }
-.update-sub{margin:0 0 18px;color:var(--muted);font-size:15px}
+.update-sub{flex:0 0 auto;margin:0 0 18px;color:var(--muted);font-size:15px}
 
+/* Khung: header cố định trên, list scroll ở giữa */
 .update-panel{
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
   border-radius:20px;
   background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
   border:1px solid var(--stroke);
   overflow:hidden;
 }
 .update-panel-header{
+  flex:0 0 auto;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 18px;
   background:linear-gradient(160deg,rgba(124,92,255,.18),rgba(63,169,255,.1));
@@ -597,9 +617,17 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   background:rgba(0,0,0,.25);border:1px solid var(--stroke);
   font-variant-numeric:tabular-nums;
 }
-.update-items{padding:8px 0}
 
-/* Đường kẻ phân cách giữa các item — đậm hơn để luôn thấy rõ */
+/* Vùng scroll bên trong khung */
+.update-items{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:8px 0;
+  scrollbar-gutter:stable;
+}
+
 .update-item{
   padding:14px 18px;
   border-top:1px solid rgba(255,255,255,.12);
@@ -618,8 +646,9 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   color:#e6e0ff;border-radius:7px;
 }
 
-/* Footer: checkbox bên trái + nút Okay bên phải */
+/* Footer: checkbox trái + nút Okay phải */
 .update-footer{
+  flex:0 0 auto;
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   margin-top:18px;padding-top:16px;
   border-top:1px solid rgba(255,255,255,.12);
@@ -652,7 +681,7 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 .update-snooze span{font-size:13.5px;color:var(--muted);line-height:1.5}
 .update-snooze input:focus-visible + span{color:var(--text)}
 
-/* Nút Okay màu trắng */
+/* Nút Okay trắng */
 .btn-okay{
   appearance:none;
   padding:10px 28px;border-radius:12px;
@@ -680,6 +709,7 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:99px;border:3px solid var(--bg)}
 ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.24)}
+.update-items::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border:3px solid transparent;background-clip:padding-box}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:1080px){
@@ -706,6 +736,7 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   .hero-stats li{padding:14px 10px}
   .modal{padding:10px}
   .modal-panel{border-radius:22px;max-height:92vh}
+  .modal-panel-update{border-radius:22px}
   .search-bar{padding-left:14px}
   .discord-preview{padding:16px}
   .dc-embed{padding:16px}
