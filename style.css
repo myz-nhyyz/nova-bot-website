@@ -616,15 +616,16 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   color:#e6e0ff;border-radius:7px;
 }
 
-/* Snooze checkbox */
+/* Snooze checkbox — thin divider style */
 .update-snooze{
   display:flex;align-items:flex-start;gap:10px;
-  margin-top:18px;padding:14px 16px;border-radius:14px;
-  background:rgba(255,255,255,.04);border:1px solid var(--stroke);
+  margin-top:0;padding:16px 4px 4px;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:transparent;
   cursor:pointer;user-select:none;
-  transition:background .2s ease,border-color .2s ease;
+  transition:color .2s ease;
 }
-.update-snooze:hover{background:rgba(255,255,255,.07);border-color:var(--stroke-2)}
+.update-snooze:hover span{color:var(--text)}
 .update-snooze input[type="checkbox"]{
   appearance:none;-webkit-appearance:none;
   width:20px;height:20px;border-radius:6px;flex-shrink:0;
