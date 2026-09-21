@@ -532,4 +532,1322 @@ const FEATURES = [
       { name: "WIN", type: "button", vi: { d: "Đánh dấu kết quả là thắng.", p: "Configurable" }, en: { d: "Mark the result as a win.", p: "Configurable" } },
       { name: "LOSE", type: "button", vi: { d: "Đánh dấu kết quả là thua.", p: "Configurable" }, en: { d: "Mark the result as a loss.", p: "Configurable" } },
       { name: "END", type: "button", vi: { d: "Kết thúc phiên hiện tại.", p: "Configurable" }, en: { d: "End the current session.", p: "Configurable" } },
-      { name: "/end all", type: "slash", vi: { d: "
+      { name: "/end all", type: "slash", vi: { d: "Kết thúc mọi phiên War/Backup đang hoạt động trong server.", p: "Manage Threads" }, en: { d: "End all active War/Backup sessions in the server.", p: "Manage Threads" } },
+      { name: "/trust add", type: "slash", vi: { d: "Thêm người dùng vào danh sách tin cậy.", p: "Manager" }, en: { d: "Add a user to the trusted list.", p: "Manager" } },
+      { name: "/trust remove", type: "slash", vi: { d: "Xoá người dùng khỏi danh sách tin cậy.", p: "Manager" }, en: { d: "Remove a user from the trusted list.", p: "Manager" } },
+      { name: "/trust list", type: "slash", vi: { d: "Xem danh sách người dùng tin cậy.", p: "Manager" }, en: { d: "View the trusted users list.", p: "Manager" } },
+      { name: "/helppanel", type: "slash", vi: { d: "Gửi bảng hướng dẫn War/Backup vào kênh.", p: "Manage Channels" }, en: { d: "Send the War/Backup help panel to a channel.", p: "Manage Channels" } },
+      { name: "/callhacker show", type: "slash", vi: { d: "Hiện nút Call Hacker.", p: "Manager" }, en: { d: "Show the Call Hacker button.", p: "Manager" } },
+      { name: "/callhacker hide", type: "slash", vi: { d: "Ẩn nút Call Hacker.", p: "Manager" }, en: { d: "Hide the Call Hacker button.", p: "Manager" } }
+    ]
+  },
+  {
+    id: "event",
+    icon: "🏆",
+    vi: {
+      title: "Tạo event",
+      short: "Tạo và quản lý sự kiện.",
+      lead: "Gửi sự kiện, quản lý người tham gia và blacklist — tất cả qua nhóm lệnh <code>/event</code>.",
+      details: [
+        "<code>/event send</code> gửi và tạo sự kiện trong server.",
+        "<code>/event test</code> kiểm tra hệ thống sự kiện.",
+        "<code>/event participants</code> xem danh sách người tham gia.",
+        "<code>/event count</code> đếm số người tham gia.",
+        "<code>/event remove</code> xoá một người tham gia.",
+        "<code>/event clear</code> xoá dữ liệu/người tham gia khi phù hợp.",
+        "Blacklist: <code>/event blacklist add</code>, <code>/event blacklist remove</code>, <code>/event blacklist list</code>."
+      ],
+      perms: [
+        "Manage Events / Manage Channels — để gửi và quản lý sự kiện.",
+        "Quyền quản lý cần thiết để dùng blacklist sự kiện."
+      ],
+      examples: [
+        "/event send title: Giải đấu cuối tuần",
+        "/event participants",
+        "/event count",
+        "/event blacklist add @User"
+      ]
+    },
+    en: {
+      title: "Create events",
+      short: "Create and manage events.",
+      lead: "Send events, manage participants and blacklist — all through the <code>/event</code> command group.",
+      details: [
+        "<code>/event send</code> sends and creates an event in the server.",
+        "<code>/event test</code> tests the event system.",
+        "<code>/event participants</code> views the participant list.",
+        "<code>/event count</code> counts participants.",
+        "<code>/event remove</code> removes a participant.",
+        "<code>/event clear</code> clears event participants/data when applicable.",
+        "Blacklist: <code>/event blacklist add</code>, <code>/event blacklist remove</code>, <code>/event blacklist list</code>."
+      ],
+      perms: [
+        "Manage Events / Manage Channels — to send and manage events.",
+        "Manager-level permissions to use the event blacklist."
+      ],
+      examples: [
+        "/event send title: Weekend Tournament",
+        "/event participants",
+        "/event count",
+        "/event blacklist add @User"
+      ]
+    },
+    commands: [
+      { name: "/event send", type: "slash", vi: { d: "Gửi và tạo sự kiện.", p: "Manage Events" }, en: { d: "Send and create an event.", p: "Manage Events" } },
+      { name: "/event test", type: "slash", vi: { d: "Kiểm tra hệ thống sự kiện.", p: "Manage Events" }, en: { d: "Test the event system.", p: "Manage Events" } },
+      { name: "/event participants", type: "slash", vi: { d: "Xem danh sách người tham gia.", p: "Manage Events" }, en: { d: "View the participant list.", p: "Manage Events" } },
+      { name: "/event count", type: "slash", vi: { d: "Đếm số người tham gia.", p: "Manage Events" }, en: { d: "Count participants.", p: "Manage Events" } },
+      { name: "/event remove", type: "slash", vi: { d: "Xoá một người tham gia.", p: "Manage Events" }, en: { d: "Remove a participant.", p: "Manage Events" } },
+      { name: "/event clear", type: "slash", vi: { d: "Xoá dữ liệu/người tham gia sự kiện khi phù hợp.", p: "Manage Events" }, en: { d: "Clear event participants/data when applicable.", p: "Manage Events" } },
+      { name: "/event blacklist add", type: "slash", vi: { d: "Thêm người dùng vào blacklist sự kiện.", p: "Manager" }, en: { d: "Add a user to the event blacklist.", p: "Manager" } },
+      { name: "/event blacklist remove", type: "slash", vi: { d: "Xoá người dùng khỏi blacklist sự kiện.", p: "Manager" }, en: { d: "Remove a user from the event blacklist.", p: "Manager" } },
+      { name: "/event blacklist list", type: "slash", vi: { d: "Xem blacklist sự kiện.", p: "Manager" }, en: { d: "View the event blacklist.", p: "Manager" } }
+    ]
+  },
+  {
+    id: "serverinfo",
+    icon: "📊",
+    vi: {
+      title: "Server Information",
+      short: "Thông tin bot, server và người dùng.",
+      lead: "Nhóm lệnh thông tin giúp bạn xem chi tiết về bot, server và thành viên — bao gồm cả bản prefix mới <code>!info</code>.",
+      details: [
+        "<code>/info</code> và <code>!info</code> cùng mở bảng thông tin bot. <code>!info</code> là bản prefix mới được thêm.",
+        "Bảng thông tin bot gồm: tên bot, Bot ID, chủ sở hữu, thời gian tạo, độ trễ, uptime, phiên bản Python, phiên bản discord.py, tổng server, tổng người dùng, tổng kênh.",
+        "Bảng còn hiển thị: trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, kênh Ban Zone, số lượng whitelist Ban Zone, kênh Help, chế độ Ban Zone, số slash command, số prefix command.",
+        "Chi tiết server hiện tại: thông tin server, chủ server, số thành viên, thứ bậc vai trò của bot, quyền của bot.",
+        "<code>/serverinfo</code>: tên server, Server ID, chủ sở hữu, số thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.",
+        "<code>/userinfo</code>: thông tin người dùng, ngày tạo tài khoản, ngày tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, trạng thái timeout."
+      ],
+      perms: [
+        "Send Messages và Embed Links trong kênh sử dụng.",
+        "Không yêu cầu quyền quản lý."
+      ],
+      examples: [
+        "/info",
+        "!info",
+        "/serverinfo",
+        "/userinfo user: @Member"
+      ]
+    },
+    en: {
+      title: "Server Information",
+      short: "Bot, server and user information.",
+      lead: "Information commands to inspect the bot, server and members — including the newly added prefix version <code>!info</code>.",
+      details: [
+        "<code>/info</code> and <code>!info</code> both open the bot information panel. <code>!info</code> is the newly added prefix version.",
+        "The bot information panel includes: bot name, Bot ID, owner, creation time, latency, uptime, Python version, discord.py version, total servers, total users, total channels.",
+        "Also shows: AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone channel, Ban whitelist count, Help channel, Ban Zone mode, slash command count, prefix command count.",
+        "Current server details: server info, server owner, member count, bot role hierarchy, bot permissions.",
+        "<code>/serverinfo</code>: server name, Server ID, owner, member counts, channels, roles, boosts, verification, features, icon/banner.",
+        "<code>/userinfo</code>: user information, account creation, server join, roles, status, platform, activity, nickname, boost, timeout status."
+      ],
+      perms: [
+        "Send Messages and Embed Links in the target channel.",
+        "No management permission required."
+      ],
+      examples: [
+        "/info",
+        "!info",
+        "/serverinfo",
+        "/userinfo user: @Member"
+      ]
+    },
+    commands: [
+      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
+      { name: "/serverinfo", type: "slash", vi: { d: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", p: "Send Messages" }, en: { d: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", p: "Send Messages" } },
+      { name: "/userinfo", type: "slash", vi: { d: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", p: "Send Messages" }, en: { d: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", p: "Send Messages" } }
+    ]
+  },
+  {
+    id: "config",
+    icon: "⚙️",
+    vi: {
+      title: "Configuration",
+      short: "Cấu hình server.",
+      lead: "Cấu hình kênh, vai trò và các thiết lập mà hệ thống War/Backup và Help sử dụng.",
+      details: [
+        "<code>/config view</code> xem toàn bộ cấu hình hiện tại.",
+        "<code>/config help_channel</code> đặt kênh nhận bảng hướng dẫn.",
+        "<code>/config war_ping_role</code> đặt vai trò được ping cho War.",
+        "<code>/config backup_ping_role</code> đặt vai trò được ping cho Backup.",
+        "<code>/config joined_war_role</code> đặt vai trò cấp cho người tham gia War.",
+        "<code>/config joined_backup_role</code> đặt vai trò cấp cho người tham gia Backup.",
+        "<code>/config hacker_role</code> đặt vai trò cho Call Hacker."
+      ],
+      perms: [
+        "Manage Server / Manage Roles — để thay đổi cấu hình.",
+        "Manage Channels — để đặt kênh help."
+      ],
+      examples: [
+        "/config view",
+        "/config war_ping_role role: @WarPing",
+        "/config help_channel channel: #help"
+      ]
+    },
+    en: {
+      title: "Configuration",
+      short: "Server configuration.",
+      lead: "Configure channels, roles and the settings used by the War/Backup and Help systems.",
+      details: [
+        "<code>/config view</code> shows the server's current configuration.",
+        "<code>/config help_channel</code> sets the channel that receives the help panel.",
+        "<code>/config war_ping_role</code> sets the role pinged for War.",
+        "<code>/config backup_ping_role</code> sets the role pinged for Backup.",
+        "<code>/config joined_war_role</code> sets the role granted to War participants.",
+        "<code>/config joined_backup_role</code> sets the role granted to Backup participants.",
+        "<code>/config hacker_role</code> sets the role for Call Hacker."
+      ],
+      perms: [
+        "Manage Server / Manage Roles — to change configuration.",
+        "Manage Channels — to set the help channel."
+      ],
+      examples: [
+        "/config view",
+        "/config war_ping_role role: @WarPing",
+        "/config help_channel channel: #help"
+      ]
+    },
+    commands: [
+      { name: "/config view", type: "slash", vi: { d: "Xem cấu hình hiện tại của server.", p: "Manage Server" }, en: { d: "View the server's current configuration.", p: "Manage Server" } },
+      { name: "/config help_channel", type: "slash", vi: { d: "Đặt kênh nhận bảng hướng dẫn.", p: "Manage Channels" }, en: { d: "Set the channel that receives the help panel.", p: "Manage Channels" } },
+      { name: "/config war_ping_role", type: "slash", vi: { d: "Đặt vai trò War Ping.", p: "Manage Roles" }, en: { d: "Set the War Ping role.", p: "Manage Roles" } },
+      { name: "/config backup_ping_role", type: "slash", vi: { d: "Đặt vai trò Backup Ping.", p: "Manage Roles" }, en: { d: "Set the Backup Ping role.", p: "Manage Roles" } },
+      { name: "/config joined_war_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia War.", p: "Manage Roles" }, en: { d: "Set the role for War participants.", p: "Manage Roles" } },
+      { name: "/config joined_backup_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia Backup.", p: "Manage Roles" }, en: { d: "Set the role for Backup participants.", p: "Manage Roles" } },
+      { name: "/config hacker_role", type: "slash", vi: { d: "Đặt vai trò Call Hacker.", p: "Manage Roles" }, en: { d: "Set the Call Hacker role.", p: "Manage Roles" } }
+    ]
+  },
+  {
+    id: "help",
+    icon: "📖",
+    vi: {
+      title: "Help System",
+      short: "Hệ thống trợ giúp.",
+      lead: "<code>!help</code> mở Help Menu chính. <code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của riêng tính năng đó.",
+      details: [
+        "<code>!help</code> / <code>/help</code> mở Help Menu chính theo danh mục.",
+        "<code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của tính năng được yêu cầu — không hiển thị toàn bộ danh mục.",
+        "Ví dụ: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>."
+      ],
+      perms: ["Send Messages trong kênh sử dụng."],
+      examples: ["!help", "/help", "!help chat", "!help info", "!help warping"]
+    },
+    en: {
+      title: "Help System",
+      short: "Help system.",
+      lead: "<code>!help</code> opens the main Help Menu. <code>!help &lt;feature&gt;</code> shows only the detailed help for that specific feature.",
+      details: [
+        "<code>!help</code> / <code>/help</code> opens the main Categories Help Menu.",
+        "<code>!help &lt;feature&gt;</code> shows only the detailed help for the requested feature — the entire category is not shown.",
+        "Examples: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>."
+      ],
+      perms: ["Send Messages in the target channel."],
+      examples: ["!help", "/help", "!help chat", "!help info", "!help warping"]
+    },
+    commands: [
+      { name: "/help • !help", type: "both", vi: { d: "Mở Help Menu chính theo danh mục.", p: "Send Messages" }, en: { d: "Open the main Categories Help Menu.", p: "Send Messages" } },
+      { name: "!help <feature>", type: "prefix", vi: { d: "Chỉ hiển thị hướng dẫn chi tiết của một tính năng cụ thể.", p: "Send Messages" }, en: { d: "Show only the detailed help for one specific feature.", p: "Send Messages" }, ex: "!help info" }
+    ]
+  },
+  {
+    id: "prefix",
+    icon: "🔧",
+    vi: {
+      title: "Prefix riêng từng server",
+      short: "Dùng prefix khác nhau cho mỗi server.",
+      lead: "Mỗi server Discord có thể dùng prefix riêng. Prefix mặc định là <code>!</code>. Dùng <code>!prefix ?</code> để đổi thành <code>?</code>.",
+      details: [
+        "Mặc định prefix là <code>!</code>.",
+        "Đổi prefix bằng <code>!prefix &lt;ký tự&gt;</code>.",
+        "Ví dụ: <code>!prefix ?</code> → sau đó dùng <code>?chat</code>, <code>?info</code>, <code>?help</code>.",
+        "Server khác có thể dùng <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>.",
+        "Mỗi server (Guild) có prefix riêng, không ảnh hưởng lẫn nhau.",
+        "DM vẫn dùng mặc định <code>!</code>.",
+        "Prefix được lưu lại sau khi bot khởi động lại.",
+        "Prefix hỗ trợ các ký tự như <code>!</code>, <code>?</code>, <code>.</code>, <code>$</code>, <code>-</code>, <code>&gt;</code>."
+      ],
+      perms: [
+        "<strong>KHÔNG</strong> chỉ dành cho chủ bot.",
+        "Administrator, Manage Server hoặc Manage Channels trong server đều dùng được.",
+        "Quyền thuộc về server Discord, không phải chủ bot."
+      ],
+      examples: [
+        "!prefix ?",
+        "?chat",
+        "?info",
+        "?help",
+        "?image"
+      ]
+    },
+    en: {
+      title: "Custom Server Prefix",
+      short: "Use a different prefix in each Discord server.",
+      lead: "Each Discord server can use its own prefix. The default prefix is <code>!</code>. Use <code>!prefix ?</code> to change it to <code>?</code>.",
+      details: [
+        "Default prefix is <code>!</code>.",
+        "Change the prefix with <code>!prefix &lt;char&gt;</code>.",
+        "Example: <code>!prefix ?</code> → then use <code>?chat</code>, <code>?info</code>, <code>?help</code>.",
+        "Another server can use <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>.",
+        "Each Guild has its own prefix and does not affect other servers.",
+        "DM uses the default <code>!</code>.",
+        "The prefix is saved after bot restart.",
+        "Supported example prefixes: <code>!</code>, <code>?</code>, <code>.</code>, <code>$</code>, <code>-</code>, <code>&gt;</code>."
+      ],
+      perms: [
+        "NOT bot-owner-only.",
+        "Administrator, Manage Server or Manage Channels in the server can use it.",
+        "The permission belongs to the Discord server, not the bot owner."
+      ],
+      examples: [
+        "!prefix ?",
+        "?chat",
+        "?info",
+        "?help",
+        "?image"
+      ]
+    },
+    isNew: true,
+    commands: [
+      { name: "/prefix • !prefix", type: "both", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
+    ]
+  }
+];
+
+/* ============================================================
+   HELP MENU CATEGORIES
+   ============================================================ */
+const HELP_CATEGORIES = [
+  {
+    id: "ai", icon: "🤖",
+    vi: { name: "AI Chatbot", desc: "Chat với AI (Qwen) ngay trong kênh" },
+    en: { name: "AI Chatbot", desc: "Chat with AI (Qwen) right in the channel" },
+    viBody: {
+      title: "AI Chatbot",
+      text: "Chat với AI trực tiếp trong Discord, kèm lịch sử hội thoại riêng, tạo ảnh AI và persona tuỳ chỉnh.",
+      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "!unsetai", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/setsharedhistory • !setsharedhistory", "!unsetsharedhistory", "/language • !language"],
+      note: "Mô hình công khai: Qwen3.7-max. Cocolink là nhà cung cấp ảnh chính, Gemini làm dự phòng."
+    },
+    enBody: {
+      title: "AI Chatbot",
+      text: "Chat with AI inside Discord, with personal conversation history, AI image generation and custom personas.",
+      cmds: ["/chat • !chat", "/image • !image", "/setai • !setai", "!unsetai", "/clearchat • !clearchat", "/persona • !persona", "/mypersona • !mypersona", "/resetpersona • !resetpersona", "/setsharedhistory • !setsharedhistory", "!unsetsharedhistory", "/language • !language"],
+      note: "Public model: Qwen3.7-max. Cocolink is primary image provider, Gemini is fallback."
+    }
+  },
+  {
+    id: "war", icon: "⚔️",
+    vi: { name: "War Ping / Backup Ping", desc: "Gọi người vào war hoặc gọi backup" },
+    en: { name: "War Ping / Backup Ping", desc: "Call people into a war or call for backup" },
+    viBody: {
+      title: "War Ping / Backup Ping",
+      text: "Tạo yêu cầu War hoặc Backup, mở thread điều phối với các nút hành động.",
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust add", "/trust remove", "/trust list", "/helppanel", "/callhacker show", "/callhacker hide"],
+      note: "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
+    },
+    enBody: {
+      title: "War Ping / Backup Ping",
+      text: "Create a War or Backup request and open a coordination thread with action buttons.",
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust add", "/trust remove", "/trust list", "/helppanel", "/callhacker show", "/callhacker hide"],
+      note: "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
+    }
+  },
+  {
+    id: "event", icon: "🏆",
+    vi: { name: "Event", desc: "Tạo sự kiện" },
+    en: { name: "Event", desc: "Create events" },
+    viBody: {
+      title: "Tạo event",
+      text: "Gửi sự kiện, quản lý người tham gia và blacklist sự kiện.",
+      cmds: ["/event send", "/event test", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add", "/event blacklist remove", "/event blacklist list"],
+      note: "Cần quyền Manage Events để gửi và quản lý sự kiện."
+    },
+    enBody: {
+      title: "Create events",
+      text: "Send events, manage participants and the event blacklist.",
+      cmds: ["/event send", "/event test", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add", "/event blacklist remove", "/event blacklist list"],
+      note: "Manage Events permission is required to send and manage events."
+    }
+  },
+  {
+    id: "banzone", icon: "☠️",
+    vi: { name: "Ban Channel", desc: "Kênh auto-ban, whitelist người được miễn ban" },
+    en: { name: "Ban Channel", desc: "Auto-ban channel, whitelist users exempt from ban" },
+    viBody: {
+      title: "Ban Zone",
+      text: "Hệ thống bảo vệ server: khi kênh bị xâm phạm, Nova xử lý người vi phạm theo chế độ đã cấu hình.",
+      cmds: ["/banzone mode:ban", "/banzone mode:mute duration:10m", "/setbanchannel true|false", "/banwhitelist add @user", "/banwhitelist remove @user", "/banwhitelist list", "/bandebug @user"],
+      note: "Whitelist theo từng server và chỉ chủ server quản lý được. Thứ bậc vai trò của bot rất quan trọng."
+    },
+    enBody: {
+      title: "Ban Zone",
+      text: "Server protection system: when a channel is compromised, Nova processes offenders according to the configured mode.",
+      cmds: ["/banzone mode:ban", "/banzone mode:mute duration:10m", "/setbanchannel true|false", "/banwhitelist add @user", "/banwhitelist remove @user", "/banwhitelist list", "/bandebug @user"],
+      note: "The whitelist is per-server and only the server owner can manage it. Bot role hierarchy matters."
+    }
+  },
+  {
+    id: "serverinfo", icon: "📊",
+    vi: { name: "Server Information", desc: "Thông tin bot và server hiện tại" },
+    en: { name: "Server Information", desc: "Bot and current-server information" },
+    isNew: true,
+    viBody: {
+      title: "Server Information",
+      text: "Xem Nova và thông tin server hiện tại.",
+      cmds: ["/info • !info", "/serverinfo", "/userinfo"],
+      note: "`!info` là bản prefix mới. `/info` và `!info` cung cấp cùng một bảng thông tin."
+    },
+    enBody: {
+      title: "Server Information",
+      text: "View Nova and current-server information.",
+      cmds: ["/info • !info", "/serverinfo", "/userinfo"],
+      note: "`!info` is the new prefix version. `/info` and `!info` provide the same information panel."
+    }
+  },
+  {
+    id: "prefix", icon: "🔧",
+    vi: { name: "Prefix riêng từng server", desc: "Đổi prefix riêng cho mỗi server" },
+    en: { name: "Custom Server Prefix", desc: "Set a different prefix per server" },
+    isNew: true,
+    viBody: {
+      title: "Prefix riêng từng server",
+      text: "Mỗi server Discord có thể dùng prefix riêng. Mặc định là `!`. Dùng `!prefix ?` để đổi.",
+      cmds: ["/prefix • !prefix", "!prefix ?", "!prefix ."],
+      note: "Không chỉ dành cho chủ bot. Cần quyền Administrator / Manage Server / Manage Channels."
+    },
+    enBody: {
+      title: "Custom Server Prefix",
+      text: "Each Discord server can use its own prefix. Default is `!`. Use `!prefix ?` to change it.",
+      cmds: ["/prefix • !prefix", "!prefix ?", "!prefix ."],
+      note: "Not bot-owner-only. Requires Administrator / Manage Server / Manage Channels."
+    }
+  }
+];
+
+/* ============================================================
+   !help <feature>
+   ============================================================ */
+const HELP_FEATURES = {
+  chat: { icon: "🤖",
+    vi: { title: "/chat • !chat", body: "Trò chuyện với AI trực tiếp trong Discord. Mỗi người dùng có lịch sử hội thoại riêng.", cmds: ["/chat • !chat"], perm: "Send Messages" },
+    en: { title: "/chat • !chat", body: "Chat with the AI directly inside Discord. Each user keeps their own conversation history.", cmds: ["/chat • !chat"], perm: "Send Messages" } },
+  info: { icon: "ℹ️", isNew: true,
+    vi: { title: "/info • !info", body: "`!info` hoặc `/info` — Xem Nova và thông tin server hiện tại. Bao gồm uptime, độ trễ, AI, War/Backup, Ban Zone và chi tiết server.", cmds: ["/info • !info"], perm: "Send Messages" },
+    en: { title: "/info • !info", body: "`!info` or `/info` — View Nova and current-server information. Includes uptime, latency, AI, War/Backup, Ban Zone and server details.", cmds: ["/info • !info"], perm: "Send Messages" } },
+  prefix: { icon: "🔧", isNew: true,
+    vi: { title: "/prefix • !prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["/prefix • !prefix"], perm: "Administrator / Manage Server / Manage Channels" },
+    en: { title: "/prefix • !prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["/prefix • !prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
+  ban: { icon: "🔨",
+    vi: { title: "/ban", body: "Ban thành viên được chọn khỏi server. Bot cần quyền Ban Members và vai trò cao hơn mục tiêu.", cmds: ["/ban"], perm: "Ban Members" },
+    en: { title: "/ban", body: "Ban the selected member from the server. The bot needs Ban Members and a higher role than the target.", cmds: ["/ban"], perm: "Ban Members" } },
+  mute: { icon: "🔇",
+    vi: { title: "/mute", body: "Timeout thành viên. Thời lượng tối đa 28 ngày. Ví dụ: 10m, 2h, 7d.", cmds: ["/mute"], perm: "Moderate Members" },
+    en: { title: "/mute", body: "Timeout a member. Maximum duration is 28 days. Examples: 10m, 2h, 7d.", cmds: ["/mute"], perm: "Moderate Members" } },
+  warping: { icon: "⚔️",
+    vi: { title: "War Ping / Backup Ping", body: "Tạo yêu cầu War/Backup, mở thread điều phối và dùng các nút WAR/BACKUP/WIN/LOSE/END.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" },
+    en: { title: "War Ping / Backup Ping", body: "Create a War/Backup request, open a coordination thread and use the WAR/BACKUP/WIN/LOSE/END buttons.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" } },
+  image: { icon: "🎨",
+    vi: { title: "/image • !image", body: "Tạo ảnh AI từ mô tả văn bản. Cocolink là nhà cung cấp chính, Gemini làm dự phòng.", cmds: ["/image • !image"], perm: "Send Messages, Attach Files" },
+    en: { title: "/image • !image", body: "Generate an AI image from a text prompt. Cocolink is primary, Gemini is fallback.", cmds: ["/image • !image"], perm: "Send Messages, Attach Files" } },
+  event: { icon: "🏆",
+    vi: { title: "/event", body: "Gửi sự kiện, xem người tham gia, đếm, xoá và quản lý blacklist sự kiện.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" },
+    en: { title: "/event", body: "Send events, view participants, count, remove and manage the event blacklist.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" } },
+  banzone: { icon: "☠️",
+    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được.", cmds: ["/banzone", "/setbanchannel", "/banwhitelist", "/bandebug"], perm: "Manage Channels / Server Owner" },
+    en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it.", cmds: ["/banzone", "/setbanchannel", "/banwhitelist", "/bandebug"], perm: "Manage Channels / Server Owner" } },
+  persona: { icon: "🎭",
+    vi: { title: "Persona", body: "Đổi phong cách trả lời của AI theo mã có sẵn hoặc mô tả tự do.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" },
+    en: { title: "Persona", body: "Change the AI reply style using a built-in code or a free-form description.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" } },
+  config: { icon: "⚙️",
+    vi: { title: "/config", body: "Cấu hình kênh và vai trò cho hệ thống War/Backup và Help.", cmds: ["/config view", "/config help_channel", "/config war_ping_role", "/config backup_ping_role"], perm: "Manage Server / Manage Roles" },
+    en: { title: "/config", body: "Configure channels and roles for the War/Backup and Help systems.", cmds: ["/config view", "/config help_channel", "/config war_ping_role", "/config backup_ping_role"], perm: "Manage Server / Manage Roles" } },
+  help: { icon: "📖",
+    vi: { title: "/help • !help", body: "`!help` mở Help Menu chính. `!help <feature>` chỉ hiển thị hướng dẫn chi tiết của tính năng đó.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" },
+    en: { title: "/help • !help", body: "`!help` opens the main Categories Help Menu. `!help <feature>` shows only that feature's detailed help.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" } },
+  serverinfo: { icon: "📊",
+    vi: { title: "/serverinfo", body: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", cmds: ["/serverinfo"], perm: "Send Messages" },
+    en: { title: "/serverinfo", body: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", cmds: ["/serverinfo"], perm: "Send Messages" } },
+  userinfo: { icon: "👤",
+    vi: { title: "/userinfo", body: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", cmds: ["/userinfo"], perm: "Send Messages" },
+    en: { title: "/userinfo", body: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", cmds: ["/userinfo"], perm: "Send Messages" } }
+};
+
+/* ============================================================
+   LEGAL
+   ============================================================ */
+const LEGAL = {
+  privacy: {
+    vi: `
+      <h2>1. Giới thiệu</h2>
+      <p>Chính sách bảo mật này giải thích cách <strong>Nova</strong> xử lý dữ liệu khi bạn sử dụng bot trong server Discord của bạn. Chủ sở hữu bot là <strong>nova_.inovation</strong>. Ngày hiệu lực: <strong>19/09/2026</strong>.</p>
+
+      <h2>2. Dữ liệu Nova có thể xử lý</h2>
+      <ul>
+        <li><strong>ID người dùng Discord và ID server</strong> — để phân biệt người dùng, lưu cấu hình theo server và áp dụng đúng quyền.</li>
+        <li><strong>Nội dung tin nhắn</strong> — chỉ xử lý khi cần cho tính năng AI/chat.</li>
+        <li><strong>Lịch sử hội thoại AI</strong> — dùng để duy trì ngữ cảnh. Mỗi người dùng có lịch sử riêng; có thể bật shared history cho kênh.</li>
+        <li><strong>Dữ liệu kiểm duyệt, sự kiện, War/Backup</strong> — người tham gia sự kiện, phiên War/Backup đang hoạt động, danh sách tin cậy.</li>
+        <li><strong>Dữ liệu cấu hình</strong> — kênh help, vai trò War/Backup, kênh Ban Zone, whitelist Ban Zone.</li>
+        <li><strong>Cấu hình prefix theo server</strong> — mỗi server có prefix riêng, được lưu độc lập.</li>
+      </ul>
+
+      <h2>3. Xử lý bởi nhà cung cấp AI</h2>
+      <p>Nội dung bạn gửi vào các lệnh AI có thể được chuyển tới nhà cung cấp mô hình AI. Mô hình công khai hiển thị trên trang này là <strong>Qwen3.7-max</strong>. Với tạo ảnh, <strong>Cocolink</strong> là nhà cung cấp chính và <strong>Gemini</strong> là dự phòng.</p>
+      <p>Chúng tôi không kiểm soát chính sách riêng của nhà cung cấp bên thứ ba. Tránh gửi thông tin nhạy cảm (mật khẩu, thanh toán, giấy tờ tuỳ thân) vào lệnh AI.</p>
+
+      <h2>4. Nguyên tắc lưu trữ</h2>
+      <ul>
+        <li>Dữ liệu lưu ở mức tối thiểu cần thiết cho tính năng tương ứng.</li>
+        <li>Lịch sử AI có thể xoá bằng <code>!clearchat</code> / <code>/clearchat</code>.</li>
+        <li>Cấu hình server (bao gồm prefix) tồn tại khi bot còn trong server.</li>
+        <li>Khi bot bị mời ra, cấu hình gắn với server đó có thể được xoá hoặc giữ lại trong thời gian hợp lý.</li>
+      </ul>
+
+      <h2>5. Nguyên tắc bảo mật</h2>
+      <p>Chúng tôi giới hạn quyền truy cập, không hiển thị thông tin bí mật ra ngoài, và không lưu trữ token, API key hay mật khẩu trên trang web tĩnh này. Không có hệ thống nào an toàn tuyệt đối.</p>
+
+      <h2>6. Quyền của bạn</h2>
+      <ul>
+        <li>Yêu cầu xem, sửa hoặc xoá dữ liệu liên quan tới mình.</li>
+        <li>Xoá lịch sử hội thoại AI bằng <code>!clearchat</code>.</li>
+        <li>Chủ server có thể xoá cấu hình (bao gồm prefix) bằng lệnh tương ứng.</li>
+        <li>Liên hệ qua email hoặc Support Server để được hỗ trợ.</li>
+      </ul>
+
+      <h2>7. Liên hệ</h2>
+      <p>Email: <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a><br>
+      Support Server: <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener">discord.gg/qkyu3G6WMa</a><br>
+      Chủ sở hữu: <strong>nova_.inovation</strong></p>
+    `,
+    en: `
+      <h2>1. Introduction</h2>
+      <p>This Privacy Policy explains how <strong>Nova</strong> processes data when you use the bot in your Discord server. Owned by <strong>nova_.inovation</strong>. Effective date: <strong>19/09/2026</strong>.</p>
+
+      <h2>2. Data Nova may process</h2>
+      <ul>
+        <li><strong>Discord user IDs and server IDs</strong> — to distinguish users, store per-server config and apply permissions.</li>
+        <li><strong>Message content</strong> — only where required for AI/chat features.</li>
+        <li><strong>AI conversation history</strong> — to maintain conversation context. Each user has their own; shared history can be enabled per channel.</li>
+        <li><strong>Moderation, event, War/Backup data</strong> — event participants, active War/Backup sessions, trusted user lists.</li>
+        <li><strong>Configuration data</strong> — help channel, War/Backup roles, Ban Zone channel, Ban Zone whitelist.</li>
+        <li><strong>Server-specific prefix configuration</strong> — each server stores its own prefix independently.</li>
+      </ul>
+
+      <h2>3. AI provider processing</h2>
+      <p>Content you submit to AI commands may be sent to an AI model provider. The public model shown on this site is <strong>Qwen3.7-max</strong>. For images, <strong>Cocolink</strong> is primary and <strong>Gemini</strong> is fallback.</p>
+      <p>We do not control third-party policies. Avoid sending sensitive information (passwords, payment details, ID documents) into AI commands.</p>
+
+      <h2>4. Data retention</h2>
+      <ul>
+        <li>Data is stored only at the minimum required for the corresponding feature.</li>
+        <li>AI conversation history can be cleared with <code>!clearchat</code> / <code>/clearchat</code>.</li>
+        <li>Server config (including prefix) exists while the bot is in the server.</li>
+        <li>When the bot is removed, config tied to that server may be deleted or kept for a reasonable period.</li>
+      </ul>
+
+      <h2>5. Security principles</h2>
+      <p>We limit access, never expose secrets externally, and never store tokens, API keys or passwords on this static site. No system is perfectly secure.</p>
+
+      <h2>6. Your rights</h2>
+      <ul>
+        <li>Request to view, correct or delete data related to you.</li>
+        <li>Clear your AI conversation history with <code>!clearchat</code>.</li>
+        <li>Server owners can clear configuration (including prefix) via the relevant commands.</li>
+        <li>Contact us by email or through the Support Server.</li>
+      </ul>
+
+      <h2>7. Contact</h2>
+      <p>Email: <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a><br>
+      Support Server: <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener">discord.gg/qkyu3G6WMa</a><br>
+      Owner: <strong>nova_.inovation</strong></p>
+    `
+  },
+  terms: {
+    vi: `
+      <h2>1. Mô tả dịch vụ</h2>
+      <p><strong>Nova</strong> là bot Discord cung cấp: AI chat, tạo ảnh AI, điều phối War/Backup, tạo sự kiện, bảo vệ Ban Zone, kiểm duyệt, thông tin server và công cụ riêng theo từng server (bao gồm prefix riêng). Chủ sở hữu: <strong>nova_.inovation</strong>. Ngày hiệu lực: <strong>19/09/2026</strong>.</p>
+
+      <h2>2. Sử dụng hợp lệ</h2>
+      <ul>
+        <li>Tuân thủ Điều khoản dịch vụ và Nguyên tắc cộng đồng của Discord.</li>
+        <li>Có đủ quyền hạn trong server khi dùng lệnh kiểm duyệt, cấu hình hoặc Ban Zone.</li>
+        <li>Chịu trách nhiệm về nội dung gửi vào các lệnh AI.</li>
+        <li>Không dùng bot để quấy rối, doxxing, spam hoặc phát tán nội dung vi phạm pháp luật.</li>
+      </ul>
+
+      <h2>3. Hành vi bị cấm</h2>
+      <ul>
+        <li>Khai thác, phá hoại hoặc gây quá tải hệ thống bot.</li>
+        <li>Truy cập trái phép vào API key, token hoặc cấu hình nội bộ.</li>
+        <li>Thực hiện hành vi vi phạm pháp luật hoặc xâm phạm quyền của người khác.</li>
+        <li>Dùng Ban Zone để trục lợi hoặc trả đũa không chính đáng.</li>
+      </ul>
+
+      <h2>4. Trách nhiệm kiểm duyệt</h2>
+      <p>Bạn và ban quản trị server chịu trách nhiệm về cách sử dụng lệnh kiểm duyệt và Ban Zone. Nova chỉ thực thi theo cấu hình và quyền bạn thiết lập. Thứ bậc vai trò quyết định khả năng hành động, và chủ server không thể bị bot ban.</p>
+
+      <h2>5. Trách nhiệm về prefix riêng</h2>
+      <p>Việc đổi prefix server là trách nhiệm của người dùng có quyền quản lý server. Nova không chịu trách nhiệm cho sự cố do đặt prefix gây nhầm lẫn hoặc xung đột với bot khác.</p>
+
+      <h2>6. Tuyên bố miễn trừ về nội dung do AI tạo</h2>
+      <p>Nội dung do AI tạo (văn bản và hình ảnh) có thể không chính xác, không đầy đủ hoặc không phù hợp với mục đích cụ thể. Bạn tự chịu trách nhiệm khi sử dụng nội dung đó.</p>
+
+      <h2>7. Sử dụng War/Backup/Event</h2>
+      <p>Bạn chịu trách nhiệm về thông tin mình cung cấp và cách sử dụng các nút hành động. Nova không chịu trách nhiệm cho thoả thuận hoặc kết quả giữa các thành viên bên ngoài bot.</p>
+
+      <h2>8. Trách nhiệm về Ban Zone</h2>
+      <p>Bạn chịu trách nhiệm cấu hình đúng chế độ, whitelist và vai trò. Việc whitelist chỉ chủ server quản lý được nhằm hạn chế lạm dụng.</p>
+
+      <h2>9. Tính khả dụng</h2>
+      <p>Dịch vụ cung cấp "nguyên trạng". Nova có thể tạm ngừng, thay đổi hoặc ngừng hoạt động bất kỳ lúc nào mà không cần báo trước.</p>
+
+      <h2>10. Thay đổi dịch vụ</h2>
+      <p>Chúng tôi có thể cập nhật tính năng, lệnh hoặc điều khoản. Phiên bản mới có hiệu lực từ ngày ghi trên trang. Tiếp tục sử dụng bot đồng nghĩa với việc chấp nhận thay đổi.</p>
+
+      <h2>11. Tạm ngừng hoặc chấm dứt</h2>
+      <p>Chúng tôi có thể tạm ngừng hoặc chấm dứt quyền truy cập nếu bạn vi phạm. Chủ server có thể gỡ bot bất kỳ lúc nào.</p>
+
+      <h2>12. Liên hệ</h2>
+      <p>Chủ sở hữu: <strong>nova_.inovation</strong><br>
+      Email: <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a><br>
+      Support Server: <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener">discord.gg/qkyu3G6WMa</a></p>
+    `,
+    en: `
+      <h2>1. Service description</h2>
+      <p><strong>Nova</strong> is a Discord bot providing: AI chat, AI image generation, War/Backup coordination, event creation, Ban Zone protection, moderation, server information and server-specific tools (including custom prefixes). Owned by <strong>nova_.inovation</strong>. Effective date: <strong>19/09/2026</strong>.</p>
+
+      <h2>2. Acceptable use</h2>
+      <ul>
+        <li>Comply with Discord's Terms of Service and Community Guidelines.</li>
+        <li>Hold sufficient permissions when using moderation, configuration or Ban Zone commands.</li>
+        <li>You are responsible for content submitted to AI commands.</li>
+        <li>Do not use the bot for harassment, doxxing, spam or illegal content.</li>
+      </ul>
+
+      <h2>3. Prohibited abuse</h2>
+      <ul>
+        <li>Exploiting, disrupting or overloading the bot's systems.</li>
+        <li>Unauthorised access to API keys, tokens or internal configuration.</li>
+        <li>Committing illegal acts or infringing on the rights of others.</li>
+        <li>Using Ban Zone for unjustified retaliation or gain.</li>
+      </ul>
+
+      <h2>4. Moderation responsibilities</h2>
+      <p>You and your server's staff are responsible for how moderation and Ban Zone commands are used. Nova only executes according to the config and permissions you set. Role hierarchy determines action capability, and the server owner can never be banned by the bot.</p>
+
+      <h2>5. Custom prefix responsibility</h2>
+      <p>Changing the server prefix is the responsibility of users with server management permissions. Nova is not responsible for issues caused by confusing prefixes or conflicts with other bots.</p>
+
+      <h2>6. AI-generated content disclaimer</h2>
+      <p>AI-generated content (text and images) may be inaccurate, incomplete or unsuitable for your purpose. You use such content at your own responsibility.</p>
+
+      <h2>7. War/Backup/Event usage</h2>
+      <p>You are responsible for the information you provide and for using action buttons appropriately. Nova is not responsible for agreements or outcomes between members outside the bot.</p>
+
+      <h2>8. Ban Zone responsibility</h2>
+      <p>You are responsible for configuring the correct mode, whitelist and roles. The whitelist being server-owner-managed exists to limit abuse.</p>
+
+      <h2>9. Availability</h2>
+      <p>The service is provided "as is". Nova may be paused, changed or discontinued at any time without prior notice.</p>
+
+      <h2>10. Changes to the service</h2>
+      <p>We may update features, commands or these terms. The new version applies from the date shown on this page. Continuing to use the bot means you accept those changes.</p>
+
+      <h2>11. Termination or suspension</h2>
+      <p>We may suspend or terminate your access if you violate these terms. Server owners may remove the bot at any time.</p>
+
+      <h2>12. Contact</h2>
+      <p>Owner: <strong>nova_.inovation</strong><br>
+      Email: <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a><br>
+      Support Server: <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener">discord.gg/qkyu3G6WMa</a></p>
+    `
+  }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let lang = 'vi';
+let activeCategory = 'all';
+let lastFocused = null;
+let lastHelpFeature = null;
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const t  = (k) => (I18N[lang] && I18N[lang][k]) || (I18N.vi[k] || k);
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function newBadge() {
+  return `<span class="badge-new">${esc(t('new.vi').replace('✨ ', '') === 'MỚI' && lang === 'vi' ? '✨ ' + t('new.short') : '✨ ' + t('new.short'))}</span>`;
+}
+function newLabel() {
+  return lang === 'vi' ? '✨ MỚI' : '✨ NEW';
+}
+function typeLabel(type) {
+  const m = { slash: 'commands.type.slash', prefix: 'commands.type.prefix', both: 'commands.type.both', button: 'commands.type.button' };
+  return t(m[type] || 'commands.type.both');
+}
+function typeClass(type) {
+  if (type === 'slash') return 'slash';
+  if (type === 'prefix') return 'prefix';
+  if (type === 'button') return 'button';
+  return 'both';
+}
+
+/* ============================================================
+   LANGUAGE
+   ============================================================ */
+function setLang(next, save = true) {
+  lang = (next === 'en') ? 'en' : 'vi';
+  document.documentElement.lang = lang;
+  if (save) { try { localStorage.setItem(LS_LANG, lang); } catch (e) {} }
+
+  $$('[data-i18n]').forEach(el => {
+    const v = I18N[lang][el.getAttribute('data-i18n')];
+    if (typeof v === 'string') el.innerHTML = v;
+  });
+  $$('[data-i18n-placeholder]').forEach(el => {
+    const v = I18N[lang][el.getAttribute('data-i18n-placeholder')];
+    if (v) el.setAttribute('placeholder', v);
+  });
+  $$('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    const src = key.startsWith('privacy') ? LEGAL.privacy : LEGAL.terms;
+    el.innerHTML = src[lang];
+  });
+  $$('[data-i18n-aria]').forEach(el => {
+    const v = I18N[lang][el.getAttribute('data-i18n-aria')];
+    if (v) el.setAttribute('aria-label', v);
+  });
+
+  const seg = $('#langSwitch');
+  if (seg) {
+    seg.setAttribute('data-active', lang);
+    $$('.seg-btn', seg).forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false'));
+  }
+
+  renderFeatures();
+  renderChips();
+  renderCommands();
+  renderHelpCategories();
+  renderHelpSelect();
+  renderHelpChips();
+  if (lastHelpFeature) renderHelpFeature(lastHelpFeature);
+  applySearch();
+  if (!$('#updateModal').hidden) renderUpdateLog();
+
+  const page = document.body.dataset.page;
+  if (page === 'privacy') document.title = (lang === 'vi' ? 'Chính sách bảo mật' : 'Privacy Policy') + ' — Nova';
+  else if (page === 'terms') document.title = (lang === 'vi' ? 'Điều khoản dịch vụ' : 'Terms of Service') + ' — Nova';
+  else document.title = t('meta.title');
+}
+
+/* ============================================================
+   UPDATE LOG
+   ============================================================ */
+function renderUpdateLog() {
+  const body = $('#updateBody');
+  if (!body) return;
+  const latest = UPDATE_LOG[0];
+  const dateLabel = latest.date;
+  const versionLabel = t('update.version');
+
+  const itemsHtml = latest.items.map(it => {
+    const title = it.title[lang];
+    const desc = it.description[lang];
+    const foot = it.footnote ? it.footnote[lang] : '';
+    const cmds = it.commands.map(c => `<code>${esc(c)}</code>`).join('');
+    return `
+      <div class="update-item">
+        <h3>
+          <span aria-hidden="true">${it.icon}</span>
+          <span>${esc(title)}</span>
+          ${it.new ? `<span class="badge-new">${newLabel()}</span>` : ''}
+        </h3>
+        <p>${desc.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
+        ${foot ? `<p>${foot.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>` : ''}
+        <div class="update-cmds">${cmds}</div>
+      </div>`;
+  }).join('');
+
+  body.innerHTML = `
+    <h2 class="update-head" id="updateTitle">${esc(t('update.title'))}</h2>
+    <p class="update-sub">${esc(t('update.sub'))}</p>
+    <p><span class="update-version">${esc(versionLabel)} · ${esc(dateLabel)}</span></p>
+    <div class="update-list">${itemsHtml}</div>
+  `;
+}
+
+function openUpdateLog() {
+  const m = $('#updateModal');
+  if (!m) return;
+  renderUpdateLog();
+  lastFocused = document.activeElement;
+  m.hidden = false;
+  document.body.style.overflow = 'hidden';
+  const panel = $('.modal-panel', m);
+  requestAnimationFrame(() => panel.focus());
+  document.addEventListener('keydown', onUpdateKey);
+}
+function closeUpdateLog() {
+  const m = $('#updateModal');
+  if (!m || m.hidden) return;
+  m.hidden = true;
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', onUpdateKey);
+  try { localStorage.setItem(LS_UPDATE_SEEN, '1'); } catch (e) {}
+  if (lastFocused && lastFocused.focus) lastFocused.focus();
+}
+function onUpdateKey(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeUpdateLog(); return; }
+  if (e.key !== 'Tab') return;
+  const panel = $('#updateModal .modal-panel');
+  const focusables = $$('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])', panel)
+    .filter(el => el.offsetParent !== null);
+  if (!focusables.length) return;
+  const first = focusables[0], last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* ============================================================
+   FEATURES
+   ============================================================ */
+function renderFeatures() {
+  const grid = $('#featureGrid');
+  if (!grid) return;
+  grid.innerHTML = FEATURES.map(f => {
+    const loc = f[lang];
+    return `
+      <article class="feature-card reveal" tabindex="0" role="button"
+               aria-label="${esc(loc.title)}" data-feature="${f.id}">
+        <div class="feature-icon" aria-hidden="true">${f.icon}</div>
+        <h3>
+          <span>${esc(loc.title)}</span>
+          ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+        </h3>
+        <p>${esc(loc.short)}</p>
+        <div class="feature-meta">
+          <span>${f.commands.length} ${esc(t('features.commands'))}</span>
+          <span class="open">${esc(t('features.view'))}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </article>`;
+  }).join('');
+
+  $$('.feature-card', grid).forEach(card => {
+    card.addEventListener('click', () => openFeature(card.dataset.feature));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFeature(card.dataset.feature); }
+    });
+    card.addEventListener('pointermove', e => {
+      if (REDUCED) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+
+  observeReveal();
+}
+
+function openFeature(id) {
+  const f = FEATURES.find(x => x.id === id);
+  if (!f) return;
+  const loc = f[lang];
+  const body = $('#modalBody');
+
+  const cmdsHtml = f.commands.map(c => `
+    <div class="modal-cmd">
+      <div class="mc-top">
+        <span class="cmd-name">${esc(c.name)}</span>
+        <span class="tag ${typeClass(c.type)}">${esc(typeLabel(c.type))}</span>
+        ${c.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+      </div>
+      <p class="mc-desc">${esc(c[lang].d)}</p>
+      ${c[lang].p ? `<p class="mc-perm"><b>${esc(t('commands.permission'))}:</b> ${esc(c[lang].p)}</p>` : ''}
+      ${c.ex ? `<code class="modal-example">${esc(c.ex)}</code>` : ''}
+    </div>`).join('');
+
+  const detailsHtml = loc.details.map(d => `<li>${d}</li>`).join('');
+  const permsHtml = loc.perms.map(p => `<li>${p}</li>`).join('');
+  const examplesHtml = loc.examples.map(e => `<code class="modal-example">${esc(e)}</code>`).join('');
+
+  body.innerHTML = `
+    <div class="modal-head">
+      <div class="m-icon" aria-hidden="true">${f.icon}</div>
+      <h2 id="modalTitle">
+        <span>${esc(loc.title)}</span>
+        ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+      </h2>
+    </div>
+    <p class="modal-lead">${esc(loc.lead)}</p>
+
+    <div class="modal-section">
+      <h3>${esc(t('modal.featuresTitle'))}</h3>
+      <ul class="modal-list">${detailsHtml}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>${esc(t('modal.commandsTitle'))}</h3>
+      <div class="modal-cmds">${cmdsHtml}</div>
+    </div>
+    <div class="modal-section">
+      <h3>${esc(t('modal.permsTitle'))}</h3>
+      <ul class="modal-list">${permsHtml}</ul>
+    </div>
+    <div class="modal-section">
+      <h3>${esc(t('modal.examplesTitle'))}</h3>
+      ${examplesHtml}
+    </div>
+    <div class="modal-actions">
+      <a class="btn btn-primary" href="${CONFIG.BOT_INVITE_URL}" target="_blank" rel="noopener">${esc(t('modal.invite'))}</a>
+      <a class="btn btn-glass" href="${CONFIG.SUPPORT_SERVER_URL}" target="_blank" rel="noopener">${esc(t('modal.support'))}</a>
+    </div>`;
+
+  showModal();
+}
+
+/* ============================================================
+   MODAL (feature)
+   ============================================================ */
+function showModal() {
+  const modal = $('#modal');
+  lastFocused = document.activeElement;
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  const panel = $('.modal-panel', modal);
+  requestAnimationFrame(() => panel.focus());
+  document.addEventListener('keydown', onModalKey);
+}
+function closeModal() {
+  const modal = $('#modal');
+  if (modal.hidden) return;
+  modal.hidden = true;
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', onModalKey);
+  if (lastFocused && lastFocused.focus) lastFocused.focus();
+}
+function onModalKey(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeModal(); return; }
+  if (e.key !== 'Tab') return;
+  const panel = $('#modal .modal-panel');
+  const focusables = $$('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])', panel)
+    .filter(el => el.offsetParent !== null);
+  if (!focusables.length) return;
+  const first = focusables[0], last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* ============================================================
+   COMMAND DIRECTORY
+   ============================================================ */
+function allCommands() {
+  const out = [];
+  FEATURES.forEach(f => f.commands.forEach(c => out.push({ ...c, featureId: f.id, icon: f.icon })));
+  return out;
+}
+
+function renderChips() {
+  const wrap = $('#categoryChips');
+  if (!wrap) return;
+  const cats = [{ id: 'all', icon: '✨', title: t('commands.all'), isNew: false }]
+    .concat(FEATURES.map(f => ({ id: f.id, icon: f.icon, title: f[lang].title, isNew: !!f.isNew })));
+
+  wrap.innerHTML = cats.map(c => `
+    <button type="button" class="chip${activeCategory === c.id ? ' active' : ''}"
+            role="tab" aria-selected="${activeCategory === c.id}"
+            data-cat="${c.id}">${c.icon} ${esc(c.title)}${c.isNew ? ` <span class="badge-new" style="margin-left:6px">${newLabel()}</span>` : ''}</button>`).join('');
+
+  $$('.chip', wrap).forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderChips();
+      renderCommands();
+      applySearch();
+    });
+  });
+}
+
+function renderCommands() {
+  const wrap = $('#commandGroups');
+  if (!wrap) return;
+  const groups = activeCategory === 'all' ? FEATURES : FEATURES.filter(f => f.id === activeCategory);
+
+  wrap.innerHTML = groups.map(f => {
+    const loc = f[lang];
+    return `
+      <div class="cmd-group" data-group="${f.id}">
+        <div class="cmd-group-head">
+          <span class="g-icon" aria-hidden="true">${f.icon}</span>
+          <h3>
+            <span>${esc(loc.title)}</span>
+            ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+          </h3>
+          <span class="count">${f.commands.length} ${esc(t('features.commands'))}</span>
+        </div>
+        <div class="cmd-list">
+          ${f.commands.map(c => cmdCard(c)).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  observeReveal();
+}
+
+function cmdCard(c) {
+  return `
+    <article class="cmd-card reveal">
+      <div class="cmd-top">
+        <span class="cmd-name">${esc(c.name)}</span>
+        <span class="tag ${typeClass(c.type)}">${esc(typeLabel(c.type))}</span>
+        ${c.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+      </div>
+      <p class="cmd-desc">${esc(c[lang].d)}</p>
+      <div class="cmd-foot">
+        ${c[lang].p ? `<span><b>${esc(t('commands.permission'))}:</b> ${esc(c[lang].p)}</span>` : ''}
+      </div>
+      ${c.ex ? `<code class="cmd-example">${esc(c.ex)}</code>` : ''}
+    </article>`;
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+function applySearch() {
+  const input = $('#searchInput');
+  const clear = $('#searchClear');
+  const results = $('#searchResults');
+  const groups = $('#commandGroups');
+  if (!input || !results || !groups) return;
+
+  const q = input.value.trim().toLowerCase();
+  clear.hidden = !q;
+
+  if (!q) {
+    results.hidden = true;
+    results.innerHTML = '';
+    groups.hidden = false;
+    return;
+  }
+
+  groups.hidden = true;
+  results.hidden = false;
+
+  const cmdHits = allCommands().filter(c => {
+    const hay = [c.name, c[lang].d, c[lang].p, c.ex, c.featureId].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+
+  const featHits = FEATURES.filter(f => {
+    const hay = [f[lang].title, f[lang].short, f[lang].lead,
+                 (f[lang].details || []).join(' '), (f[lang].perms || []).join(' '),
+                 f.id].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+
+  const helpHits = HELP_CATEGORIES.filter(h => {
+    const hay = [h[lang].name, h[lang].desc, h.viBody.title, h.enBody.title].join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+
+  if (!cmdHits.length && !featHits.length && !helpHits.length) {
+    results.innerHTML = `<div class="sr-empty">${esc(t('commands.noResults'))}</div>`;
+    return;
+  }
+
+  let html = '';
+
+  if (featHits.length) {
+    html += `<div class="cmd-group">
+      <div class="cmd-group-head">
+        <span class="g-icon">🧩</span>
+        <h3>${esc(t('nav.features'))}</h3>
+        <span class="count">${featHits.length} ${esc(t('commands.results'))}</span>
+      </div>
+      <div class="cmd-list">
+        ${featHits.map(f => `
+          <article class="cmd-card" data-jump="${f.id}" tabindex="0" role="button">
+            <div class="cmd-top">
+              <span class="cmd-name">${f.icon} ${esc(f[lang].title)}</span>
+              ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+            </div>
+            <p class="cmd-desc">${esc(f[lang].short)}</p>
+            <div class="cmd-foot"><span><b>${esc(t('features.view'))}</b></span></div>
+          </article>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (cmdHits.length) {
+    html += `<div class="cmd-group">
+      <div class="cmd-group-head">
+        <span class="g-icon">⌨️</span>
+        <h3>${esc(t('nav.commands'))}</h3>
+        <span class="count">${cmdHits.length} ${esc(t('commands.results'))}</span>
+      </div>
+      <div class="cmd-list">${cmdHits.map(cmdCard).join('')}</div>
+    </div>`;
+  }
+
+  if (helpHits.length) {
+    html += `<div class="cmd-group">
+      <div class="cmd-group-head">
+        <span class="g-icon">📖</span>
+        <h3>${esc(t('nav.help'))}</h3>
+        <span class="count">${helpHits.length} ${esc(t('commands.results'))}</span>
+      </div>
+      <div class="cmd-list">
+        ${helpHits.map(h => `
+          <article class="cmd-card" data-help="${h.id}" tabindex="0" role="button">
+            <div class="cmd-top">
+              <span class="cmd-name">${h.icon} ${esc(h[lang].name)}</span>
+              ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+            </div>
+            <p class="cmd-desc">${esc(h[lang].desc)}</p>
+          </article>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  results.innerHTML = html;
+
+  $$('[data-jump]', results).forEach(el => {
+    const go = () => { closeModal(); location.hash = '#features'; openFeature(el.dataset.jump); };
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  $$('[data-help]', results).forEach(el => {
+    el.addEventListener('click', () => {
+      closeModal();
+      const sel = $('#helpSelect');
+      if (sel) { sel.value = el.dataset.help; sel.dispatchEvent(new Event('change')); }
+      location.hash = '#help';
+    });
+  });
+}
+
+/* ============================================================
+   HELP
+   ============================================================ */
+function renderHelpCategories() {
+  const list = $('#helpCategoryList');
+  if (!list) return;
+  list.innerHTML = HELP_CATEGORIES.map(h => `
+    <li>
+      <span class="ico" aria-hidden="true">${h.icon}</span>
+      <span>
+        <b>
+          <span>${esc(h[lang].name)}</span>
+          ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+        </b>
+        <span>${esc(h[lang].desc)}</span>
+      </span>
+    </li>`).join('');
+}
+
+function renderHelpSelect() {
+  const sel = $('#helpSelect');
+  if (!sel) return;
+  const current = sel.value;
+  sel.innerHTML = `<option value="">${esc(t('help.selectPlaceholder'))}</option>` +
+    HELP_CATEGORIES.map(h => `<option value="${h.id}">${h.icon} ${esc(h[lang].name)}${h.isNew ? ' — ' + newLabel() : ''}</option>`).join('');
+  if (current) sel.value = current;
+}
+
+function renderHelpChips() {
+  const wrap = $('#helpChips');
+  if (!wrap) return;
+  const keys = ['chat', 'info', 'prefix', 'ban', 'mute', 'warping', 'image', 'event', 'banzone', 'persona', 'config', 'help', 'serverinfo', 'userinfo'];
+  wrap.innerHTML = keys.map(k => `<button type="button" class="chip" data-hf="${k}">!help ${esc(k)}</button>`).join('');
+  $$('[data-hf]', wrap).forEach(b => {
+    b.addEventListener('click', () => {
+      const inp = $('#helpFeatureInput');
+      if (inp) inp.value = b.dataset.hf;
+      renderHelpFeature(b.dataset.hf);
+    });
+  });
+}
+
+function renderHelpCategory(id) {
+  const out = $('#helpOutput');
+  const h = HELP_CATEGORIES.find(x => x.id === id);
+  if (!out) return;
+  if (!h) { out.innerHTML = ''; return; }
+  const body = lang === 'vi' ? h.viBody : h.enBody;
+  out.innerHTML = `
+    <div class="help-out-card">
+      <h4>
+        <span>${h.icon} ${esc(body.title)}</span>
+        ${h.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+      </h4>
+      <div class="hc-cmds">
+        ${body.cmds.map(c => `<span class="cmd-name">${esc(c)}</span>`).join('')}
+      </div>
+      <p>${esc(body.text)}</p>
+      <p><strong>${lang === 'vi' ? 'Lưu ý' : 'Note'}:</strong> ${body.note.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
+    </div>`;
+}
+
+function renderHelpFeature(key) {
+  const out = $('#helpFeatureOutput');
+  if (!out) return;
+  const k = String(key || '').trim().toLowerCase().replace(/^!?help\s*/, '');
+  lastHelpFeature = k;
+  const f = HELP_FEATURES[k];
+
+  if (!f) {
+    out.innerHTML = `<div class="help-out-card"><p>${esc(t('help.notFound'))}</p></div>`;
+    return;
+  }
+  const loc = f[lang];
+  out.innerHTML = `
+    <div class="help-out-card">
+      <h4>
+        <span>${f.icon} ${esc(loc.title)}</span>
+        ${f.isNew ? `<span class="badge-new">${newLabel()}</span>` : ''}
+      </h4>
+      <div class="hc-cmds">
+        ${loc.cmds.map(c => `<span class="cmd-name">${esc(c)}</span>`).join('')}
+      </div>
+      <p>${loc.body.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
+      <p><strong>${esc(t('commands.permission'))}:</strong> ${esc(loc.perm)}</p>
+    </div>`;
+}
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+function initMobileMenu() {
+  const btn = $('#hamburger');
+  const menu = $('#mobileMenu');
+  if (!btn || !menu) return;
+  const close = () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-label', 'Open menu'); };
+  const open  = () => { menu.hidden = false; btn.setAttribute('aria-expanded', 'true');  btn.setAttribute('aria-label', 'Close menu'); };
+  btn.addEventListener('click', () => { if (menu.hidden) open(); else close(); });
+  $$('a', menu).forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) close(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 1080 && !menu.hidden) close(); });
+}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+let revealObserver = null;
+function observeReveal() {
+  if (REDUCED || !('IntersectionObserver' in window)) {
+    $$('.reveal').forEach(el => el.classList.add('in'));
+    return;
+  }
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          revealObserver.unobserve(en.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.08 });
+  }
+  $$('.reveal:not(.in)').forEach(el => revealObserver.observe(el));
+}
+
+/* ============================================================
+   IMAGE FALLBACK
+   ============================================================ */
+function initImageFallback() {
+  $$('img[data-avatar]').forEach(img => {
+    img.addEventListener('error', () => {
+      if (img.dataset.fallbackApplied) return;
+      img.dataset.fallbackApplied = '1';
+      img.src = FALLBACK_AVATAR;
+    }, { once: true });
+    if (img.complete && img.naturalWidth === 0) {
+      img.dataset.fallbackApplied = '1';
+      img.src = FALLBACK_AVATAR;
+    }
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  let saved = null;
+  try { saved = localStorage.getItem(LS_LANG); } catch (e) {}
+  lang = (saved === 'en' || saved === 'vi') ? saved : 'vi';
+
+  initImageFallback();
+  initMobileMenu();
+
+  const y = $('#year');
+  if (y) y.textContent = new Date().getFullYear();
+
+  const seg = $('#langSwitch');
+  if (seg) {
+    $$('.seg-btn', seg).forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  }
+
+  $$('[data-close-modal]').forEach(el => el.addEventListener('click', closeModal));
+  $$('[data-close-update]').forEach(el => el.addEventListener('click', closeUpdateLog));
+  $$('[data-open-updates]').forEach(el => el.addEventListener('click', openUpdateLog));
+  const updatesBtn = $('#updatesBtn');
+  if (updatesBtn) updatesBtn.addEventListener('click', openUpdateLog);
+  const mobileUpdates = $('#mobileUpdatesBtn');
+  if (mobileUpdates) mobileUpdates.addEventListener('click', () => {
+    const menu = $('#mobileMenu');
+    if (menu && !menu.hidden) menu.hidden = true;
+    openUpdateLog();
+  });
+
+  const input = $('#searchInput');
+  if (input) {
+    input.addEventListener('input', applySearch);
+    input.addEventListener('keydown', e => { if (e.key === 'Escape') { input.value = ''; applySearch(); } });
+  }
+  const clear = $('#searchClear');
+  if (clear) clear.addEventListener('click', () => { if (input) input.value = ''; applySearch(); input && input.focus(); });
+
+  const sel = $('#helpSelect');
+  if (sel) sel.addEventListener('change', () => renderHelpCategory(sel.value));
+
+  const form = $('#helpForm');
+  if (form) form.addEventListener('submit', e => { e.preventDefault(); renderHelpFeature($('#helpFeatureInput').value); });
+
+  $$('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+      history.replaceState(null, '', id);
+    });
+  });
+
+  setLang(lang, false);
+
+  if (sel && document.body.dataset.page === 'index') {
+    sel.value = 'ai';
+    renderHelpCategory('ai');
+  }
+  if ($('#helpFeatureOutput') && document.body.dataset.page === 'index') {
+    renderHelpFeature('info');
+  }
+
+  // Auto-show update log on first visit
+  let seen = null;
+  try { seen = localStorage.getItem(LS_UPDATE_SEEN); } catch (e) {}
+  if (!seen) {
+    setTimeout(() => openUpdateLog(), 700);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
