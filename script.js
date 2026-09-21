@@ -1,8 +1,8 @@
 /* ============================================================
    NOVA — script.js
    Language, sticky nav, auto Update Log with 24h snooze,
-   feature modals, inline command search, Help preview, unified
-   Slash/Prefix commands, temporary NEW badge logic,
+   feature modals, INLINE command search (grouped by category),
+   Help preview, unified Slash/Prefix commands, NEW badge,
    nav scroll spy.
    ============================================================ */
 'use strict';
@@ -1101,9 +1101,7 @@ const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const t  = (k) => (I18N[lang] && I18N[lang][k]) || (I18N.vi[k] || k);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function newLabel() {
-  return lang === 'vi' ? '✨ MỚI' : '✨ NEW';
-}
+function newLabel() { return lang === 'vi' ? '✨ MỚI' : '✨ NEW'; }
 function typeLabel(type) {
   const m = { slash: 'commands.type.slash', prefix: 'commands.type.prefix', both: 'commands.type.both', button: 'commands.type.button' };
   return t(m[type] || 'commands.type.both');
@@ -1231,9 +1229,7 @@ function isSnoozed() {
     if (until > Date.now()) return true;
     localStorage.removeItem(LS_SNOOZE);
     return false;
-  } catch (e) {
-    return false;
-  }
+  } catch (e) { return false; }
 }
 
 function openUpdateLog() {
@@ -1367,7 +1363,7 @@ function openFeature(id) {
 }
 
 /* ============================================================
-   MODAL (feature)
+   MODAL
    ============================================================ */
 function showModal() {
   const modal = $('#modal');
@@ -1399,8 +1395,10 @@ function onModalKey(e) {
 }
 
 /* ============================================================
-   COMMAND DIRECTORY (với search inline)
+   COMMAND DIRECTORY — INLINE SEARCH
    ============================================================ */
+
+/* Chips: chỉ dùng để đổi activeCategory rồi render lại */
 function renderChips() {
   const wrap = $('#categoryChips');
   if (!wrap) return;
@@ -1421,6 +1419,7 @@ function renderChips() {
   });
 }
 
+/* Command card — KHÔNG có dòng ví dụ nữa */
 function cmdCard(c) {
   return `
     <article class="cmd-card reveal">
@@ -1436,6 +1435,7 @@ function cmdCard(c) {
     </article>`;
 }
 
+/* Render danh sách lệnh, tự lọc theo search value + activeCategory, giữ phân nhóm */
 function renderCommands() {
   const wrap = $('#commandGroups');
   if (!wrap) return;
@@ -1447,11 +1447,12 @@ function renderCommands() {
     ? FEATURES
     : FEATURES.filter(f => f.id === activeCategory);
 
-  // Lọc theo search — chỉ giữ các command khớp và các category còn lệnh
+  // Nếu có từ khoá → lọc từng command. Chỉ giữ category còn command khớp.
   const groups = baseGroups.map(f => {
     if (!q) return { feature: f, commands: f.commands };
     const matched = f.commands.filter(c => {
-      const hay = [c.name, c[lang].d, c[lang].p, f.id].join(' ').toLowerCase();
+      const hay = [c.name, c[lang].d, c[lang].p, f.id, f[lang].title]
+        .join(' ').toLowerCase();
       return hay.includes(q);
     });
     return { feature: f, commands: matched };
@@ -1480,9 +1481,7 @@ function renderCommands() {
   observeReveal();
 }
 
-/* ============================================================
-   SEARCH — chỉ toggle nút clear và re-render danh sách lệnh
-   ============================================================ */
+/* Search chỉ toggle nút × rồi gọi renderCommands */
 function applySearch() {
   const input = $('#searchInput');
   const clear = $('#searchClear');
@@ -1647,18 +1646,13 @@ function initScrollSpy() {
 
     for (const sec of sections) {
       const top = sec.offsetTop - navOffset;
-      if (scrollY >= top) {
-        current = sec.id;
-      } else {
-        break;
-      }
+      if (scrollY >= top) current = sec.id;
+      else break;
     }
 
     const scrollBottom = scrollY + window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
-    if (docHeight - scrollBottom < 80) {
-      current = sections[sections.length - 1].id;
-    }
+    if (docHeight - scrollBottom < 80) current = sections[sections.length - 1].id;
 
     return current;
   };
@@ -1708,6 +1702,10 @@ function init() {
 
   initImageFallback();
   initMobileMenu();
+
+  // Xoá hẳn ô #searchResults cũ để không còn hiện mục Help riêng
+  const staleResults = document.getElementById('searchResults');
+  if (staleResults && staleResults.parentNode) staleResults.parentNode.removeChild(staleResults);
 
   const y = $('#year');
   if (y) y.textContent = new Date().getFullYear();
