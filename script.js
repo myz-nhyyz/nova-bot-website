@@ -1,7 +1,7 @@
 /* ============================================================
    NOVA — script.js
    Language, sticky nav, auto Update Log with 24h snooze,
-   feature modals, command search, Help preview, unified
+   feature modals, inline command search, Help preview, unified
    Slash/Prefix commands, temporary NEW badge logic,
    nav scroll spy.
    ============================================================ */
@@ -212,7 +212,7 @@ const I18N = {
 };
 
 /* ============================================================
-   UPDATE LOG — !info và !prefix được đánh dấu isCurrent:true
+   UPDATE LOG
    ============================================================ */
 const UPDATE_LOG = [
   {
@@ -376,16 +376,16 @@ const FEATURES = [
       ]
     },
     commands: [
-      { name: "/chat • !chat", type: "both", vi: { d: "Trò chuyện với AI trong Discord.", p: "Send Messages" }, en: { d: "Chat with the AI inside Discord.", p: "Send Messages" }, ex: "!chat Xin chào Nova!" },
-      { name: "/image • !image", type: "both", vi: { d: "Tạo ảnh AI từ mô tả văn bản.", p: "Send Messages, Attach Files" }, en: { d: "Generate an AI image from a text prompt.", p: "Send Messages, Attach Files" }, ex: "!image thành phố tương lai lúc hoàng hôn" },
+      { name: "/chat • !chat", type: "both", vi: { d: "Trò chuyện với AI trong Discord.", p: "Send Messages" }, en: { d: "Chat with the AI inside Discord.", p: "Send Messages" } },
+      { name: "/image • !image", type: "both", vi: { d: "Tạo ảnh AI từ mô tả văn bản.", p: "Send Messages, Attach Files" }, en: { d: "Generate an AI image from a text prompt.", p: "Send Messages, Attach Files" } },
       { name: "/clearchat • !clearchat", type: "both", vi: { d: "Xoá lịch sử hội thoại AI của riêng bạn.", p: "Send Messages" }, en: { d: "Clear your own AI conversation history.", p: "Send Messages" } },
-      { name: "/setai • !setai", type: "both", isNew: true, vi: { d: "Bật/tắt AI mode cho kênh hiện tại. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable AI mode for the current channel. Use true|false.", p: "Manage Channels" }, ex: "/setai value:true" },
-      { name: "/setsharedhistory • !setsharedhistory", type: "both", isNew: true, vi: { d: "Bật/tắt lịch sử chat chung cho kênh. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable shared chat history for the channel. Use true|false.", p: "Manage Channels" }, ex: "/setsharedhistory value:true" },
-      { name: "/persona • !persona", type: "both", vi: { d: "Đổi persona AI theo mã có sẵn.", p: "Send Messages" }, en: { d: "Change AI persona using a built-in code.", p: "Send Messages" }, ex: "!persona teacher" },
-      { name: "!persona custom: <description>", type: "prefix", vi: { d: "Tạo persona AI tuỳ chỉnh bằng mô tả tự do.", p: "Send Messages" }, en: { d: "Create a custom AI persona with a free-form description.", p: "Send Messages" }, ex: "!persona custom: Nói chuyện như một cố vấn thân thiện" },
+      { name: "/setai • !setai", type: "both", isNew: true, vi: { d: "Bật/tắt AI mode cho kênh hiện tại. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable AI mode for the current channel. Use true|false.", p: "Manage Channels" } },
+      { name: "/setsharedhistory • !setsharedhistory", type: "both", isNew: true, vi: { d: "Bật/tắt lịch sử chat chung cho kênh. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable shared chat history for the channel. Use true|false.", p: "Manage Channels" } },
+      { name: "/persona • !persona", type: "both", vi: { d: "Đổi persona AI theo mã có sẵn.", p: "Send Messages" }, en: { d: "Change AI persona using a built-in code.", p: "Send Messages" } },
+      { name: "!persona custom: <description>", type: "prefix", vi: { d: "Tạo persona AI tuỳ chỉnh bằng mô tả tự do.", p: "Send Messages" }, en: { d: "Create a custom AI persona with a free-form description.", p: "Send Messages" } },
       { name: "/mypersona • !mypersona", type: "both", vi: { d: "Xem persona AI hiện tại của bạn.", p: "Send Messages" }, en: { d: "View your current AI persona.", p: "Send Messages" } },
       { name: "/resetpersona • !resetpersona", type: "both", vi: { d: "Đưa persona AI về mặc định.", p: "Send Messages" }, en: { d: "Reset your AI persona to default.", p: "Send Messages" } },
-      { name: "/language • !language", type: "both", vi: { d: "Đặt ngôn ngữ trả lời của AI cho bạn.", p: "Send Messages" }, en: { d: "Set the AI reply language for yourself.", p: "Send Messages" }, ex: "!language vi" }
+      { name: "/language • !language", type: "both", vi: { d: "Đặt ngôn ngữ trả lời của AI cho bạn.", p: "Send Messages" }, en: { d: "Set the AI reply language for yourself.", p: "Send Messages" } }
     ]
   },
   {
@@ -425,10 +425,10 @@ const FEATURES = [
       examples: ["/ban user: @Spammer reason: Advertising spam", "!ban @Spammer Advertising spam", "/mute user: @Noisy duration: 10m reason: Chat spam", "!mute @Noisy 10m Chat spam", "/unban user_id: 123456789012345678"]
     },
     commands: [
-      { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" }, ex: "/ban user: @User reason: Spam" },
-      { name: "/unban • !unban", type: "both", isNew: true, vi: { d: "Bỏ cấm người dùng bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" }, ex: "/unban user_id: 123456789012345678" },
-      { name: "/mute • !mute", type: "both", isNew: true, vi: { d: "Timeout thành viên. Thời lượng tối đa 28 ngày (10m, 2h, 7d).", p: "Moderate Members" }, en: { d: "Timeout a member. Max 28 days (10m, 2h, 7d).", p: "Moderate Members" }, ex: "/mute user: @User duration: 2h reason: Spam" },
-      { name: "/unmute • !unmute", type: "both", isNew: true, vi: { d: "Gỡ timeout cho thành viên.", p: "Moderate Members" }, en: { d: "Remove a member's timeout.", p: "Moderate Members" }, ex: "/unmute user: @User" }
+      { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" } },
+      { name: "/unban • !unban", type: "both", isNew: true, vi: { d: "Bỏ cấm người dùng bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" } },
+      { name: "/mute • !mute", type: "both", isNew: true, vi: { d: "Timeout thành viên. Thời lượng tối đa 28 ngày (10m, 2h, 7d).", p: "Moderate Members" }, en: { d: "Timeout a member. Max 28 days (10m, 2h, 7d).", p: "Moderate Members" } },
+      { name: "/unmute • !unmute", type: "both", isNew: true, vi: { d: "Gỡ timeout cho thành viên.", p: "Moderate Members" }, en: { d: "Remove a member's timeout.", p: "Moderate Members" } }
     ]
   },
   {
@@ -472,10 +472,10 @@ const FEATURES = [
       examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/banwhitelist add @TrustedUser", "/bandebug @SomeUser", "!bandebug @SomeUser"]
     },
     commands: [
-      { name: "/setbanchannel • !setbanchannel", type: "both", isNew: true, vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" }, ex: "!setbanchannel true" },
-      { name: "/banzone • !banzone", type: "both", isNew: true, vi: { d: "Chọn chế độ Ban Zone: ban hoặc mute <duration>.", p: "Server Owner" }, en: { d: "Choose Ban Zone mode: ban or mute <duration>.", p: "Server Owner" }, ex: "!banzone mute 10m" },
+      { name: "/setbanchannel • !setbanchannel", type: "both", isNew: true, vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" } },
+      { name: "/banzone • !banzone", type: "both", isNew: true, vi: { d: "Chọn chế độ Ban Zone: ban hoặc mute <duration>.", p: "Server Owner" }, en: { d: "Choose Ban Zone mode: ban or mute <duration>.", p: "Server Owner" } },
       { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server (chỉ Server Owner).", p: "Server Owner" }, en: { d: "Manage the server's Ban Zone whitelist (Server Owner only).", p: "Server Owner" } },
-      { name: "/bandebug • !bandebug", type: "both", isNew: true, vi: { d: "Kiểm tra bot có thể hành động lên thành viên được chọn theo Ban Zone.", p: "Manager" }, en: { d: "Test whether the bot can act on the selected member under Ban Zone rules.", p: "Manager" }, ex: "!bandebug @User" }
+      { name: "/bandebug • !bandebug", type: "both", isNew: true, vi: { d: "Kiểm tra bot có thể hành động lên thành viên được chọn theo Ban Zone.", p: "Manager" }, en: { d: "Test whether the bot can act on the selected member under Ban Zone rules.", p: "Manager" } }
     ]
   },
   {
@@ -521,7 +521,7 @@ const FEATURES = [
       { name: "LOSE", type: "button", vi: { d: "Đánh dấu kết quả là thua.", p: "Configurable" }, en: { d: "Mark the result as a loss.", p: "Configurable" } },
       { name: "END", type: "button", vi: { d: "Kết thúc phiên hiện tại.", p: "Configurable" }, en: { d: "End the current session.", p: "Configurable" } },
       { name: "/end all", type: "slash", vi: { d: "Kết thúc mọi phiên War/Backup đang hoạt động trong server.", p: "Manage Threads" }, en: { d: "End all active War/Backup sessions in the server.", p: "Manage Threads" } },
-      { name: "/trust • !trust", type: "both", isNew: true, vi: { d: "Quản lý danh sách Trusted (add / remove / list).", p: "Manager" }, en: { d: "Manage the Trusted list (add / remove / list).", p: "Manager" }, ex: "!trust add @User" },
+      { name: "/trust • !trust", type: "both", isNew: true, vi: { d: "Quản lý danh sách Trusted (add / remove / list).", p: "Manager" }, en: { d: "Manage the Trusted list (add / remove / list).", p: "Manager" } },
       { name: "/helppanel", type: "slash", vi: { d: "Gửi bảng hướng dẫn War/Backup vào kênh.", p: "Manage Channels" }, en: { d: "Send the War/Backup help panel to a channel.", p: "Manage Channels" } },
       { name: "/callhacker show", type: "slash", vi: { d: "Hiện nút Call Hacker.", p: "Manager" }, en: { d: "Show the Call Hacker button.", p: "Manager" } },
       { name: "/callhacker hide", type: "slash", vi: { d: "Ẩn nút Call Hacker.", p: "Manager" }, en: { d: "Hide the Call Hacker button.", p: "Manager" } }
@@ -604,9 +604,9 @@ const FEATURES = [
       examples: ["/info", "!info", "/serverinfo", "!serverinfo", "/userinfo user: @Member", "!userinfo @Member"]
     },
     commands: [
-      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" }, ex: "!info" },
-      { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current-server information.", p: "Send Messages" }, ex: "!serverinfo" },
-      { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin người dùng.", p: "Send Messages" }, en: { d: "View user information.", p: "Send Messages" }, ex: "!userinfo @Member" }
+      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" } },
+      { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current-server information.", p: "Send Messages" } },
+      { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin người dùng.", p: "Send Messages" }, en: { d: "View user information.", p: "Send Messages" } }
     ]
   },
   {
@@ -681,7 +681,7 @@ const FEATURES = [
     },
     commands: [
       { name: "/help • !help", type: "both", vi: { d: "Mở Help Menu chính theo danh mục.", p: "Send Messages" }, en: { d: "Open the main Categories Help Menu.", p: "Send Messages" } },
-      { name: "!help <feature>", type: "prefix", vi: { d: "Chỉ hiển thị hướng dẫn chi tiết của một tính năng cụ thể.", p: "Send Messages" }, en: { d: "Show only the detailed help for one specific feature.", p: "Send Messages" }, ex: "!help info" }
+      { name: "!help <feature>", type: "prefix", vi: { d: "Chỉ hiển thị hướng dẫn chi tiết của một tính năng cụ thể.", p: "Send Messages" }, en: { d: "Show only the detailed help for one specific feature.", p: "Send Messages" } }
     ]
   },
   {
@@ -719,7 +719,7 @@ const FEATURES = [
       examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
     },
     commands: [
-      { name: "!prefix", type: "prefix", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, ex: "!prefix ?" }
+      { name: "!prefix", type: "prefix", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" } }
     ]
   }
 ];
@@ -1154,7 +1154,6 @@ function setLang(next, save = true) {
   renderHelpSelect();
   renderHelpChips();
   if (lastHelpFeature) renderHelpFeature(lastHelpFeature);
-  applySearch();
   const um = $('#updateModal');
   if (um && !um.hidden) renderUpdateLog();
 
@@ -1327,7 +1326,6 @@ function openFeature(id) {
       </div>
       <p class="mc-desc">${esc(c[lang].d)}</p>
       ${c[lang].p ? `<p class="mc-perm"><b>${esc(t('commands.permission'))}:</b> ${esc(c[lang].p)}</p>` : ''}
-      ${c.ex ? `<code class="modal-example">${esc(c.ex)}</code>` : ''}
     </div>`).join('');
 
   const detailsHtml = loc.details.map(d => `<li>${d}</li>`).join('');
@@ -1401,14 +1399,8 @@ function onModalKey(e) {
 }
 
 /* ============================================================
-   COMMAND DIRECTORY
+   COMMAND DIRECTORY (với search inline)
    ============================================================ */
-function allCommands() {
-  const out = [];
-  FEATURES.forEach(f => f.commands.forEach(c => out.push({ ...c, featureId: f.id, icon: f.icon })));
-  return out;
-}
-
 function renderChips() {
   const wrap = $('#categoryChips');
   if (!wrap) return;
@@ -1425,32 +1417,8 @@ function renderChips() {
       activeCategory = btn.dataset.cat;
       renderChips();
       renderCommands();
-      applySearch();
     });
   });
-}
-
-function renderCommands() {
-  const wrap = $('#commandGroups');
-  if (!wrap) return;
-  const groups = activeCategory === 'all' ? FEATURES : FEATURES.filter(f => f.id === activeCategory);
-
-  wrap.innerHTML = groups.map(f => {
-    const loc = f[lang];
-    return `
-      <div class="cmd-group" data-group="${f.id}">
-        <div class="cmd-group-head">
-          <span class="g-icon" aria-hidden="true">${f.icon}</span>
-          <h3><span>${esc(loc.title)}</span></h3>
-          <span class="count">${f.commands.length} ${esc(t('features.commands'))}</span>
-        </div>
-        <div class="cmd-list">
-          ${f.commands.map(c => cmdCard(c)).join('')}
-        </div>
-      </div>`;
-  }).join('');
-
-  observeReveal();
 }
 
 function cmdCard(c) {
@@ -1465,122 +1433,63 @@ function cmdCard(c) {
       <div class="cmd-foot">
         ${c[lang].p ? `<span><b>${esc(t('commands.permission'))}:</b> ${esc(c[lang].p)}</span>` : ''}
       </div>
-      ${c.ex ? `<code class="cmd-example">${esc(c.ex)}</code>` : ''}
     </article>`;
 }
 
+function renderCommands() {
+  const wrap = $('#commandGroups');
+  if (!wrap) return;
+
+  const input = $('#searchInput');
+  const q = input ? input.value.trim().toLowerCase() : '';
+
+  const baseGroups = activeCategory === 'all'
+    ? FEATURES
+    : FEATURES.filter(f => f.id === activeCategory);
+
+  // Lọc theo search — chỉ giữ các command khớp và các category còn lệnh
+  const groups = baseGroups.map(f => {
+    if (!q) return { feature: f, commands: f.commands };
+    const matched = f.commands.filter(c => {
+      const hay = [c.name, c[lang].d, c[lang].p, f.id].join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+    return { feature: f, commands: matched };
+  }).filter(g => g.commands.length > 0);
+
+  if (!groups.length) {
+    wrap.innerHTML = `<div class="sr-empty">${esc(t('commands.noResults'))}</div>`;
+    return;
+  }
+
+  wrap.innerHTML = groups.map(({ feature: f, commands }) => {
+    const loc = f[lang];
+    return `
+      <div class="cmd-group" data-group="${f.id}">
+        <div class="cmd-group-head">
+          <span class="g-icon" aria-hidden="true">${f.icon}</span>
+          <h3><span>${esc(loc.title)}</span></h3>
+          <span class="count">${commands.length} ${esc(t('features.commands'))}</span>
+        </div>
+        <div class="cmd-list">
+          ${commands.map(c => cmdCard(c)).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  observeReveal();
+}
+
 /* ============================================================
-   SEARCH
+   SEARCH — chỉ toggle nút clear và re-render danh sách lệnh
    ============================================================ */
 function applySearch() {
   const input = $('#searchInput');
   const clear = $('#searchClear');
-  const results = $('#searchResults');
-  const groups = $('#commandGroups');
-  if (!input || !results || !groups) return;
-
-  const q = input.value.trim().toLowerCase();
-  clear.hidden = !q;
-
-  if (!q) {
-    results.hidden = true;
-    results.innerHTML = '';
-    groups.hidden = false;
-    return;
-  }
-
-  groups.hidden = true;
-  results.hidden = false;
-
-  const cmdHits = allCommands().filter(c => {
-    const hay = [c.name, c[lang].d, c[lang].p, c.ex, c.featureId].join(' ').toLowerCase();
-    return hay.includes(q);
-  });
-
-  const featHits = FEATURES.filter(f => {
-    const hay = [f[lang].title, f[lang].short, f[lang].lead,
-                 (f[lang].details || []).join(' '), (f[lang].perms || []).join(' '),
-                 f.id].join(' ').toLowerCase();
-    return hay.includes(q);
-  });
-
-  const helpHits = HELP_CATEGORIES.filter(h => {
-    const hay = [h[lang].name, h[lang].desc, h.viBody.title, h.enBody.title].join(' ').toLowerCase();
-    return hay.includes(q);
-  });
-
-  if (!cmdHits.length && !featHits.length && !helpHits.length) {
-    results.innerHTML = `<div class="sr-empty">${esc(t('commands.noResults'))}</div>`;
-    return;
-  }
-
-  let html = '';
-
-  if (featHits.length) {
-    html += `<div class="cmd-group">
-      <div class="cmd-group-head">
-        <span class="g-icon">🧩</span>
-        <h3>${esc(t('nav.features'))}</h3>
-        <span class="count">${featHits.length} ${esc(t('commands.results'))}</span>
-      </div>
-      <div class="cmd-list">
-        ${featHits.map(f => `
-          <article class="cmd-card" data-jump="${f.id}" tabindex="0" role="button">
-            <div class="cmd-top">
-              <span class="cmd-name">${f.icon} ${esc(f[lang].title)}</span>
-            </div>
-            <p class="cmd-desc">${esc(f[lang].short)}</p>
-            <div class="cmd-foot"><span><b>${esc(t('features.view'))}</b></span></div>
-          </article>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  if (cmdHits.length) {
-    html += `<div class="cmd-group">
-      <div class="cmd-group-head">
-        <span class="g-icon">⌨️</span>
-        <h3>${esc(t('nav.commands'))}</h3>
-        <span class="count">${cmdHits.length} ${esc(t('commands.results'))}</span>
-      </div>
-      <div class="cmd-list">${cmdHits.map(cmdCard).join('')}</div>
-    </div>`;
-  }
-
-  if (helpHits.length) {
-    html += `<div class="cmd-group">
-      <div class="cmd-group-head">
-        <span class="g-icon">📖</span>
-        <h3>${esc(t('nav.help'))}</h3>
-        <span class="count">${helpHits.length} ${esc(t('commands.results'))}</span>
-      </div>
-      <div class="cmd-list">
-        ${helpHits.map(h => `
-          <article class="cmd-card" data-help="${h.id}" tabindex="0" role="button">
-            <div class="cmd-top">
-              <span class="cmd-name">${h.icon} ${esc(h[lang].name)}</span>
-            </div>
-            <p class="cmd-desc">${esc(h[lang].desc)}</p>
-          </article>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  results.innerHTML = html;
-
-  $$('[data-jump]', results).forEach(el => {
-    const go = () => { closeModal(); location.hash = '#features'; openFeature(el.dataset.jump); };
-    el.addEventListener('click', go);
-    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
-  });
-  $$('[data-help]', results).forEach(el => {
-    el.addEventListener('click', () => {
-      closeModal();
-      const sel = $('#helpSelect');
-      if (sel) { sel.value = el.dataset.help; sel.dispatchEvent(new Event('change')); }
-      location.hash = '#help';
-    });
-  });
+  if (!input) return;
+  const q = input.value.trim();
+  if (clear) clear.hidden = !q;
+  renderCommands();
 }
 
 /* ============================================================
