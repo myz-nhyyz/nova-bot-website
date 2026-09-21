@@ -118,6 +118,7 @@ const I18N = {
     "terms.lead": "Khi mời Nova vào server hoặc sử dụng bất kỳ tính năng nào của bot, bạn đồng ý với các điều khoản dưới đây.",
     "update.sub": "Tính năng mới trong Nova",
     "update.snoozeLabel": "Tắt update-logs trong 24h",
+    "update.okay": "Okay",
     "new.vi": "✨ MỚI",
     "new.en": "✨ NEW"
   },
@@ -203,13 +204,14 @@ const I18N = {
     "terms.lead": "By inviting Nova to your server or using any of its features, you agree to the terms below.",
     "update.sub": "What’s new in Nova",
     "update.snoozeLabel": "Don't show update-logs for 24 hours",
+    "update.okay": "Okay",
     "new.vi": "✨ MỚI",
     "new.en": "✨ NEW"
   }
 };
 
 /* ============================================================
-   UPDATE LOG — single unified panel
+   UPDATE LOG
    ============================================================ */
 const UPDATE_LOG = [
   {
@@ -217,8 +219,7 @@ const UPDATE_LOG = [
     date: "19/09/2026",
     items: [
       {
-        icon: "ℹ️",
-        isCurrent: false,
+        icon: "ℹ️", isCurrent: false,
         title: { vi: "!info — Thông tin bot", en: "!info — Bot Information" },
         description: {
           vi: "`!info` là bản prefix của `/info`. Cả hai hiển thị cùng một bảng thông tin bot, gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, Ban Zone, Help Channel, số lượng lệnh, thông tin server hiện tại, chủ server, vai trò của bot và quyền của bot.",
@@ -227,8 +228,7 @@ const UPDATE_LOG = [
         commands: ["/info • !info"]
       },
       {
-        icon: "🔧",
-        isCurrent: false,
+        icon: "🔧", isCurrent: false,
         title: { vi: "Prefix riêng cho từng server", en: "Custom Server Prefix" },
         description: {
           vi: "Prefix mặc định là `!`. Quản trị viên server đổi bằng `!prefix ?` → sau đó dùng `?chat`, `?info`, `?help`, `?image`. Server khác có thể dùng `!prefix .` → `.chat`, `.info`, `.help`. Prefix được lưu độc lập theo từng Guild, đổi ở server này không ảnh hưởng server khác. DM vẫn dùng `!`. Lệnh này KHÔNG chỉ dành cho chủ bot — cần quyền Administrator / Manage Server / Manage Channels.",
@@ -314,7 +314,6 @@ const UPDATE_LOG = [
 
 /* ============================================================
    FEATURES (public — no Admin)
-   NOTE: isNew ở command level chỉ. Feature cards KHÔNG có badge.
    ============================================================ */
 const FEATURES = [
   {
@@ -407,13 +406,7 @@ const FEATURES = [
         "Moderate Members — cho <code>mute</code> và <code>unmute</code>.",
         "Vai trò của bot phải nằm cao hơn vai trò của mục tiêu."
       ],
-      examples: [
-        "/ban user: @Spammer reason: Spam quảng cáo",
-        "!ban @Spammer Spam quảng cáo",
-        "/mute user: @Noisy duration: 10m reason: Spam chat",
-        "!mute @Noisy 10m Spam chat",
-        "/unban user_id: 123456789012345678"
-      ]
+      examples: ["/ban user: @Spammer reason: Spam quảng cáo", "!ban @Spammer Spam quảng cáo", "/mute user: @Noisy duration: 10m reason: Spam chat", "!mute @Noisy 10m Spam chat", "/unban user_id: 123456789012345678"]
     },
     en: {
       title: "Moderation",
@@ -427,18 +420,8 @@ const FEATURES = [
         "The bot needs a higher role than the target to act.",
         "The server owner can never be banned by the bot."
       ],
-      perms: [
-        "Ban Members — for <code>ban</code> and <code>unban</code>.",
-        "Moderate Members — for <code>mute</code> and <code>unmute</code>.",
-        "The bot's role must sit above the target's highest role."
-      ],
-      examples: [
-        "/ban user: @Spammer reason: Advertising spam",
-        "!ban @Spammer Advertising spam",
-        "/mute user: @Noisy duration: 10m reason: Chat spam",
-        "!mute @Noisy 10m Chat spam",
-        "/unban user_id: 123456789012345678"
-      ]
+      perms: ["Ban Members — for <code>ban</code> and <code>unban</code>.", "Moderate Members — for <code>mute</code> and <code>unmute</code>.", "The bot's role must sit above the target's highest role."],
+      examples: ["/ban user: @Spammer reason: Advertising spam", "!ban @Spammer Advertising spam", "/mute user: @Noisy duration: 10m reason: Chat spam", "!mute @Noisy 10m Chat spam", "/unban user_id: 123456789012345678"]
     },
     commands: [
       { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" }, ex: "/ban user: @User reason: Spam" },
@@ -465,19 +448,8 @@ const FEATURES = [
         "Cấu hình kênh được cô lập theo từng server.",
         "Bảo vệ xoá kênh: nếu kênh Ban Zone bị xoá, Nova tự khôi phục kênh và xử lý theo logic bảo vệ."
       ],
-      perms: [
-        "Manage Channels — để cấu hình kênh Ban Zone.",
-        "Ban Members / Moderate Members — tuỳ chế độ đã chọn.",
-        "Chỉ <strong>chủ server</strong> được quản lý whitelist Ban Zone.",
-        "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."
-      ],
-      examples: [
-        "/setbanchannel value:true", "!setbanchannel true",
-        "/banzone ban", "!banzone ban",
-        "/banzone mute duration:10m", "!banzone mute 10m",
-        "/banwhitelist add @TrustedUser",
-        "/bandebug @SomeUser", "!bandebug @SomeUser"
-      ]
+      perms: ["Manage Channels — để cấu hình kênh Ban Zone.", "Ban Members / Moderate Members — tuỳ chế độ đã chọn.", "Chỉ <strong>chủ server</strong> được quản lý whitelist Ban Zone.", "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."],
+      examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/banwhitelist add @TrustedUser", "/bandebug @SomeUser", "!bandebug @SomeUser"]
     },
     en: {
       title: "Ban Zone",
@@ -495,19 +467,8 @@ const FEATURES = [
         "Channel configuration is isolated per server.",
         "Channel deletion protection: if the Ban Zone channel is deleted, Nova recreates it and handles the executor according to its protection logic."
       ],
-      perms: [
-        "Manage Channels — to configure the Ban Zone channel.",
-        "Ban Members / Moderate Members — depending on the selected mode.",
-        "Only the <strong>server owner</strong> can manage the Ban Zone whitelist.",
-        "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."
-      ],
-      examples: [
-        "/setbanchannel value:true", "!setbanchannel true",
-        "/banzone ban", "!banzone ban",
-        "/banzone mute duration:10m", "!banzone mute 10m",
-        "/banwhitelist add @TrustedUser",
-        "/bandebug @SomeUser", "!bandebug @SomeUser"
-      ]
+      perms: ["Manage Channels — to configure the Ban Zone channel.", "Ban Members / Moderate Members — depending on the selected mode.", "Only the <strong>server owner</strong> can manage the Ban Zone whitelist.", "Bandebug: Manager (Administrator / Manage Server / Manage Channels)."],
+      examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/banwhitelist add @TrustedUser", "/bandebug @SomeUser", "!bandebug @SomeUser"]
     },
     commands: [
       { name: "/setbanchannel • !setbanchannel", type: "both", isNew: true, vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" }, ex: "!setbanchannel true" },
@@ -532,11 +493,7 @@ const FEATURES = [
         "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
         "Trusted users: <code>/trust • !trust</code>."
       ],
-      perms: [
-        "Manage Roles — để cấu hình các vai trò War/Backup.",
-        "Manage Channels / Manage Threads — để tạo thread điều phối.",
-        "Quyền quản lý cần thiết cho <code>/callhacker</code> và <code>/trust</code>."
-      ],
+      perms: ["Manage Roles — để cấu hình các vai trò War/Backup.", "Manage Channels / Manage Threads — để tạo thread điều phối.", "Quyền quản lý cần thiết cho <code>/callhacker</code> và <code>/trust</code>."],
       examples: ["/end all", "/callhacker show", "/callhacker hide", "!trust add @User", "/trust list"]
     },
     en: {
@@ -553,11 +510,7 @@ const FEATURES = [
         "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
         "Trusted users: <code>/trust • !trust</code>."
       ],
-      perms: [
-        "Manage Roles — to configure the War/Backup roles.",
-        "Manage Channels / Manage Threads — to create coordination threads.",
-        "Manager-level permissions for <code>/callhacker</code> and <code>/trust</code>."
-      ],
+      perms: ["Manage Roles — to configure the War/Backup roles.", "Manage Channels / Manage Threads — to create coordination threads.", "Manager-level permissions for <code>/callhacker</code> and <code>/trust</code>."],
       examples: ["/end all", "/callhacker show", "/callhacker hide", "!trust add @User", "/trust list"]
     },
     commands: [
@@ -588,10 +541,7 @@ const FEATURES = [
         "<code>/event clear</code> xoá dữ liệu/người tham gia khi phù hợp.",
         "Blacklist: <code>/event blacklist add</code>, <code>/event blacklist remove</code>, <code>/event blacklist list</code>."
       ],
-      perms: [
-        "Manage Events / Manage Channels — để gửi và quản lý sự kiện.",
-        "Quyền quản lý cần thiết để dùng blacklist sự kiện."
-      ],
+      perms: ["Manage Events / Manage Channels — để gửi và quản lý sự kiện.", "Quyền quản lý cần thiết để dùng blacklist sự kiện."],
       examples: ["/event send title: Giải đấu cuối tuần", "/event participants", "/event count", "/event blacklist add @User"]
     },
     en: {
@@ -748,11 +698,7 @@ const FEATURES = [
         "DM vẫn dùng mặc định <code>!</code>.",
         "Prefix được lưu lại sau khi bot khởi động lại."
       ],
-      perms: [
-        "<strong>KHÔNG</strong> chỉ dành cho chủ bot.",
-        "Administrator, Manage Server hoặc Manage Channels trong server đều dùng được.",
-        "Quyền thuộc về server Discord, không phải chủ bot."
-      ],
+      perms: ["<strong>KHÔNG</strong> chỉ dành cho chủ bot.", "Administrator, Manage Server hoặc Manage Channels trong server đều dùng được.", "Quyền thuộc về server Discord, không phải chủ bot."],
       examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
     },
     en: {
@@ -768,11 +714,7 @@ const FEATURES = [
         "DM uses the default <code>!</code>.",
         "The prefix is saved after bot restart."
       ],
-      perms: [
-        "NOT bot-owner-only.",
-        "Administrator, Manage Server or Manage Channels in the server can use it.",
-        "The permission belongs to the Discord server, not the bot owner."
-      ],
+      perms: ["NOT bot-owner-only.", "Administrator, Manage Server or Manage Channels in the server can use it.", "The permission belongs to the Discord server, not the bot owner."],
       examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
     },
     commands: [
@@ -953,7 +895,7 @@ const HELP_FEATURES = {
 };
 
 /* ============================================================
-   LEGAL (giữ nguyên — không đổi)
+   LEGAL (giữ nguyên)
    ============================================================ */
 const LEGAL = {
   privacy: {
@@ -1222,7 +1164,7 @@ function setLang(next, save = true) {
 }
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — có nút Okay + đường kẻ đậm hơn
    ============================================================ */
 function renderUpdateLog() {
   const body = $('#updateBody');
@@ -1257,10 +1199,13 @@ function renderUpdateLog() {
       </div>
       <div class="update-items">${itemsHtml}</div>
     </div>
-    <label class="update-snooze" for="snoozeCheck">
-      <input type="checkbox" id="snoozeCheck">
-      <span>${esc(t('update.snoozeLabel'))}</span>
-    </label>
+    <div class="update-footer">
+      <label class="update-snooze" for="snoozeCheck">
+        <input type="checkbox" id="snoozeCheck">
+        <span>${esc(t('update.snoozeLabel'))}</span>
+      </label>
+      <button type="button" class="btn-okay" id="updateOkayBtn">${esc(t('update.okay'))}</button>
+    </div>
   `;
 
   const snooze = $('#snoozeCheck');
@@ -1274,6 +1219,9 @@ function renderUpdateLog() {
       }
     });
   }
+
+  const okayBtn = $('#updateOkayBtn');
+  if (okayBtn) okayBtn.addEventListener('click', closeUpdateLog);
 }
 
 function isSnoozed() {
@@ -1320,7 +1268,7 @@ function onUpdateKey(e) {
 }
 
 /* ============================================================
-   FEATURES — KHÔNG còn badge NEW ở category card
+   FEATURES
    ============================================================ */
 function renderFeatures() {
   const grid = $('#featureGrid');
@@ -1456,7 +1404,6 @@ function allCommands() {
   return out;
 }
 
-/* CHIPS — bỏ badge NEW ở category chip */
 function renderChips() {
   const wrap = $('#categoryChips');
   if (!wrap) return;
@@ -1478,7 +1425,6 @@ function renderChips() {
   });
 }
 
-/* COMMAND GROUP HEAD — bỏ badge NEW ở category heading */
 function renderCommands() {
   const wrap = $('#commandGroups');
   if (!wrap) return;
@@ -1502,7 +1448,6 @@ function renderCommands() {
   observeReveal();
 }
 
-/* Command card — GIỮ badge NEW ở đây (chỉ cho command có isNew) */
 function cmdCard(c) {
   return `
     <article class="cmd-card reveal">
