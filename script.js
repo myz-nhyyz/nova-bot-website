@@ -212,7 +212,7 @@ const I18N = {
 };
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — !info và !prefix được đánh dấu isCurrent:true
    ============================================================ */
 const UPDATE_LOG = [
   {
@@ -1720,7 +1720,7 @@ function initImageFallback() {
 }
 
 /* ============================================================
-   NAV SCROLL SPY — tự động highlight nav theo section đang xem
+   NAV SCROLL SPY
    ============================================================ */
 function initScrollSpy() {
   const sections = ['home', 'features', 'commands', 'help']
@@ -1732,7 +1732,7 @@ function initScrollSpy() {
   if (!navLinks.length) return;
 
   const getActiveId = () => {
-    const navOffset = 140; // nav height + gap + buffer
+    const navOffset = 140;
     const scrollY = window.scrollY || window.pageYOffset;
     let current = sections[0].id;
 
@@ -1745,7 +1745,6 @@ function initScrollSpy() {
       }
     }
 
-    // Chạm đáy trang → giữ section cuối active
     const scrollBottom = scrollY + window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
     if (docHeight - scrollBottom < 80) {
@@ -1775,7 +1774,6 @@ function initScrollSpy() {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
 
-  // Click nav link → highlight ngay lập tức
   navLinks.forEach(a => {
     a.addEventListener('click', () => {
       const href = a.getAttribute('href') || '';
@@ -1788,7 +1786,7 @@ function initScrollSpy() {
     });
   });
 
-  update(); // set active ngay khi load
+  update();
 }
 
 /* ============================================================
