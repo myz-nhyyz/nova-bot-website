@@ -1,202 +1,143 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Điều khoản dịch vụ của Nova Discord bot.">
-    <meta name="theme-color" content="#0a0a0f">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Điều khoản dịch vụ — Nova">
-    <meta property="og:description" content="Điều khoản dịch vụ của Nova Discord bot.">
-    <meta property="og:image" content="./assets/avatar.png">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Điều khoản dịch vụ — Nova">
-    <meta name="twitter:description" content="Điều khoản dịch vụ của Nova Discord bot.">
-
-    <title>Điều khoản dịch vụ — Nova</title>
-    <link rel="icon" type="image/png" href="./assets/favicon.png">
-    <link rel="stylesheet" href="./style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Điều khoản dịch vụ — Nova</title>
+<meta name="description" content="Điều khoản dịch vụ của Nova Discord bot.">
+<meta name="theme-color" content="#050507">
+<meta property="og:title" content="Điều khoản dịch vụ — Nova">
+<meta property="og:description" content="Điều khoản dịch vụ của Nova Discord bot.">
+<meta property="og:image" content="assets/avatar.png">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/avatar.png">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body data-page="terms">
-    <div class="bg-ambient" aria-hidden="true">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
 
-    <div class="mobile-overlay" aria-hidden="true"></div>
+<div class="aurora" aria-hidden="true">
+  <span class="aurora-blob a1"></span>
+  <span class="aurora-blob a2"></span>
+  <span class="aurora-blob a3"></span>
+  <span class="aurora-grain"></span>
+</div>
 
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
-        <div class="navbar-inner">
-            <a href="./index.html" class="nav-brand" aria-label="Nova Home">
-                <div class="nav-brand-avatar" aria-hidden="true">
-                    <img src="./assets/avatar.png" alt="" onerror="this.style.display='none'; this.parentElement.innerHTML='N';">
-                </div>
-                <span>Nova</span>
-            </a>
+<a class="skip-link" href="#main" data-i18n="a11y.skip">Chuyển tới nội dung</a>
 
-            <ul class="nav-links" role="list">
-                <li><a href="./index.html" data-i18n="nav.home">Trang chủ</a></li>
-                <li><a href="./index.html#features-section" data-i18n="nav.features">Tính năng</a></li>
-                <li><a href="./index.html#commands-section" data-i18n="nav.commands">Lệnh</a></li>
-                <li><a href="./privacy-policy.html" data-i18n="nav.privacy">Chính sách</a></li>
-                <li><a href="./terms-of-service.html" data-i18n="nav.terms">Điều khoản</a></li>
-            </ul>
+<div class="modal modal-update" id="updateModal" role="dialog" aria-modal="true" aria-labelledby="updateTitle" hidden>
+  <div class="modal-backdrop" data-close-update></div>
+  <div class="modal-panel glass modal-panel-update" role="document" tabindex="-1">
+    <button class="modal-close" type="button" data-close-update aria-label="Close">×</button>
+    <div class="modal-body" id="updateBody"></div>
+  </div>
+</div>
 
-            <div class="nav-actions">
-                <a href="#" data-href="invite" class="nav-invite" data-i18n="nav.invite">Mời Nova</a>
-                <div class="lang-switch vi" role="group" aria-label="Language switcher">
-                    <div class="lang-switch-thumb" aria-hidden="true"></div>
-                    <button type="button" class="lang-btn" data-lang="vi" role="tab" aria-selected="true" aria-label="Tiếng Việt">
-                        <span class="lang-flag">🇻🇳</span><span>VI</span>
-                    </button>
-                    <button type="button" class="lang-btn" data-lang="en" role="tab" aria-selected="false" aria-label="English">
-                        <span class="lang-flag">🇺🇸</span><span>EN</span>
-                    </button>
-                </div>
-                <button type="button" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-        </div>
+<header class="nav" id="nav">
+  <div class="nav-inner glass">
+    <a class="brand" href="index.html" aria-label="Nova">
+      <span class="brand-avatar-wrap"><img class="brand-avatar" src="assets/avatar.png" alt="Nova avatar" data-avatar></span>
+      <span class="brand-name">Nova</span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html#home" data-i18n="nav.home">Trang chủ</a>
+      <a href="index.html#features" data-i18n="nav.features">Tính năng</a>
+      <a href="index.html#commands" data-i18n="nav.commands">Lệnh</a>
+      <a href="index.html#help" data-i18n="nav.help">Help</a>
+      <a href="privacy-policy.html" data-i18n="nav.privacy">Privacy</a>
+      <a href="terms-of-service.html" class="active" data-i18n="nav.terms">Terms</a>
     </nav>
-
-    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation">
-        <div class="mobile-menu-section" data-i18n="mobile.main">Điều hướng</div>
-        <a href="./index.html" data-i18n="nav.home">Trang chủ</a>
-        <a href="./index.html#features-section" data-i18n="nav.features">Tính năng</a>
-        <a href="./index.html#commands-section" data-i18n="nav.commands">Lệnh</a>
-        <div class="mobile-menu-section" data-i18n="mobile.legal">Pháp lý</div>
-        <a href="./privacy-policy.html" data-i18n="nav.privacy">Chính sách</a>
-        <a href="./terms-of-service.html" data-i18n="nav.terms">Điều khoản</a>
-        <a href="#" data-href="invite" class="mobile-invite" data-i18n="nav.invite">Mời Nova</a>
+    <div class="nav-actions">
+      <button type="button" class="btn btn-updates" data-open-updates aria-label="Open Update Log">
+        <span class="updates-dot" aria-hidden="true"></span>
+        <span data-i18n="nav.updatesLabel">Updates</span>
+      </button>
+      <div class="seg" id="langSwitch" role="group" aria-label="Language / Ngôn ngữ">
+        <span class="seg-thumb" aria-hidden="true"></span>
+        <button type="button" class="seg-btn" data-lang="vi" aria-pressed="true">VI</button>
+        <button type="button" class="seg-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-primary btn-invite" href="https://discord.com/oauth2/authorize?client_id=1532745879944036523" target="_blank" rel="noopener" data-i18n="nav.invite">Mời Nova</a>
+      <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </div>
+</header>
 
-    <header class="legal-hero">
-        <div class="container">
-            <div class="reveal">
-                <span class="legal-badge" data-i18n="terms.badge">Điều khoản dịch vụ</span>
-            </div>
-            <h1 class="legal-title reveal" data-stagger="1" data-i18n="terms.title">Điều khoản dịch vụ</h1>
-            <p class="legal-effective reveal" data-stagger="2" data-i18n="terms.effective">Có hiệu lực từ: 19/09/2026</p>
-        </div>
-    </header>
+<div class="mobile-menu glass" id="mobileMenu" hidden>
+  <nav aria-label="Mobile navigation">
+    <a href="index.html#home" data-i18n="nav.home">Trang chủ</a>
+    <a href="index.html#features" data-i18n="nav.features">Tính năng</a>
+    <a href="index.html#commands" data-i18n="nav.commands">Lệnh</a>
+    <a href="index.html#help" data-i18n="nav.help">Help</a>
+    <a href="privacy-policy.html" data-i18n="nav.privacy">Privacy</a>
+    <a href="terms-of-service.html" data-i18n="nav.terms">Terms</a>
+    <button type="button" class="mm-link" data-open-updates data-i18n="nav.updatesLabel">Updates</button>
+  </nav>
+  <a class="btn btn-primary btn-block" href="https://discord.com/oauth2/authorize?client_id=1532745879944036523" target="_blank" rel="noopener" data-i18n="nav.invite">Mời Nova</a>
+</div>
 
-    <main class="legal-content">
-        <div class="container">
-            <div class="legal-disclaimer reveal" data-i18n="terms.disclaimer">
-                Nova là Discord bot bên thứ ba và không phải sản phẩm chính thức của Discord.
-            </div>
+<main id="main">
+  <section class="legal-hero">
+    <div class="container">
+      <span class="kicker" data-i18n="legal.kicker">Pháp lý</span>
+      <h1 data-i18n="terms.title">Điều khoản dịch vụ</h1>
+      <p class="legal-effective"><span data-i18n="legal.effective">Ngày hiệu lực</span>: <strong>19/09/2026</strong></p>
+      <p class="legal-lead" data-i18n="terms.lead">Khi mời Nova vào server hoặc sử dụng bất kỳ tính năng nào của bot, bạn đồng ý với các điều khoản dưới đây.</p>
+    </div>
+  </section>
 
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">1</span><span data-i18n="terms.s1.title">Giới thiệu</span></h2>
-                <p data-i18n="terms.s1.text">Điều khoản dịch vụ này quản lý việc bạn sử dụng bot Discord Nova. Bằng cách sử dụng Nova, bạn đồng ý tuân thủ các điều khoản này.</p>
-            </article>
+  <section class="section section-tight">
+    <div class="container">
+      <article class="glass legal-doc" id="legalBody" data-i18n-html="terms.body"></article>
 
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">2</span><span data-i18n="terms.s2.title">Chấp nhận điều khoản</span></h2>
-                <p data-i18n="terms.s2.text">Bằng cách thêm Nova vào server Discord của bạn hoặc sử dụng bất kỳ lệnh nào của bot, bạn xác nhận rằng đã đọc, hiểu và đồng ý với các điều khoản này. Nếu bạn không đồng ý, vui lòng không sử dụng Nova.</p>
-            </article>
+      <div class="glass contact-card">
+        <h3 data-i18n="legal.contactTitle">Liên hệ</h3>
+        <p data-i18n="legal.contactText">Nếu bạn có câu hỏi về chính sách này hoặc muốn yêu cầu xoá dữ liệu, hãy liên hệ:</p>
+        <ul>
+          <li><span data-i18n="legal.email">Email</span>: <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a></li>
+          <li><span data-i18n="legal.support">Support Server</span>: <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener">discord.gg/qkyu3G6WMa</a></li>
+          <li><span data-i18n="legal.owner">Chủ sở hữu</span>: <strong>nova_.inovation</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
 
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">3</span><span data-i18n="terms.s3.title">Sử dụng có thể chấp nhận</span></h2>
-                <p data-i18n="terms.s3.text">Bạn đồng ý sử dụng Nova chỉ cho các mục đích hợp pháp và tuân thủ Điều khoản Dịch vụ của Discord. Bạn không được sử dụng Nova để gửi thư rác, lạm dụng, hoặc thực hiện các hành vi gây hại cho người dùng khác.</p>
-            </article>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <div class="footer-brand-top">
+        <img src="assets/avatar.png" alt="Nova" data-avatar>
+        <span>Nova</span>
+      </div>
+      <p data-i18n="footer.owned">Được phát triển và duy trì bởi <strong>nova_.inovation</strong>.</p>
+      <p class="footer-ai"><span data-i18n="footer.model">Mô hình AI công khai</span>: <strong>Qwen3.7-max</strong></p>
+    </div>
+    <nav class="footer-col" aria-label="Footer navigation">
+      <h4 data-i18n="footer.links">Liên kết</h4>
+      <a href="index.html#home" data-i18n="nav.home">Trang chủ</a>
+      <a href="index.html#features" data-i18n="nav.features">Tính năng</a>
+      <a href="index.html#commands" data-i18n="nav.commands">Lệnh</a>
+      <a href="index.html#help" data-i18n="nav.help">Help</a>
+      <a href="privacy-policy.html" data-i18n="nav.privacy">Privacy</a>
+      <a href="terms-of-service.html" data-i18n="nav.terms">Terms</a>
+      <button type="button" class="footer-link-btn" data-open-updates data-i18n="nav.updatesLabel">Updates</button>
+    </nav>
+    <div class="footer-col">
+      <h4 data-i18n="footer.supportTitle">Hỗ trợ</h4>
+      <a href="https://discord.gg/qkyu3G6WMa" target="_blank" rel="noopener" data-i18n="footer.supportLink">Support Server</a>
+      <a href="https://discord.com/oauth2/authorize?client_id=1532745879944036523" target="_blank" rel="noopener" data-i18n="footer.inviteLink">Mời Nova</a>
+      <a href="mailto:anhbao27072011@gmail.com">anhbao27072011@gmail.com</a>
+      <p class="footer-date"><span data-i18n="footer.effective">Ngày hiệu lực</span>: 19/09/2026</p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© <span id="year">2026</span> Nova · nova_.inovation. <span data-i18n="footer.rights">Mọi quyền được bảo lưu.</span></p>
+    <p class="footer-note" data-i18n="footer.note">Trang web tĩnh chỉ mang tính giới thiệu. Nova không lưu trữ token hay khóa API trên trang này.</p>
+  </div>
+</footer>
 
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">4</span><span data-i18n="terms.s4.title">Lạm dụng bị cấm</span></h2>
-                <p data-i18n="terms.s4.text">Người dùng có trách nhiệm đối với nội dung họ gửi thông qua Nova. Bạn không được sử dụng Nova để truyền tải nội dung xúc phạm, đe dọa, khiêu dâm, vi phạm bản quyền hoặc trái pháp luật. Việc cố tình lạm dụng tính năng AI, moderation, Ban Zone hoặc War/Backup có thể dẫn đến việc bị chấm dứt quyền truy cập.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">5</span><span data-i18n="terms.s5.title">Yêu cầu quyền Discord</span></h2>
-                <p data-i18n="terms.s5.text">Nova yêu cầu các quyền Discord cần thiết để hoạt động. Các hành động moderation và cấu hình tôn trọng thứ bậc vai trò Discord và quyền của người dùng. Bot không thể thực hiện các hành động vượt quá quyền của nó trong server.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">6</span><span data-i18n="terms.s6.title">Giới hạn tính năng AI</span></h2>
-                <p data-i18n="terms.s6.text">Tính năng AI sử dụng Qwen3.7-max. Chúng tôi không đảm bảo rằng nội dung do AI tạo ra luôn chính xác, hoàn chỉnh hoặc phù hợp. Sử dụng thông tin từ AI theo trách nhiệm của riêng bạn. Dịch vụ AI có thể không khả dụng vào lúc này.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">7</span><span data-i18n="terms.s7.title">Giới hạn tính năng Moderation</span></h2>
-                <p data-i18n="terms.s7.text">Các tính năng moderation được cung cấp để hỗ trợ quản lý server. Chúng tôi không đảm bảo rằng mọi hành động moderation đều thành công hoặc phù hợp trong mọi tình huống. Quản trị viên server có trách nhiệm giám sát và điều chỉnh.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">8</span><span data-i18n="terms.s8.title">Tính khả dụng</span></h2>
-                <p data-i18n="terms.s8.text">Chúng tôi không đảm bảo rằng Nova sẽ hoạt động không gián đoạn hoặc không có lỗi. Dịch vụ có thể bị gián đoạn do bảo trì, cập nhật, hoặc sự cố bên thứ ba ngoài tầm kiểm soát của chúng tôi.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">9</span><span data-i18n="terms.s9.title">Thay đổi dịch vụ</span></h2>
-                <p data-i18n="terms.s9.text">Chúng tôi có quyền cập nhật, sửa đổi hoặc loại bỏ tính năng của Nova bất cứ lúc nào. Chúng tôi sẽ cố gắng thông báo trước về các thay đổi quan trọng khi có thể.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">10</span><span data-i18n="terms.s10.title">Chấm dứt</span></h2>
-                <p data-i18n="terms.s10.text">Chúng tôi có quyền tạm ngừng hoặc chấm dứt quyền truy cập Nova của bạn nếu bạn vi phạm các điều khoản này. Bạn có thể ngừng sử dụng Nova bất cứ lúc nào bằng cách xóa bot khỏi server.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">11</span><span data-i18n="terms.s11.title">Giới hạn trách nhiệm</span></h2>
-                <p data-i18n="terms.s11.text">Trong phạm vi được pháp luật cho phép, Nova và người duy trì không chịu trách nhiệm đối với bất kỳ thiệt hại gián tiếp, ngẫu nhiên, đặc biệt, hệ quả hoặc trừng phạt nào phát sinh từ việc sử dụng hoặc không thể sử dụng bot.</p>
-            </article>
-
-            <article class="legal-section reveal">
-                <h2><span class="legal-section-num">12</span><span data-i18n="terms.s12.title">Liên hệ</span></h2>
-                <p data-i18n="terms.s12.text">Nếu bạn có câu hỏi về các điều khoản này, vui lòng liên hệ:</p>
-                <div style="margin-top:0.75rem;">
-                    <p style="font-size:var(--fs-small); color:var(--text-secondary); margin-bottom:0.2rem;" data-i18n="terms.contact.owner">Bot Owner: nova_.inovation</p>
-                    <p style="font-size:var(--fs-small); color:var(--text-secondary); margin-bottom:0.2rem;" data-i18n="terms.contact.email">Email: anhbao27072011@gmail.com</p>
-                    <p style="font-size:var(--fs-small); color:var(--text-secondary);" data-i18n="terms.contact.support">Support Server: https://discord.gg/qkyu3G6WMa</p>
-                </div>
-            </article>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-inner">
-                <div class="footer-grid">
-                    <div>
-                        <div class="footer-brand-name">Nova</div>
-                        <p class="footer-brand-tagline" data-i18n="footer.tagline">AI-powered Discord bot</p>
-                        <p class="footer-owner" data-i18n="footer.owner">Bot Owner: nova_.inovation</p>
-                    </div>
-                    <div>
-                        <h4 class="footer-col-title" data-i18n="footer.col.nav">Điều hướng</h4>
-                        <ul class="footer-links" role="list">
-                            <li><a href="./index.html" data-i18n="footer.link.home">Trang chủ</a></li>
-                            <li><a href="./index.html#features-section" data-i18n="footer.link.features">Tính năng</a></li>
-                            <li><a href="./index.html#commands-section" data-i18n="footer.link.commands">Lệnh</a></li>
-                            <li><a href="./privacy-policy.html" data-i18n="footer.link.privacy">Chính sách bảo mật</a></li>
-                            <li><a href="./terms-of-service.html" data-i18n="footer.link.terms">Điều khoản dịch vụ</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="footer-col-title" data-i18n="footer.col.community">Cộng đồng</h4>
-                        <ul class="footer-links" role="list">
-                            <li><a href="#" data-href="support" target="_blank" rel="noopener noreferrer" data-i18n="footer.link.support">Support Server</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="footer-col-title">Nova</h4>
-                        <div class="footer-cta">
-                            <a href="#" data-href="invite" class="btn btn-primary btn-sm" data-i18n="footer.invite">Mời Nova</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <span data-i18n="footer.copyright">© 2026 Nova. Đã đăng ký bản quyền.</span>
-                    <span>Effective Date: 19/09/2026</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="./script.js"></script>
+<script src="./script.js" defer></script>
 </body>
 </html>
