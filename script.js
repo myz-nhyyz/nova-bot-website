@@ -2,7 +2,8 @@
    NOVA — script.js
    Language, sticky nav, auto Update Log with 24h snooze,
    feature modals, command search, Help preview, unified
-   Slash/Prefix commands, temporary NEW badge logic.
+   Slash/Prefix commands, temporary NEW badge logic,
+   nav scroll spy.
    ============================================================ */
 'use strict';
 
@@ -211,7 +212,7 @@ const I18N = {
 };
 
 /* ============================================================
-   UPDATE LOG — !info và !prefix được đánh dấu isCurrent:true
+   UPDATE LOG
    ============================================================ */
 const UPDATE_LOG = [
   {
@@ -895,7 +896,7 @@ const HELP_FEATURES = {
 };
 
 /* ============================================================
-   LEGAL (giữ nguyên)
+   LEGAL
    ============================================================ */
 const LEGAL = {
   privacy: {
@@ -1719,6 +1720,78 @@ function initImageFallback() {
 }
 
 /* ============================================================
+   NAV SCROLL SPY — tự động highlight nav theo section đang xem
+   ============================================================ */
+function initScrollSpy() {
+  const sections = ['home', 'features', 'commands', 'help']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  const navLinks = $$('.nav-links a');
+  if (!navLinks.length) return;
+
+  const getActiveId = () => {
+    const navOffset = 140; // nav height + gap + buffer
+    const scrollY = window.scrollY || window.pageYOffset;
+    let current = sections[0].id;
+
+    for (const sec of sections) {
+      const top = sec.offsetTop - navOffset;
+      if (scrollY >= top) {
+        current = sec.id;
+      } else {
+        break;
+      }
+    }
+
+    // Chạm đáy trang → giữ section cuối active
+    const scrollBottom = scrollY + window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    if (docHeight - scrollBottom < 80) {
+      current = sections[sections.length - 1].id;
+    }
+
+    return current;
+  };
+
+  let ticking = false;
+  const update = () => {
+    const activeId = getActiveId();
+    navLinks.forEach(a => {
+      const href = a.getAttribute('href') || '';
+      const isActive = href.endsWith('#' + activeId) || href === '#' + activeId;
+      a.classList.toggle('active', isActive);
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+
+  // Click nav link → highlight ngay lập tức
+  navLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      const href = a.getAttribute('href') || '';
+      const match = href.match(/#(.+)$/);
+      if (!match) return;
+      const id = match[1];
+      if (!sections.some(s => s.id === id)) return;
+      navLinks.forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+    });
+  });
+
+  update(); // set active ngay khi load
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 function init() {
@@ -1767,6 +1840,10 @@ function init() {
   });
 
   setLang(lang, false);
+
+  if (document.body.dataset.page === 'index') {
+    initScrollSpy();
+  }
 
   if (sel && document.body.dataset.page === 'index') {
     sel.value = 'ai';
