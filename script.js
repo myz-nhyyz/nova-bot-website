@@ -346,7 +346,7 @@ const FEATURES = [
     vi: {
       title: "Moderation",
       short: "Kiểm duyệt + hệ thống Security tự động.",
-      lead: "Bộ lệnh kiểm duyệt cơ bản (kick/mute/ban) kết hợp hệ thống Security tự động: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup, debug.",
+      lead: "Bộ lệnh kiểm duyệt cơ bản (kick/mute/ban) kết hợp hệ thống Security tự động: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup.",
       details: [
         "**🛡️ Moderation** — <code>/kick</code> • <code>!kick</code>, <code>/mute</code> • <code>!mute</code>, <code>/ban</code> • <code>!ban</code>. Chỉ **Server Owner**.",
         "**🔒 Security Config** — <code>/security</code>, <code>/toggle</code>, <code>/config</code>, <code>/punishment</code>, <code>/fallback</code>, <code>/post-punish</code>, <code>/decay</code>, <code>/mute-duration</code>, <code>/admin-mute-method</code>, <code>/muted-role-name</code>, <code>/setchannel</code>.",
@@ -354,7 +354,6 @@ const FEATURES = [
         "**⚙️ Module Config** — <code>/raid-config</code>, <code>/spam-config</code>, <code>/language</code> (Security).",
         "**🎭 Mute Role** — <code>/setup-mute-role</code> tạo/chọn Muted Role; <code>/unmute</code> • <code>!unmute</code> gỡ mute và khôi phục role đã lưu.",
         "**💾 Backup** — <code>/backup create|load|info|list|status|delete</code> sao lưu roles/channels.",
-        "**🔍 Debug/Test** — <code>/debug-user</code>, <code>/test-timeout</code>, <code>/test-ban</code>, <code>/diagnose-full</code>.",
         "**🚨 Tự động** — Anti-Nuke (theo dõi hành động phá server), Anti-Raid (chống raid, mass-punish/lockdown), Anti-Spam (link/mention/Zalgo/scam), Bot-Watch (bot mới nguy hiểm), Auto-Lockdown / Auto-Restore."
       ],
       perms: [
@@ -375,7 +374,7 @@ const FEATURES = [
     en: {
       title: "Moderation",
       short: "Moderation + automated Security system.",
-      lead: "Core moderation commands (kick/mute/ban) plus an automated Security system: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup, debug.",
+      lead: "Core moderation commands (kick/mute/ban) plus an automated Security system: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup.",
       details: [
         "**🛡️ Moderation** — <code>/kick</code> • <code>!kick</code>, <code>/mute</code> • <code>!mute</code>, <code>/ban</code> • <code>!ban</code>. **Server Owner only**.",
         "**🔒 Security Config** — <code>/security</code>, <code>/toggle</code>, <code>/config</code>, <code>/punishment</code>, <code>/fallback</code>, <code>/post-punish</code>, <code>/decay</code>, <code>/mute-duration</code>, <code>/admin-mute-method</code>, <code>/muted-role-name</code>, <code>/setchannel</code>.",
@@ -383,7 +382,6 @@ const FEATURES = [
         "**⚙️ Module Config** — <code>/raid-config</code>, <code>/spam-config</code>, <code>/language</code> (Security).",
         "**🎭 Mute Role** — <code>/setup-mute-role</code> create/choose Muted Role; <code>/unmute</code> • <code>!unmute</code> remove mute and restore saved roles.",
         "**💾 Backup** — <code>/backup create|load|info|list|status|delete</code> roles/channels backup.",
-        "**🔍 Debug/Test** — <code>/debug-user</code>, <code>/test-timeout</code>, <code>/test-ban</code>, <code>/diagnose-full</code>.",
         "**🚨 Automatic** — Anti-Nuke (destructive action tracking), Anti-Raid (mass-punish/lockdown), Anti-Spam (links/mentions/Zalgo/scam), Bot-Watch (dangerous new bots), Auto-Lockdown / Auto-Restore."
       ],
       perms: [
@@ -432,11 +430,7 @@ const FEATURES = [
       { name: "/backup info <backup_id>", type: "slash", vi: { d: "Xem chi tiết backup.", p: "Manager" }, en: { d: "View backup details.", p: "Manager" } },
       { name: "/backup list", type: "slash", vi: { d: "Xem danh sách backup.", p: "Manager" }, en: { d: "Browse backups.", p: "Manager" } },
       { name: "/backup status", type: "slash", vi: { d: "Xem tiến trình load gần nhất.", p: "Manager" }, en: { d: "View latest load progress.", p: "Manager" } },
-      { name: "/backup delete <backup_id>", type: "slash", vi: { d: "Xoá một backup.", p: "Manager" }, en: { d: "Delete a backup.", p: "Manager" } },
-      { name: "/debug-user <user>", type: "slash", vi: { d: "Kiểm tra quyền và hierarchy.", p: "Manager" }, en: { d: "Check permissions and hierarchy.", p: "Manager" } },
-      { name: "/test-timeout <user> <duration>", type: "slash", vi: { d: "Test timeout với user.", p: "Manager" }, en: { d: "Test timeout on a user.", p: "Manager" } },
-      { name: "/test-ban <user>", type: "slash", vi: { d: "Test ban với user.", p: "Manager" }, en: { d: "Test ban on a user.", p: "Manager" } },
-      { name: "/diagnose-full <user>", type: "slash", vi: { d: "Chẩn đoán moderation đầy đủ.", p: "Manager" }, en: { d: "Full moderation diagnosis.", p: "Manager" } }
+      { name: "/backup delete <backup_id>", type: "slash", vi: { d: "Xoá một backup.", p: "Manager" }, en: { d: "Delete a backup.", p: "Manager" } }
     ]
   },
   {
@@ -668,13 +662,13 @@ const HELP_CATEGORIES = [
     viBody: {
       title: "Moderation",
       text: "Bộ lệnh kiểm duyệt và Security module: kick/mute/ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown, Backup.",
-      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete", "/debug-user", "/test-timeout", "/test-ban", "/diagnose-full"],
+      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete"],
       note: "kick/mute/ban chỉ **Server Owner**. Bot phải có role cao hơn mục tiêu."
     },
     enBody: {
       title: "Moderation",
       text: "Moderation and Security module: kick/mute/ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown, Backup.",
-      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete", "/debug-user", "/test-timeout", "/test-ban", "/diagnose-full"],
+      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete"],
       note: "kick/mute/ban are **Server Owner only**. The bot must have a higher role than the target."
     }
   },
@@ -789,8 +783,8 @@ const HELP_FEATURES = {
     vi: { title: "/unban • !unban", body: "Bỏ cấm người dùng bằng User ID. Cần quyền Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" },
     en: { title: "/unban • !unban", body: "Unban a user using their User ID. Requires Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" } },
   moderation: { icon: "🛡️", isNew: true,
-    vi: { title: "Moderation & Security", body: "Nhóm lệnh kiểm duyệt + Security: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, debug/test.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" },
-    en: { title: "Moderation & Security", body: "Moderation + Security command set: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, debug/test.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" } },
+    vi: { title: "Moderation & Security", body: "Nhóm lệnh kiểm duyệt + Security: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" },
+    en: { title: "Moderation & Security", body: "Moderation + Security command set: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" } },
   banzone: { icon: "☠️", isNew: true,
     vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" },
     en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" } },
