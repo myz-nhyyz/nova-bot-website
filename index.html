@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nova — AI Discord Bot</title>
+<title>Nova — Discord Bot</title>
 <meta name="description" content="Nova is a Discord bot for AI chat, AI image generation, War and Backup coordination, Events, Ban Zone protection, moderation, server information, and server-specific tools.">
 <meta name="theme-color" content="#050507">
 <meta name="author" content="nova_.inovation">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nova">
-<meta property="og:title" content="Nova — AI Discord Bot">
+<meta property="og:title" content="Nova — Discord Bot">
 <meta property="og:description" content="Nova is a Discord bot for AI chat, AI image generation, War and Backup coordination, Events, Ban Zone protection, moderation, server information, and server-specific tools.">
 <meta property="og:image" content="assets/avatar.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Nova — AI Discord Bot">
+<meta name="twitter:title" content="Nova — Discord Bot">
 <meta name="twitter:description" content="AI chat, AI images, War/Backup coordination, Events, Ban Zone protection, moderation, server info and custom prefixes.">
 <meta name="twitter:image" content="assets/avatar.png">
 <link rel="icon" href="assets/favicon.png" type="image/png">
@@ -31,7 +31,6 @@
 
 <a class="skip-link" href="#main" data-i18n="a11y.skip">Chuyển tới nội dung</a>
 
-<!-- ================= UPDATE LOG MODAL (auto-opens) ================= -->
 <div class="modal modal-update" id="updateModal" role="dialog" aria-modal="true" aria-labelledby="updateTitle" hidden>
   <div class="modal-backdrop" data-close-update></div>
   <div class="modal-panel glass modal-panel-update" role="document" tabindex="-1">
@@ -40,7 +39,6 @@
   </div>
 </div>
 
-<!-- ================= NAVBAR ================= -->
 <header class="nav" id="nav">
   <div class="nav-inner glass">
     <a class="brand" href="index.html#home" aria-label="Nova">
@@ -79,7 +77,6 @@
   </div>
 </header>
 
-<!-- ================= MOBILE MENU ================= -->
 <div class="mobile-menu glass" id="mobileMenu" hidden>
   <nav aria-label="Mobile navigation">
     <a href="index.html#home" data-i18n="nav.home">Trang chủ</a>
@@ -105,7 +102,7 @@
         <span class="hero-glow" aria-hidden="true"></span>
         <img class="hero-avatar" src="assets/avatar.png" alt="Nova Discord bot avatar" data-avatar>
       </div>
-      <span class="pill" data-i18n="hero.badge">AI Discord Bot · Qwen3.7-max</span>
+      <span class="pill" data-i18n="hero.badge">Nova · Discord Bot</span>
       <h1 class="hero-title">Nova</h1>
       <p class="hero-sub" data-i18n="hero.sub">
         Bot Discord thông minh cho AI chat, tạo ảnh AI, kiểm duyệt, điều phối War/Backup,
@@ -121,9 +118,9 @@
         <a class="btn btn-ghost" href="#features" data-i18n="hero.explore">Khám phá tính năng</a>
       </div>
       <ul class="hero-stats">
-        <li><strong>Qwen3.7-max</strong><span data-i18n="hero.stat1l">Mô hình AI công khai</span></li>
+        <li><strong>Qwen3.7-max</strong><span data-i18n="hero.stat1l">Mô hình công khai</span></li>
         <li><strong>nova_.inovation</strong><span data-i18n="hero.stat2l">Chủ sở hữu bot</span></li>
-        <li><strong>9</strong><span data-i18n="hero.stat3l">Nhóm tính năng</span></li>
+        <li><strong>6</strong><span data-i18n="hero.stat3l">Nhóm tính năng</span></li>
         <li><strong>60+</strong><span data-i18n="hero.stat4l">Lệnh slash &amp; prefix</span></li>
       </ul>
     </div>
@@ -152,7 +149,7 @@
           <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
         </svg>
         <input type="search" id="searchInput" autocomplete="off"
-               data-i18n-placeholder="commands.search" placeholder="Tìm lệnh, tính năng, quyền… (ví dụ: info, prefix, chat)">
+               data-i18n-placeholder="commands.search" placeholder="Tìm lệnh, tính năng, quyền… (ví dụ: info, prefix, ban)">
         <button type="button" class="search-clear" id="searchClear" hidden aria-label="Clear search">×</button>
       </div>
       <div class="chips" id="categoryChips" role="tablist" aria-label="Command categories"></div>
@@ -226,7 +223,7 @@
         <span>Nova</span>
       </div>
       <p data-i18n="footer.owned">Được phát triển và duy trì bởi <strong>nova_.inovation</strong>.</p>
-      <p class="footer-ai"><span data-i18n="footer.model">Mô hình AI công khai</span>: <strong>Qwen3.7-max</strong></p>
+      <p class="footer-ai"><span data-i18n="footer.model">Mô hình công khai</span>: <strong>Qwen3.7-max</strong></p>
     </div>
     <nav class="footer-col" aria-label="Footer navigation">
       <h4 data-i18n="footer.links">Liên kết</h4>
