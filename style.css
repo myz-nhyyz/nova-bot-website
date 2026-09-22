@@ -645,6 +645,17 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.32);
   color:#e6e0ff;border-radius:7px;
 }
+.update-history{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  padding-right:4px;
+  scrollbar-gutter:stable;
+}
 
 /* Footer: checkbox trái + nút Okay phải */
 .update-footer{
