@@ -211,31 +211,15 @@ const I18N = {
 };
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — multiple panels
+   UPDATE 02 = current (isCurrent: true on items)
+   UPDATE 01 = history (isCurrent: false on items)
    ============================================================ */
 const UPDATE_LOG = [
   {
-    id: "UPDATE 01",
-    date: "19/09/2026",
+    id: "UPDATE 02",
+    date: "22/09/2026",
     items: [
-      {
-        icon: "ℹ️", isCurrent: true,
-        title: { vi: "!info — Thông tin bot", en: "!info — Bot Information" },
-        description: {
-          vi: "`!info` là bản prefix của `/info`. Cả hai hiển thị cùng một bảng thông tin bot, gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, Ban Zone, Help Channel, số lượng lệnh, thông tin server hiện tại, chủ server, vai trò của bot và quyền của bot.",
-          en: "`!info` is the prefix version of `/info`. Both display the same bot information panel, including: bot information, uptime, latency, Python version, discord.py version, server count, user count, channel count, AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone, Help Channel, command counts, current server information, server owner, bot role and bot permissions."
-        },
-        commands: ["/info • !info"]
-      },
-      {
-        icon: "🔧", isCurrent: true,
-        title: { vi: "Prefix riêng cho từng server", en: "Custom Server Prefix" },
-        description: {
-          vi: "Prefix mặc định là `!`. Quản trị viên server đổi bằng `!prefix ?` → sau đó dùng `?chat`, `?info`, `?help`, `?image`. Server khác có thể dùng `!prefix .` → `.chat`, `.info`, `.help`. Prefix được lưu độc lập theo từng Guild, đổi ở server này không ảnh hưởng server khác. DM vẫn dùng `!`. Lệnh này KHÔNG chỉ dành cho chủ bot — cần quyền Administrator / Manage Server / Manage Channels.",
-          en: "Default prefix is `!`. A server admin changes it with `!prefix ?` → then use `?chat`, `?info`, `?help`, `?image`. Another server can use `!prefix .` → `.chat`, `.info`, `.help`. Prefix is stored independently per Guild; changing one server does not affect another. DM keeps using `!`. This command is NOT bot-owner-only — requires Administrator / Manage Server / Manage Channels."
-        },
-        commands: ["!prefix"]
-      },
       {
         icon: "🛡️", isCurrent: true,
         title: { vi: "Moderation & Security", en: "Moderation & Security" },
@@ -253,6 +237,30 @@ const UPDATE_LOG = [
           en: "The **Others** section gathers utility commands: `/info`, `/serverinfo`, `/userinfo`, `!prefix`, `/language`, `/help`, and `!log kick|voicekick`."
         },
         commands: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo", "!prefix", "/language • !language"]
+      }
+    ]
+  },
+  {
+    id: "UPDATE 01",
+    date: "19/09/2026",
+    items: [
+      {
+        icon: "ℹ️", isCurrent: false,
+        title: { vi: "!info — Thông tin bot", en: "!info — Bot Information" },
+        description: {
+          vi: "`!info` là bản prefix của `/info`. Cả hai hiển thị cùng một bảng thông tin bot, gồm: thông tin bot, uptime, độ trễ, phiên bản Python, phiên bản discord.py, số server, số người dùng, số kênh, trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, Ban Zone, Help Channel, số lượng lệnh, thông tin server hiện tại, chủ server, vai trò của bot và quyền của bot.",
+          en: "`!info` is the prefix version of `/info`. Both display the same bot information panel, including: bot information, uptime, latency, Python version, discord.py version, server count, user count, channel count, AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone, Help Channel, command counts, current server information, server owner, bot role and bot permissions."
+        },
+        commands: ["/info • !info"]
+      },
+      {
+        icon: "🔧", isCurrent: false,
+        title: { vi: "Prefix riêng cho từng server", en: "Custom Server Prefix" },
+        description: {
+          vi: "Prefix mặc định là `!`. Quản trị viên server đổi bằng `!prefix ?` → sau đó dùng `?chat`, `?info`, `?help`, `?image`. Server khác có thể dùng `!prefix .` → `.chat`, `.info`, `.help`. Prefix được lưu độc lập theo từng Guild, đổi ở server này không ảnh hưởng server khác. DM vẫn dùng `!`. Lệnh này KHÔNG chỉ dành cho chủ bot — cần quyền Administrator / Manage Server / Manage Channels.",
+          en: "Default prefix is `!`. A server admin changes it with `!prefix ?` → then use `?chat`, `?info`, `?help`, `?image`. Another server can use `!prefix .` → `.chat`, `.info`, `.help`. Prefix is stored independently per Guild; changing one server does not affect another. DM keeps using `!`. This command is NOT bot-owner-only — requires Administrator / Manage Server / Manage Channels."
+        },
+        commands: ["!prefix"]
       }
     ]
   }
@@ -1073,41 +1081,45 @@ function setLang(next, save = true) {
 }
 
 /* ============================================================
-   UPDATE LOG
+   UPDATE LOG — render ALL panels (UPDATE 02 first, then 01)
    ============================================================ */
 function renderUpdateLog() {
   const body = $('#updateBody');
   if (!body) return;
-  const update = UPDATE_LOG[0];
-  if (!update) { body.innerHTML = ''; return; }
+  if (!UPDATE_LOG.length) { body.innerHTML = ''; return; }
 
-  const itemsHtml = update.items.map(item => {
-    const title = item.title[lang];
-    const desc = item.description[lang];
-    const cmds = item.commands.map(c => `<code>${esc(c)}</code>`).join('');
-    const newMark = item.isCurrent ? `<span class="badge-new">${newLabel()}</span>` : '';
+  const panelsHtml = UPDATE_LOG.map(update => {
+    const itemsHtml = update.items.map(item => {
+      const title = item.title[lang];
+      const desc = item.description[lang];
+      const cmds = item.commands.map(c => `<code>${esc(c)}</code>`).join('');
+      const newMark = item.isCurrent ? `<span class="badge-new">${newLabel()}</span>` : '';
+      return `
+        <div class="update-item">
+          <h3>
+            <span aria-hidden="true">${item.icon}</span>
+            <span>${esc(title)}</span>
+            ${newMark}
+          </h3>
+          <p>${desc.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
+          ${cmds ? `<div class="update-cmds">${cmds}</div>` : ''}
+        </div>`;
+    }).join('');
+
     return `
-      <div class="update-item">
-        <h3>
-          <span aria-hidden="true">${item.icon}</span>
-          <span>${esc(title)}</span>
-          ${newMark}
-        </h3>
-        <p>${desc.replace(/`([^`]+)`/g, '<code>$1</code>')}</p>
-        ${cmds ? `<div class="update-cmds">${cmds}</div>` : ''}
+      <div class="update-panel">
+        <div class="update-panel-header">
+          <span class="up-id">${esc(update.id)}</span>
+          <span class="up-date">${esc(update.date)}</span>
+        </div>
+        <div class="update-items">${itemsHtml}</div>
       </div>`;
   }).join('');
 
   body.innerHTML = `
-    <h2 class="update-head" id="updateTitle">✨ ${esc(update.id)}</h2>
+    <h2 class="update-head" id="updateTitle">✨ ${esc(UPDATE_LOG[0].id)}</h2>
     <p class="update-sub">${esc(t('update.sub'))}</p>
-    <div class="update-panel">
-      <div class="update-panel-header">
-        <span class="up-id">${esc(update.id)}</span>
-        <span class="up-date">${esc(update.date)}</span>
-      </div>
-      <div class="update-items">${itemsHtml}</div>
-    </div>
+    <div class="update-history">${panelsHtml}</div>
     <div class="update-footer">
       <label class="update-snooze" for="snoozeCheck">
         <input type="checkbox" id="snoozeCheck">
