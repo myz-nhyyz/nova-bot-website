@@ -1,9 +1,8 @@
 /* ============================================================
    NOVA — script.js
    Language, sticky nav, auto Update Log with 24h snooze,
-   feature modals, INLINE command search (grouped by category),
-   Help preview, unified Slash/Prefix commands, NEW badge,
-   nav scroll spy.
+   feature modals, INLINE command search, Help preview,
+   unified Slash/Prefix commands, NEW badge, nav scroll spy.
    ============================================================ */
 'use strict';
 
@@ -64,9 +63,9 @@ const I18N = {
     "commands.kicker": "Thư viện lệnh",
     "commands.title": "Tìm kiếm lệnh",
     "commands.sub": "Tìm theo tên lệnh, mô tả, quyền hoặc nhóm tính năng. Mỗi lệnh có cả slash và prefix chỉ hiển thị một dòng duy nhất.",
-    "commands.search": "Tìm lệnh, tính năng, quyền… (ví dụ: info, prefix, chat)",
+    "commands.search": "Tìm lệnh, tính năng, quyền… (ví dụ: info, prefix, ban)",
     "commands.all": "Tất cả",
-    "commands.noResults": "Không tìm thấy lệnh nào khớp với từ khoá của bạn. Hãy thử “info”, “prefix”, “chat” hoặc “ban”.",
+    "commands.noResults": "Không tìm thấy lệnh nào khớp với từ khoá của bạn. Hãy thử “info”, “prefix”, “ban” hoặc “event”.",
     "commands.results": "kết quả",
     "commands.permission": "Quyền",
     "commands.example": "Ví dụ",
@@ -90,7 +89,7 @@ const I18N = {
     "help.tip1": "Dùng <code>/</code> để xem toàn bộ slash command của Nova.",
     "help.tip2": "Dùng tiền tố <code>!</code> cho các lệnh prefix như <code>!chat</code>, <code>!info</code>, <code>!help</code>.",
     "help.tip3": "Mỗi server có thể đặt prefix riêng bằng <code>!prefix &lt;ký tự&gt;</code>.",
-    "help.notFound": "Không tìm thấy tính năng này. Hãy thử: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo, bandebug, trust.",
+    "help.notFound": "Không tìm thấy tính năng này. Hãy thử: chat, info, ban, kick, mute, moderation, warping, image, event, banzone, persona, prefix, serverinfo, userinfo.",
     "footer.owned": "Được phát triển và duy trì bởi <strong>nova_.inovation</strong>.",
     "footer.model": "Mô hình AI công khai",
     "footer.links": "Liên kết",
@@ -150,9 +149,9 @@ const I18N = {
     "commands.kicker": "Command library",
     "commands.title": "Search commands",
     "commands.sub": "Search by command name, description, permission or feature group. Commands with both slash and prefix versions appear as a single entry.",
-    "commands.search": "Search commands, features, permissions… (e.g. info, prefix, chat)",
+    "commands.search": "Search commands, features, permissions… (e.g. info, prefix, ban)",
     "commands.all": "All",
-    "commands.noResults": "No commands matched your search. Try “info”, “prefix”, “chat” or “ban”.",
+    "commands.noResults": "No commands matched your search. Try “info”, “prefix”, “ban” or “event”.",
     "commands.results": "results",
     "commands.permission": "Permission",
     "commands.example": "Example",
@@ -176,7 +175,7 @@ const I18N = {
     "help.tip1": "Use <code>/</code> to browse all of Nova's slash commands.",
     "help.tip2": "Use the <code>!</code> prefix for prefix commands like <code>!chat</code>, <code>!info</code>, <code>!help</code>.",
     "help.tip3": "Each server can set its own prefix with <code>!prefix &lt;char&gt;</code>.",
-    "help.notFound": "Feature not found. Try: chat, info, ban, mute, warping, image, event, banzone, persona, config, help, prefix, serverinfo, userinfo, bandebug, trust.",
+    "help.notFound": "Feature not found. Try: chat, info, ban, kick, mute, moderation, warping, image, event, banzone, persona, prefix, serverinfo, userinfo.",
     "footer.owned": "Owned and maintained by <strong>nova_.inovation</strong>.",
     "footer.model": "Public AI model",
     "footer.links": "Links",
@@ -238,83 +237,29 @@ const UPDATE_LOG = [
         commands: ["!prefix"]
       },
       {
-        icon: "🤖", isCurrent: true,
-        title: { vi: "AI Channel Toggle", en: "AI Channel Toggle" },
-        description: {
-          vi: "Bật/tắt chế độ AI cho kênh hiện tại bằng `true` hoặc `false`. Khi bật, người dùng chỉ cần nhắn tin bình thường, không cần gõ `!chat`. Cần quyền **Manage Channels**.",
-          en: "Enable or disable AI mode for the current channel with `true` or `false`. Once enabled, users just type normally — no `!chat` needed. Requires **Manage Channels**."
-        },
-        commands: ["/setai • !setai"]
-      },
-      {
-        icon: "🗃️", isCurrent: true,
-        title: { vi: "Shared History Toggle", en: "Shared History Toggle" },
-        description: {
-          vi: "Bật/tắt lịch sử chat chung cho kênh hiện tại bằng `true` hoặc `false`. Khi bật, cả kênh dùng chung một mạch hội thoại với AI. Cần quyền **Manage Channels**.",
-          en: "Enable or disable shared chat history for the current channel with `true` or `false`. When on, the whole channel shares one conversation history with the AI. Requires **Manage Channels**."
-        },
-        commands: ["/setsharedhistory • !setsharedhistory"]
-      },
-      {
         icon: "🛡️", isCurrent: true,
-        title: { vi: "Moderation Prefix Commands", en: "Moderation Prefix Commands" },
+        title: { vi: "Moderation & Security", en: "Moderation & Security" },
         description: {
-          vi: "Các lệnh kiểm duyệt giờ đây hỗ trợ cả Slash và Prefix: `ban`, `unban`, `mute`, `unmute`. Quyền và chức năng giữ nguyên như bản slash — **Ban Members** cho ban/unban, **Moderate Members** cho mute/unmute, timeout tối đa 28 ngày.",
-          en: "Moderation commands now support both Slash and Prefix: `ban`, `unban`, `mute`, `unmute`. Permissions and behaviour are unchanged — **Ban Members** for ban/unban, **Moderate Members** for mute/unmute, timeout up to 28 days."
+          vi: "Hệ thống kiểm duyệt giờ đây bao gồm cả **Security module**: `/ban`, `/kick`, `/mute`, `/unmute`, `/unban` (slash + prefix) cùng các lệnh cấu hình Security như `/security`, `/toggle`, `/config`, `/punishment`, `/fallback`, `/whitelist`, `/backup` và các module tự động Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown.",
+          en: "The moderation system now includes the **Security module**: `/ban`, `/kick`, `/mute`, `/unmute`, `/unban` (slash + prefix) plus Security configuration commands like `/security`, `/toggle`, `/config`, `/punishment`, `/fallback`, `/whitelist`, `/backup`, and automated modules: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown."
         },
-        commands: ["/ban • !ban", "/unban • !unban", "/mute • !mute", "/unmute • !unmute"]
+        commands: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/security"]
       },
       {
-        icon: "🚫", isCurrent: true,
-        title: { vi: "Set Ban Channel Prefix", en: "Set Ban Channel Prefix" },
+        icon: "🛠️", isCurrent: true,
+        title: { vi: "Others (Info · Prefix · Language)", en: "Others (Info · Prefix · Language)" },
         description: {
-          vi: "Bật/tắt Ban Zone cho kênh hiện tại bằng `true` hoặc `false`. Cấu hình được lưu riêng cho từng server.",
-          en: "Enable or disable Ban Zone for the current channel with `true` or `false`. Configuration is stored per server."
+          vi: "Mục **Others** gộp các lệnh tiện ích: `/info`, `/serverinfo`, `/userinfo`, `!prefix`, `/language`, `/help` và `!log kick|voicekick`.",
+          en: "The **Others** section gathers utility commands: `/info`, `/serverinfo`, `/userinfo`, `!prefix`, `/language`, `/help`, and `!log kick|voicekick`."
         },
-        commands: ["/setbanchannel • !setbanchannel"]
-      },
-      {
-        icon: "☠️", isCurrent: true,
-        title: { vi: "Ban Zone Prefix", en: "Ban Zone Prefix" },
-        description: {
-          vi: "Chọn chế độ Ban Zone: `ban` hoặc `mute <duration>`. Cả hai chế độ đều tự động dọn tin nhắn 24 giờ gần nhất trên toàn server.",
-          en: "Choose the Ban Zone mode: `ban` or `mute <duration>`. Both modes clean the sender's messages from the last 24 hours across the whole server."
-        },
-        commands: ["/banzone • !banzone"]
-      },
-      {
-        icon: "🧪", isCurrent: true,
-        title: { vi: "Bandebug — Manager Access", en: "Bandebug — Manager Access" },
-        description: {
-          vi: "`/bandebug` giờ đây KHÔNG còn chỉ dành cho chủ bot. Server Manager (Administrator / Manage Server / Manage Channels) đều dùng được. Lệnh kiểm tra Nova có thể xử lý một thành viên theo thứ bậc vai trò và quy tắc Ban Zone hay không.",
-          en: "`/bandebug` is no longer bot-owner-only. Server Managers (Administrator / Manage Server / Manage Channels) can now use it. It checks whether Nova can act on a member under the Ban Zone hierarchy and permission rules."
-        },
-        commands: ["/bandebug • !bandebug"]
-      },
-      {
-        icon: "🤝", isCurrent: true,
-        title: { vi: "Trust Prefix", en: "Trust Prefix" },
-        description: {
-          vi: "`/trust` giờ hỗ trợ cả prefix. Người dùng Trusted nhận quyền quản lý War/Backup theo hệ thống phân quyền của bot.",
-          en: "`/trust` now supports both slash and prefix. Trusted users receive War/Backup management access according to the bot's permission system."
-        },
-        commands: ["/trust • !trust"]
-      },
-      {
-        icon: "📊", isCurrent: true,
-        title: { vi: "Serverinfo / Userinfo Prefix", en: "Serverinfo / Userinfo Prefix" },
-        description: {
-          vi: "Hai lệnh `/serverinfo` và `/userinfo` giờ có thêm bản prefix. Xem thông tin server hiện tại hoặc người dùng chỉ bằng cú pháp `!serverinfo`, `!userinfo @user`.",
-          en: "`/serverinfo` and `/userinfo` now have prefix versions. View current-server or user information with `!serverinfo`, `!userinfo @user`."
-        },
-        commands: ["/serverinfo • !serverinfo", "/userinfo • !userinfo"]
+        commands: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo", "!prefix", "/language • !language"]
       }
     ]
   }
 ];
 
 /* ============================================================
-   FEATURES
+   FEATURES — 6 public categories
    ============================================================ */
 const FEATURES = [
   {
@@ -381,54 +326,109 @@ const FEATURES = [
       { name: "/clearchat • !clearchat", type: "both", vi: { d: "Xoá lịch sử hội thoại AI của riêng bạn.", p: "Send Messages" }, en: { d: "Clear your own AI conversation history.", p: "Send Messages" } },
       { name: "/setai • !setai", type: "both", isNew: true, vi: { d: "Bật/tắt AI mode cho kênh hiện tại. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable AI mode for the current channel. Use true|false.", p: "Manage Channels" } },
       { name: "/setsharedhistory • !setsharedhistory", type: "both", isNew: true, vi: { d: "Bật/tắt lịch sử chat chung cho kênh. Dùng true|false.", p: "Manage Channels" }, en: { d: "Enable or disable shared chat history for the channel. Use true|false.", p: "Manage Channels" } },
-      { name: "/persona • !persona", type: "both", vi: { d: "Đổi persona AI theo mã có sẵn.", p: "Send Messages" }, en: { d: "Change AI persona using a built-in code.", p: "Send Messages" } },
+      { name: "/persona • !persona", type: "both", vi: { d: "Đổi persona AI theo mã có sẵn hoặc mô tả tự do.", p: "Send Messages" }, en: { d: "Change AI persona using a built-in code or a free-form description.", p: "Send Messages" } },
       { name: "!persona custom: <description>", type: "prefix", vi: { d: "Tạo persona AI tuỳ chỉnh bằng mô tả tự do.", p: "Send Messages" }, en: { d: "Create a custom AI persona with a free-form description.", p: "Send Messages" } },
       { name: "/mypersona • !mypersona", type: "both", vi: { d: "Xem persona AI hiện tại của bạn.", p: "Send Messages" }, en: { d: "View your current AI persona.", p: "Send Messages" } },
       { name: "/resetpersona • !resetpersona", type: "both", vi: { d: "Đưa persona AI về mặc định.", p: "Send Messages" }, en: { d: "Reset your AI persona to default.", p: "Send Messages" } },
-      { name: "/language • !language", type: "both", vi: { d: "Đặt ngôn ngữ trả lời của AI cho bạn.", p: "Send Messages" }, en: { d: "Set the AI reply language for yourself.", p: "Send Messages" } }
+      { name: "/language • !language", type: "both", vi: { d: "Đặt ngôn ngữ giao diện bot cho bạn.", p: "Send Messages" }, en: { d: "Set your personal bot interface language.", p: "Send Messages" } }
     ]
   },
   {
     id: "moderation", icon: "🛡️",
     vi: {
       title: "Moderation",
-      short: "Công cụ kiểm duyệt thành viên.",
-      lead: "Bộ lệnh kiểm duyệt: ban, unban, timeout và gỡ timeout — kèm kiểm tra thứ bậc vai trò. Hỗ trợ cả Slash và Prefix.",
+      short: "Kiểm duyệt + hệ thống Security tự động.",
+      lead: "Bộ lệnh kiểm duyệt cơ bản (kick/mute/ban) kết hợp hệ thống Security tự động: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup, debug.",
       details: [
-        "<code>/ban • !ban</code> — cấm một thành viên khỏi server.",
-        "<code>/unban • !unban</code> — bỏ cấm bằng User ID để nhận diện chính xác.",
-        "<code>/mute • !mute</code> — timeout thành viên, thời lượng tối đa 28 ngày.",
-        "<code>/unmute • !unmute</code> — gỡ timeout của thành viên.",
-        "Bot cần thứ bậc vai trò cao hơn mục tiêu mới có thể hành động.",
-        "Chủ server không thể bị bot ban."
+        "**🛡️ Moderation** — <code>/kick</code> • <code>!kick</code>, <code>/mute</code> • <code>!mute</code>, <code>/ban</code> • <code>!ban</code>. Chỉ **Server Owner**.",
+        "**🔒 Security Config** — <code>/security</code>, <code>/toggle</code>, <code>/config</code>, <code>/punishment</code>, <code>/fallback</code>, <code>/post-punish</code>, <code>/decay</code>, <code>/mute-duration</code>, <code>/admin-mute-method</code>, <code>/muted-role-name</code>, <code>/setchannel</code>.",
+        "**✅ Whitelist** — <code>/whitelist add|remove|list</code>, <code>/whitelist role</code> (role bypass), <code>/whitelist channel</code> (kênh được phép spam).",
+        "**⚙️ Module Config** — <code>/raid-config</code>, <code>/spam-config</code>, <code>/language</code> (Security).",
+        "**🎭 Mute Role** — <code>/setup-mute-role</code> tạo/chọn Muted Role; <code>/unmute</code> • <code>!unmute</code> gỡ mute và khôi phục role đã lưu.",
+        "**💾 Backup** — <code>/backup create|load|info|list|status|delete</code> sao lưu roles/channels.",
+        "**🔍 Debug/Test** — <code>/debug-user</code>, <code>/test-timeout</code>, <code>/test-ban</code>, <code>/diagnose-full</code>.",
+        "**🚨 Tự động** — Anti-Nuke (theo dõi hành động phá server), Anti-Raid (chống raid, mass-punish/lockdown), Anti-Spam (link/mention/Zalgo/scam), Bot-Watch (bot mới nguy hiểm), Auto-Lockdown / Auto-Restore."
       ],
       perms: [
-        "Ban Members — cho <code>ban</code> và <code>unban</code>.",
-        "Moderate Members — cho <code>mute</code> và <code>unmute</code>.",
-        "Vai trò của bot phải nằm cao hơn vai trò của mục tiêu."
+        "Lệnh <code>kick</code>, <code>mute</code>, <code>ban</code> chỉ **Server Owner** dùng được.",
+        "Bot phải có role cao hơn mục tiêu để kick/mute/ban.",
+        "Các lệnh Security khác yêu cầu quyền quản lý server tuỳ module.",
+        "Whitelist role/channel cho phép bỏ qua kiểm tra Security."
       ],
-      examples: ["/ban user: @Spammer reason: Spam quảng cáo", "!ban @Spammer Spam quảng cáo", "/mute user: @Noisy duration: 10m reason: Spam chat", "!mute @Noisy 10m Spam chat", "/unban user_id: 123456789012345678"]
+      examples: [
+        "/kick user: @Spammer reason: Spam",
+        "/mute user: @Noisy duration: 10m reason: Spam chat",
+        "/ban user: @Spammer reason: Repeated violations",
+        "/whitelist add user: @Trusted",
+        "/backup create",
+        "/security"
+      ]
     },
     en: {
       title: "Moderation",
-      short: "Member moderation toolkit.",
-      lead: "A focused moderation set: ban, unban, timeout and untimeout — with proper role hierarchy checks. Works as both slash and prefix.",
+      short: "Moderation + automated Security system.",
+      lead: "Core moderation commands (kick/mute/ban) plus an automated Security system: Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown/Auto-Restore, whitelist, backup, debug.",
       details: [
-        "<code>/ban • !ban</code> — bans a member from the server.",
-        "<code>/unban • !unban</code> — unbans a user by precise User ID.",
-        "<code>/mute • !mute</code> — times out a member, maximum duration 28 days.",
-        "<code>/unmute • !unmute</code> — removes a member's timeout.",
-        "The bot needs a higher role than the target to act.",
-        "The server owner can never be banned by the bot."
+        "**🛡️ Moderation** — <code>/kick</code> • <code>!kick</code>, <code>/mute</code> • <code>!mute</code>, <code>/ban</code> • <code>!ban</code>. **Server Owner only**.",
+        "**🔒 Security Config** — <code>/security</code>, <code>/toggle</code>, <code>/config</code>, <code>/punishment</code>, <code>/fallback</code>, <code>/post-punish</code>, <code>/decay</code>, <code>/mute-duration</code>, <code>/admin-mute-method</code>, <code>/muted-role-name</code>, <code>/setchannel</code>.",
+        "**✅ Whitelist** — <code>/whitelist add|remove|list</code>, <code>/whitelist role</code> (role bypass), <code>/whitelist channel</code> (allowed spam channels).",
+        "**⚙️ Module Config** — <code>/raid-config</code>, <code>/spam-config</code>, <code>/language</code> (Security).",
+        "**🎭 Mute Role** — <code>/setup-mute-role</code> create/choose Muted Role; <code>/unmute</code> • <code>!unmute</code> remove mute and restore saved roles.",
+        "**💾 Backup** — <code>/backup create|load|info|list|status|delete</code> roles/channels backup.",
+        "**🔍 Debug/Test** — <code>/debug-user</code>, <code>/test-timeout</code>, <code>/test-ban</code>, <code>/diagnose-full</code>.",
+        "**🚨 Automatic** — Anti-Nuke (destructive action tracking), Anti-Raid (mass-punish/lockdown), Anti-Spam (links/mentions/Zalgo/scam), Bot-Watch (dangerous new bots), Auto-Lockdown / Auto-Restore."
       ],
-      perms: ["Ban Members — for <code>ban</code> and <code>unban</code>.", "Moderate Members — for <code>mute</code> and <code>unmute</code>.", "The bot's role must sit above the target's highest role."],
-      examples: ["/ban user: @Spammer reason: Advertising spam", "!ban @Spammer Advertising spam", "/mute user: @Noisy duration: 10m reason: Chat spam", "!mute @Noisy 10m Chat spam", "/unban user_id: 123456789012345678"]
+      perms: [
+        "<code>kick</code>, <code>mute</code>, <code>ban</code> commands are **Server Owner only**.",
+        "Bot must have a higher role than the target to kick/mute/ban.",
+        "Other Security commands require server management permissions depending on the module.",
+        "Whitelist role/channel lets targets bypass Security checks."
+      ],
+      examples: [
+        "/kick user: @Spammer reason: Spam",
+        "/mute user: @Noisy duration: 10m reason: Chat spam",
+        "/ban user: @Spammer reason: Repeated violations",
+        "/whitelist add user: @Trusted",
+        "/backup create",
+        "/security"
+      ]
     },
     commands: [
-      { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban thành viên được chọn khỏi server.", p: "Ban Members" }, en: { d: "Ban the selected member from the server.", p: "Ban Members" } },
-      { name: "/unban • !unban", type: "both", isNew: true, vi: { d: "Bỏ cấm người dùng bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" } },
-      { name: "/mute • !mute", type: "both", isNew: true, vi: { d: "Timeout thành viên. Thời lượng tối đa 28 ngày (10m, 2h, 7d).", p: "Moderate Members" }, en: { d: "Timeout a member. Max 28 days (10m, 2h, 7d).", p: "Moderate Members" } },
-      { name: "/unmute • !unmute", type: "both", isNew: true, vi: { d: "Gỡ timeout cho thành viên.", p: "Moderate Members" }, en: { d: "Remove a member's timeout.", p: "Moderate Members" } }
+      { name: "/ban • !ban", type: "both", isNew: true, vi: { d: "Ban member qua Security moderation engine.", p: "Server Owner" }, en: { d: "Ban a member via the Security moderation engine.", p: "Server Owner" } },
+      { name: "/kick • !kick", type: "both", isNew: true, vi: { d: "Kick member qua Security moderation engine.", p: "Server Owner" }, en: { d: "Kick a member via the Security moderation engine.", p: "Server Owner" } },
+      { name: "/mute • !mute", type: "both", isNew: true, vi: { d: "Security mute: Timeout khi có thể, fallback Muted Role theo config.", p: "Server Owner" }, en: { d: "Security mute: Timeout when possible, Muted Role fallback by config.", p: "Server Owner" } },
+      { name: "/unmute • !unmute", type: "both", isNew: true, vi: { d: "Gỡ Security mute, khôi phục role đã lưu.", p: "Server Owner" }, en: { d: "Remove Security mute and restore saved roles.", p: "Server Owner" } },
+      { name: "/unban • !unban", type: "both", vi: { d: "Unban user bằng User ID.", p: "Ban Members" }, en: { d: "Unban a user using their User ID.", p: "Ban Members" } },
+      { name: "/security", type: "slash", vi: { d: "Xem trạng thái Security.", p: "Manager" }, en: { d: "View Security status.", p: "Manager" } },
+      { name: "/toggle <module> <state>", type: "slash", vi: { d: "Bật/tắt một module Security.", p: "Manager" }, en: { d: "Enable/disable a Security module.", p: "Manager" } },
+      { name: "/config <module> <action> <percent>", type: "slash", vi: { d: "Đặt threshold 1–100%.", p: "Manager" }, en: { d: "Set threshold 1–100%.", p: "Manager" } },
+      { name: "/punishment <module> <action> [duration]", type: "slash", vi: { d: "Chọn hình phạt Ban/Kick/Mute.", p: "Manager" }, en: { d: "Choose punishment: Ban/Kick/Mute.", p: "Manager" } },
+      { name: "/fallback <action>", type: "slash", vi: { d: "Chọn hành động dự phòng.", p: "Manager" }, en: { d: "Choose fallback action.", p: "Manager" } },
+      { name: "/post-punish <mode>", type: "slash", vi: { d: "Reset hoặc tiếp tục decay sau punish.", p: "Manager" }, en: { d: "Reset or continue decay after punish.", p: "Manager" } },
+      { name: "/decay <interval> <amount>", type: "slash", vi: { d: "Cấu hình decay.", p: "Manager" }, en: { d: "Configure decay.", p: "Manager" } },
+      { name: "/mute-duration <duration>", type: "slash", vi: { d: "Đặt mute mặc định.", p: "Manager" }, en: { d: "Set default mute duration.", p: "Manager" } },
+      { name: "/admin-mute-method <method>", type: "slash", vi: { d: "Cách xử lý admin khi mute.", p: "Manager" }, en: { d: "Admin mute method.", p: "Manager" } },
+      { name: "/muted-role-name <name>", type: "slash", vi: { d: "Đổi tên Muted Role.", p: "Manager" }, en: { d: "Rename the Muted Role.", p: "Manager" } },
+      { name: "/setchannel <type> <channel>", type: "slash", vi: { d: "Đặt kênh Security / Bot Watch / Raid Alert.", p: "Manager" }, en: { d: "Set Security / Bot Watch / Raid Alert channels.", p: "Manager" } },
+      { name: "/whitelist add <user>", type: "slash", vi: { d: "Thêm user vào whitelist.", p: "Manager" }, en: { d: "Add a user to the whitelist.", p: "Manager" } },
+      { name: "/whitelist remove <user>", type: "slash", vi: { d: "Xoá user khỏi whitelist.", p: "Manager" }, en: { d: "Remove a user from the whitelist.", p: "Manager" } },
+      { name: "/whitelist list", type: "slash", vi: { d: "Xem danh sách whitelist user.", p: "Manager" }, en: { d: "View the user whitelist.", p: "Manager" } },
+      { name: "/whitelist role <action> @role", type: "slash", vi: { d: "Whitelist role — members với role này bypass Security.", p: "Manager" }, en: { d: "Role whitelist — members with these roles bypass Security.", p: "Manager" } },
+      { name: "/whitelist channel <action> #channel", type: "slash", vi: { d: "Whitelist kênh — spam trong kênh này được phép.", p: "Manager" }, en: { d: "Channel whitelist — spam in these channels is allowed.", p: "Manager" } },
+      { name: "/raid-config <age> <threshold> <window>", type: "slash", vi: { d: "Cấu hình Anti-Raid.", p: "Manager" }, en: { d: "Configure Anti-Raid.", p: "Manager" } },
+      { name: "/spam-config <sim> <count> <seconds>", type: "slash", vi: { d: "Cấu hình Anti-Spam.", p: "Manager" }, en: { d: "Configure Anti-Spam.", p: "Manager" } },
+      { name: "/language <lang>", type: "slash", vi: { d: "Đổi ngôn ngữ Security.", p: "Manager" }, en: { d: "Change Security language.", p: "Manager" } },
+      { name: "/setup-mute-role [role] [name]", type: "slash", vi: { d: "Chọn hoặc tạo Muted Role.", p: "Manager" }, en: { d: "Use or create a Muted Role.", p: "Manager" } },
+      { name: "/backup create", type: "slash", vi: { d: "Tạo backup roles/channels.", p: "Manager" }, en: { d: "Create a roles/channels backup.", p: "Manager" } },
+      { name: "/backup load <backup_id>", type: "slash", vi: { d: "Load backup + xác nhận.", p: "Manager" }, en: { d: "Load a backup with confirmation.", p: "Manager" } },
+      { name: "/backup info <backup_id>", type: "slash", vi: { d: "Xem chi tiết backup.", p: "Manager" }, en: { d: "View backup details.", p: "Manager" } },
+      { name: "/backup list", type: "slash", vi: { d: "Xem danh sách backup.", p: "Manager" }, en: { d: "Browse backups.", p: "Manager" } },
+      { name: "/backup status", type: "slash", vi: { d: "Xem tiến trình load gần nhất.", p: "Manager" }, en: { d: "View latest load progress.", p: "Manager" } },
+      { name: "/backup delete <backup_id>", type: "slash", vi: { d: "Xoá một backup.", p: "Manager" }, en: { d: "Delete a backup.", p: "Manager" } },
+      { name: "/debug-user <user>", type: "slash", vi: { d: "Kiểm tra quyền và hierarchy.", p: "Manager" }, en: { d: "Check permissions and hierarchy.", p: "Manager" } },
+      { name: "/test-timeout <user> <duration>", type: "slash", vi: { d: "Test timeout với user.", p: "Manager" }, en: { d: "Test timeout on a user.", p: "Manager" } },
+      { name: "/test-ban <user>", type: "slash", vi: { d: "Test ban với user.", p: "Manager" }, en: { d: "Test ban on a user.", p: "Manager" } },
+      { name: "/diagnose-full <user>", type: "slash", vi: { d: "Chẩn đoán moderation đầy đủ.", p: "Manager" }, en: { d: "Full moderation diagnosis.", p: "Manager" } }
     ]
   },
   {
@@ -472,9 +472,9 @@ const FEATURES = [
       examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/banwhitelist add @TrustedUser", "/bandebug @SomeUser", "!bandebug @SomeUser"]
     },
     commands: [
-      { name: "/setbanchannel • !setbanchannel", type: "both", isNew: true, vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" } },
-      { name: "/banzone • !banzone", type: "both", isNew: true, vi: { d: "Chọn chế độ Ban Zone: ban hoặc mute <duration>.", p: "Server Owner" }, en: { d: "Choose Ban Zone mode: ban or mute <duration>.", p: "Server Owner" } },
-      { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server (chỉ Server Owner).", p: "Server Owner" }, en: { d: "Manage the server's Ban Zone whitelist (Server Owner only).", p: "Server Owner" } },
+      { name: "/setbanchannel • !setbanchannel", type: "both", vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner" } },
+      { name: "/banzone • !banzone", type: "both", vi: { d: "Chọn chế độ Ban Zone: ban hoặc mute <duration>.", p: "Server Owner" }, en: { d: "Choose Ban Zone mode: ban or mute <duration>.", p: "Server Owner" } },
+      { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server.", p: "Server Owner" }, en: { d: "Manage the server's Ban Zone whitelist.", p: "Server Owner" } },
       { name: "/bandebug • !bandebug", type: "both", isNew: true, vi: { d: "Kiểm tra bot có thể hành động lên thành viên được chọn theo Ban Zone.", p: "Manager" }, en: { d: "Test whether the bot can act on the selected member under Ban Zone rules.", p: "Manager" } }
     ]
   },
@@ -483,36 +483,36 @@ const FEATURES = [
     vi: {
       title: "War Ping / Backup Ping",
       short: "Điều phối War và Backup.",
-      lead: "Tạo yêu cầu War Ping hoặc Backup Ping, thu thập thông tin cần thiết và mở thread điều phối với các nút hành động.",
+      lead: "Tạo yêu cầu War Ping hoặc Backup Ping, thu thập thông tin cần thiết và mở thread điều phối với các nút hành động. Cấu hình kênh/vai trò bằng <code>/bot-config</code>.",
       details: [
         "War: tạo yêu cầu War Ping, thu thập enemy/clan, khu vực, link/mã server Roblox, và mở thread điều phối.",
         "Backup: tạo yêu cầu Backup Ping, thu thập thông tin cần thiết và mở thread điều phối.",
         "Nút hành động: <code>WAR</code>, <code>BACKUP</code>, <code>WIN</code>, <code>LOSE</code>, <code>END</code>.",
-        "Có thể cấu hình quyền cho thành viên thường bấm nút kết quả.",
         "Kết thúc toàn bộ: <code>/end all</code> kết thúc mọi phiên War/Backup đang hoạt động.",
         "Call Hacker: <code>/callhacker show</code> và <code>/callhacker hide</code>.",
         "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
-        "Trusted users: <code>/trust • !trust</code>."
+        "Trusted users: <code>/trust • !trust</code>.",
+        "Cấu hình: <code>/bot-config view</code>, <code>/bot-config help_channel|war_ping_role|backup_ping_role|joined_war_role|joined_backup_role|hacker_role</code>."
       ],
-      perms: ["Manage Roles — để cấu hình các vai trò War/Backup.", "Manage Channels / Manage Threads — để tạo thread điều phối.", "Quyền quản lý cần thiết cho <code>/callhacker</code> và <code>/trust</code>."],
-      examples: ["/end all", "/callhacker show", "/callhacker hide", "!trust add @User", "/trust list"]
+      perms: ["Manage Roles — để cấu hình các vai trò War/Backup.", "Manage Channels / Manage Threads — để tạo thread điều phối.", "Manager cho <code>/callhacker</code>, <code>/trust</code>, <code>/bot-config</code>."],
+      examples: ["/end all", "/callhacker show", "/trust add @User", "/bot-config view", "/bot-config help_channel channel: #help"]
     },
     en: {
       title: "War Ping / Backup Ping",
       short: "War and Backup coordination.",
-      lead: "Create War Ping or Backup Ping requests, collect required information and open a coordination thread with action buttons.",
+      lead: "Create War Ping or Backup Ping requests, collect required information and open a coordination thread with action buttons. Configure channels/roles with <code>/bot-config</code>.",
       details: [
         "War: create a War Ping request, collect enemy/clan, region, Roblox server link/code, and open a coordination thread.",
         "Backup: create a Backup Ping request, collect the required information, and open a coordination thread.",
         "Action buttons: <code>WAR</code>, <code>BACKUP</code>, <code>WIN</code>, <code>LOSE</code>, <code>END</code>.",
-        "Configurable permission for regular members pressing the result buttons.",
         "Global ending: <code>/end all</code> ends all active War/Backup sessions.",
         "Call Hacker: <code>/callhacker show</code> and <code>/callhacker hide</code>.",
         "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role.",
-        "Trusted users: <code>/trust • !trust</code>."
+        "Trusted users: <code>/trust • !trust</code>.",
+        "Config: <code>/bot-config view</code>, <code>/bot-config help_channel|war_ping_role|backup_ping_role|joined_war_role|joined_backup_role|hacker_role</code>."
       ],
-      perms: ["Manage Roles — to configure the War/Backup roles.", "Manage Channels / Manage Threads — to create coordination threads.", "Manager-level permissions for <code>/callhacker</code> and <code>/trust</code>."],
-      examples: ["/end all", "/callhacker show", "/callhacker hide", "!trust add @User", "/trust list"]
+      perms: ["Manage Roles — to configure War/Backup roles.", "Manage Channels / Manage Threads — to create coordination threads.", "Manager-level for <code>/callhacker</code>, <code>/trust</code>, <code>/bot-config</code>."],
+      examples: ["/end all", "/callhacker show", "/trust add @User", "/bot-config view", "/bot-config help_channel channel: #help"]
     },
     commands: [
       { name: "WAR", type: "button", vi: { d: "Nút tạo yêu cầu War Ping.", p: "Configurable" }, en: { d: "Button to create a War Ping request.", p: "Configurable" } },
@@ -524,7 +524,15 @@ const FEATURES = [
       { name: "/trust • !trust", type: "both", isNew: true, vi: { d: "Quản lý danh sách Trusted (add / remove / list).", p: "Manager" }, en: { d: "Manage the Trusted list (add / remove / list).", p: "Manager" } },
       { name: "/helppanel", type: "slash", vi: { d: "Gửi bảng hướng dẫn War/Backup vào kênh.", p: "Manage Channels" }, en: { d: "Send the War/Backup help panel to a channel.", p: "Manage Channels" } },
       { name: "/callhacker show", type: "slash", vi: { d: "Hiện nút Call Hacker.", p: "Manager" }, en: { d: "Show the Call Hacker button.", p: "Manager" } },
-      { name: "/callhacker hide", type: "slash", vi: { d: "Ẩn nút Call Hacker.", p: "Manager" }, en: { d: "Hide the Call Hacker button.", p: "Manager" } }
+      { name: "/callhacker hide", type: "slash", vi: { d: "Ẩn nút Call Hacker.", p: "Manager" }, en: { d: "Hide the Call Hacker button.", p: "Manager" } },
+      { name: "/endpermission allow|deny", type: "slash", vi: { d: "Cho phép/từ chối member thường bấm nút kết quả War/Backup.", p: "Manager" }, en: { d: "Allow/deny regular members from using War/Backup result buttons.", p: "Manager" } },
+      { name: "/bot-config view", type: "slash", vi: { d: "Xem cấu hình hiện tại.", p: "Manager" }, en: { d: "View the current config.", p: "Manager" } },
+      { name: "/bot-config help_channel", type: "slash", vi: { d: "Đặt kênh nhận bảng hướng dẫn.", p: "Manage Channels" }, en: { d: "Set the channel that receives the help panel.", p: "Manage Channels" } },
+      { name: "/bot-config war_ping_role", type: "slash", vi: { d: "Đặt vai trò War Ping.", p: "Manage Roles" }, en: { d: "Set the War Ping role.", p: "Manage Roles" } },
+      { name: "/bot-config backup_ping_role", type: "slash", vi: { d: "Đặt vai trò Backup Ping.", p: "Manage Roles" }, en: { d: "Set the Backup Ping role.", p: "Manage Roles" } },
+      { name: "/bot-config joined_war_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia War.", p: "Manage Roles" }, en: { d: "Set the role for War participants.", p: "Manage Roles" } },
+      { name: "/bot-config joined_backup_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia Backup.", p: "Manage Roles" }, en: { d: "Set the role for Backup participants.", p: "Manage Roles" } },
+      { name: "/bot-config hacker_role", type: "slash", vi: { d: "Đặt vai trò Call Hacker.", p: "Manage Roles" }, en: { d: "Set the Call Hacker role.", p: "Manage Roles" } }
     ]
   },
   {
@@ -536,6 +544,7 @@ const FEATURES = [
       details: [
         "<code>/event send</code> gửi và tạo sự kiện trong server.",
         "<code>/event test</code> kiểm tra hệ thống sự kiện.",
+        "<code>/event edit title|description</code> chỉnh sửa nội dung event.",
         "<code>/event participants</code> xem danh sách người tham gia.",
         "<code>/event count</code> đếm số người tham gia.",
         "<code>/event remove</code> xoá một người tham gia.",
@@ -543,7 +552,7 @@ const FEATURES = [
         "Blacklist: <code>/event blacklist add</code>, <code>/event blacklist remove</code>, <code>/event blacklist list</code>."
       ],
       perms: ["Manage Events / Manage Channels — để gửi và quản lý sự kiện.", "Quyền quản lý cần thiết để dùng blacklist sự kiện."],
-      examples: ["/event send title: Giải đấu cuối tuần", "/event participants", "/event count", "/event blacklist add @User"]
+      examples: ["/event send", "/event test", "/event edit title", "/event participants", "/event blacklist add @User"]
     },
     en: {
       title: "Create events",
@@ -552,6 +561,7 @@ const FEATURES = [
       details: [
         "<code>/event send</code> sends and creates an event in the server.",
         "<code>/event test</code> tests the event system.",
+        "<code>/event edit title|description</code> edits event content.",
         "<code>/event participants</code> views the participant list.",
         "<code>/event count</code> counts participants.",
         "<code>/event remove</code> removes a participant.",
@@ -559,11 +569,12 @@ const FEATURES = [
         "Blacklist: <code>/event blacklist add</code>, <code>/event blacklist remove</code>, <code>/event blacklist list</code>."
       ],
       perms: ["Manage Events / Manage Channels — to send and manage events.", "Manager-level permissions to use the event blacklist."],
-      examples: ["/event send title: Weekend Tournament", "/event participants", "/event count", "/event blacklist add @User"]
+      examples: ["/event send", "/event test", "/event edit title", "/event participants", "/event blacklist add @User"]
     },
     commands: [
       { name: "/event send", type: "slash", vi: { d: "Gửi và tạo sự kiện.", p: "Manage Events" }, en: { d: "Send and create an event.", p: "Manage Events" } },
       { name: "/event test", type: "slash", vi: { d: "Kiểm tra hệ thống sự kiện.", p: "Manage Events" }, en: { d: "Test the event system.", p: "Manage Events" } },
+      { name: "/event edit title|description", type: "slash", vi: { d: "Chỉnh sửa nội dung event.", p: "Manage Events" }, en: { d: "Edit event content.", p: "Manage Events" } },
       { name: "/event participants", type: "slash", vi: { d: "Xem danh sách người tham gia.", p: "Manage Events" }, en: { d: "View the participant list.", p: "Manage Events" } },
       { name: "/event count", type: "slash", vi: { d: "Đếm số người tham gia.", p: "Manage Events" }, en: { d: "Count participants.", p: "Manage Events" } },
       { name: "/event remove", type: "slash", vi: { d: "Xoá một người tham gia.", p: "Manage Events" }, en: { d: "Remove a participant.", p: "Manage Events" } },
@@ -574,152 +585,49 @@ const FEATURES = [
     ]
   },
   {
-    id: "serverinfo", icon: "📊",
+    id: "others", icon: "🛠️",
     vi: {
-      title: "Server Information",
-      short: "Thông tin bot, server và người dùng.",
-      lead: "Nhóm lệnh thông tin giúp bạn xem chi tiết về bot, server và thành viên — cả bản slash và prefix.",
+      title: "Others",
+      short: "Thông tin · Prefix · Language · Tiện ích.",
+      lead: "Các lệnh tiện ích: xem thông tin bot/server/user, đổi prefix riêng server, đổi ngôn ngữ giao diện, mở Help Menu, xem lịch sử kick voice.",
       details: [
-        "<code>/info</code> và <code>!info</code> cùng mở bảng thông tin bot.",
-        "Bảng thông tin bot gồm: tên bot, Bot ID, chủ sở hữu, thời gian tạo, độ trễ, uptime, phiên bản Python, phiên bản discord.py, tổng server, tổng người dùng, tổng kênh.",
-        "Bảng còn hiển thị: trạng thái AI, mô hình AI, số phiên War đang hoạt động, số phiên Backup đang hoạt động, trusted users, kênh Ban Zone, số lượng whitelist Ban Zone, kênh Help, chế độ Ban Zone, số slash command, số prefix command.",
-        "<code>/serverinfo</code> / <code>!serverinfo</code>: tên server, Server ID, chủ sở hữu, số thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.",
-        "<code>/userinfo</code> / <code>!userinfo</code>: thông tin người dùng, ngày tạo tài khoản, ngày tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, trạng thái timeout."
+        "**📊 Information** — <code>/info</code> • <code>!info</code>, <code>/serverinfo</code> • <code>!serverinfo</code>, <code>/userinfo [user]</code> • <code>!userinfo [user]</code>.",
+        "**🔧 Server-specific Prefix** — <code>!prefix</code> xem/đổi prefix riêng cho server hiện tại.",
+        "**🌐 Language** — <code>/language</code> • <code>!language</code> đặt ngôn ngữ giao diện riêng cho bạn.",
+        "**🛠️ Other utilities** — <code>/help</code> • <code>!help</code> mở Help Menu, <code>!log kick|voicekick</code> xem lịch sử kick voice."
       ],
-      perms: ["Send Messages và Embed Links trong kênh sử dụng.", "Không yêu cầu quyền quản lý."],
-      examples: ["/info", "!info", "/serverinfo", "!serverinfo", "/userinfo user: @Member", "!userinfo @Member"]
+      perms: [
+        "Send Messages để dùng các lệnh thông tin và tiện ích.",
+        "<code>!prefix</code> cần Administrator / Manage Server / Manage Channels.",
+        "Không cần quyền quản lý cho <code>/info</code>, <code>/serverinfo</code>, <code>/userinfo</code>, <code>/language</code>, <code>/help</code>, <code>!log</code>."
+      ],
+      examples: ["/info", "!info", "/serverinfo", "!userinfo @Member", "!prefix ?", "/language vi", "/help", "!log voicekick"]
     },
     en: {
-      title: "Server Information",
-      short: "Bot, server and user information.",
-      lead: "Information commands to inspect the bot, server and members — both slash and prefix versions.",
+      title: "Others",
+      short: "Information · Prefix · Language · Utilities.",
+      lead: "Utility commands: bot/server/user information, server-specific prefix, interface language, Help Menu, and voice-kick history.",
       details: [
-        "<code>/info</code> and <code>!info</code> both open the bot information panel.",
-        "The bot information panel includes: bot name, Bot ID, owner, creation time, latency, uptime, Python version, discord.py version, total servers, total users, total channels.",
-        "Also shows: AI status, AI model, active War sessions, active Backup sessions, trusted users, Ban Zone channel, Ban whitelist count, Help channel, Ban Zone mode, slash command count, prefix command count.",
-        "<code>/serverinfo</code> / <code>!serverinfo</code>: server name, Server ID, owner, member counts, channels, roles, boosts, verification, features, icon/banner.",
-        "<code>/userinfo</code> / <code>!userinfo</code>: user information, account creation, server join, roles, status, platform, activity, nickname, boost, timeout status."
+        "**📊 Information** — <code>/info</code> • <code>!info</code>, <code>/serverinfo</code> • <code>!serverinfo</code>, <code>/userinfo [user]</code> • <code>!userinfo [user]</code>.",
+        "**🔧 Server-specific Prefix** — <code>!prefix</code> view/change prefix for the current server.",
+        "**🌐 Language** — <code>/language</code> • <code>!language</code> set your personal interface language.",
+        "**🛠️ Other utilities** — <code>/help</code> • <code>!help</code> open the Help Menu, <code>!log kick|voicekick</code> view voice-kick history."
       ],
-      perms: ["Send Messages and Embed Links in the target channel.", "No management permission required."],
-      examples: ["/info", "!info", "/serverinfo", "!serverinfo", "/userinfo user: @Member", "!userinfo @Member"]
+      perms: [
+        "Send Messages to use information and utility commands.",
+        "<code>!prefix</code> requires Administrator / Manage Server / Manage Channels.",
+        "No management permission needed for <code>/info</code>, <code>/serverinfo</code>, <code>/userinfo</code>, <code>/language</code>, <code>/help</code>, <code>!log</code>."
+      ],
+      examples: ["/info", "!info", "/serverinfo", "!userinfo @Member", "!prefix ?", "/language en", "/help", "!log voicekick"]
     },
     commands: [
-      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem Nova và thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View Nova and current-server information.", p: "Send Messages" } },
-      { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current-server information.", p: "Send Messages" } },
-      { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin người dùng.", p: "Send Messages" }, en: { d: "View user information.", p: "Send Messages" } }
-    ]
-  },
-  {
-    id: "config", icon: "⚙️",
-    vi: {
-      title: "Configuration",
-      short: "Cấu hình server.",
-      lead: "Cấu hình kênh, vai trò và các thiết lập mà hệ thống War/Backup và Help sử dụng.",
-      details: [
-        "<code>/config view</code> xem toàn bộ cấu hình hiện tại.",
-        "<code>/config help_channel</code> đặt kênh nhận bảng hướng dẫn.",
-        "<code>/config war_ping_role</code> đặt vai trò được ping cho War.",
-        "<code>/config backup_ping_role</code> đặt vai trò được ping cho Backup.",
-        "<code>/config joined_war_role</code> đặt vai trò cấp cho người tham gia War.",
-        "<code>/config joined_backup_role</code> đặt vai trò cấp cho người tham gia Backup.",
-        "<code>/config hacker_role</code> đặt vai trò cho Call Hacker."
-      ],
-      perms: ["Manage Server / Manage Roles — để thay đổi cấu hình.", "Manage Channels — để đặt kênh help."],
-      examples: ["/config view", "/config war_ping_role role: @WarPing", "/config help_channel channel: #help"]
-    },
-    en: {
-      title: "Configuration",
-      short: "Server configuration.",
-      lead: "Configure channels, roles and the settings used by the War/Backup and Help systems.",
-      details: [
-        "<code>/config view</code> shows the server's current configuration.",
-        "<code>/config help_channel</code> sets the channel that receives the help panel.",
-        "<code>/config war_ping_role</code> sets the role pinged for War.",
-        "<code>/config backup_ping_role</code> sets the role pinged for Backup.",
-        "<code>/config joined_war_role</code> sets the role granted to War participants.",
-        "<code>/config joined_backup_role</code> sets the role granted to Backup participants.",
-        "<code>/config hacker_role</code> sets the role for Call Hacker."
-      ],
-      perms: ["Manage Server / Manage Roles — to change configuration.", "Manage Channels — to set the help channel."],
-      examples: ["/config view", "/config war_ping_role role: @WarPing", "/config help_channel channel: #help"]
-    },
-    commands: [
-      { name: "/config view", type: "slash", vi: { d: "Xem cấu hình hiện tại của server.", p: "Manage Server" }, en: { d: "View the server's current configuration.", p: "Manage Server" } },
-      { name: "/config help_channel", type: "slash", vi: { d: "Đặt kênh nhận bảng hướng dẫn.", p: "Manage Channels" }, en: { d: "Set the channel that receives the help panel.", p: "Manage Channels" } },
-      { name: "/config war_ping_role", type: "slash", vi: { d: "Đặt vai trò War Ping.", p: "Manage Roles" }, en: { d: "Set the War Ping role.", p: "Manage Roles" } },
-      { name: "/config backup_ping_role", type: "slash", vi: { d: "Đặt vai trò Backup Ping.", p: "Manage Roles" }, en: { d: "Set the Backup Ping role.", p: "Manage Roles" } },
-      { name: "/config joined_war_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia War.", p: "Manage Roles" }, en: { d: "Set the role for War participants.", p: "Manage Roles" } },
-      { name: "/config joined_backup_role", type: "slash", vi: { d: "Đặt vai trò cho người tham gia Backup.", p: "Manage Roles" }, en: { d: "Set the role for Backup participants.", p: "Manage Roles" } },
-      { name: "/config hacker_role", type: "slash", vi: { d: "Đặt vai trò Call Hacker.", p: "Manage Roles" }, en: { d: "Set the Call Hacker role.", p: "Manage Roles" } }
-    ]
-  },
-  {
-    id: "help", icon: "📖",
-    vi: {
-      title: "Help System",
-      short: "Hệ thống trợ giúp.",
-      lead: "<code>!help</code> mở Help Menu chính. <code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của riêng tính năng đó.",
-      details: [
-        "<code>/help • !help</code> mở Help Menu chính theo danh mục.",
-        "<code>!help &lt;feature&gt;</code> chỉ hiển thị hướng dẫn chi tiết của tính năng được yêu cầu — không hiển thị toàn bộ danh mục.",
-        "Ví dụ: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>, <code>!help bandebug</code>."
-      ],
-      perms: ["Send Messages trong kênh sử dụng."],
-      examples: ["!help", "/help", "!help chat", "!help info", "!help prefix", "!help bandebug"]
-    },
-    en: {
-      title: "Help System",
-      short: "Help system.",
-      lead: "<code>!help</code> opens the main Help Menu. <code>!help &lt;feature&gt;</code> shows only the detailed help for that specific feature.",
-      details: [
-        "<code>/help • !help</code> opens the main Categories Help Menu.",
-        "<code>!help &lt;feature&gt;</code> shows only the detailed help for the requested feature — the entire category is not shown.",
-        "Examples: <code>!help chat</code>, <code>!help info</code>, <code>!help ban</code>, <code>!help mute</code>, <code>!help warping</code>, <code>!help prefix</code>, <code>!help bandebug</code>."
-      ],
-      perms: ["Send Messages in the target channel."],
-      examples: ["!help", "/help", "!help chat", "!help info", "!help prefix", "!help bandebug"]
-    },
-    commands: [
+      { name: "/info • !info", type: "both", isNew: true, vi: { d: "Xem thông tin bot.", p: "Send Messages" }, en: { d: "View bot information.", p: "Send Messages" } },
+      { name: "/serverinfo • !serverinfo", type: "both", isNew: true, vi: { d: "Xem thông tin server hiện tại.", p: "Send Messages" }, en: { d: "View current server information.", p: "Send Messages" } },
+      { name: "/userinfo • !userinfo", type: "both", isNew: true, vi: { d: "Xem thông tin user. Bỏ trống để xem chính mình.", p: "Send Messages" }, en: { d: "View user information. Leave empty for yourself.", p: "Send Messages" } },
+      { name: "!prefix", type: "prefix", isNew: true, vi: { d: "Xem/đổi prefix riêng cho server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "View/change the prefix for the current server. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" } },
+      { name: "/language • !language", type: "both", isNew: true, vi: { d: "Đặt ngôn ngữ giao diện riêng cho bạn.", p: "Send Messages" }, en: { d: "Set your personal interface language.", p: "Send Messages" } },
       { name: "/help • !help", type: "both", vi: { d: "Mở Help Menu chính theo danh mục.", p: "Send Messages" }, en: { d: "Open the main Categories Help Menu.", p: "Send Messages" } },
-      { name: "!help <feature>", type: "prefix", vi: { d: "Chỉ hiển thị hướng dẫn chi tiết của một tính năng cụ thể.", p: "Send Messages" }, en: { d: "Show only the detailed help for one specific feature.", p: "Send Messages" } }
-    ]
-  },
-  {
-    id: "prefix", icon: "🔧",
-    vi: {
-      title: "Prefix riêng từng server",
-      short: "Dùng prefix khác nhau cho mỗi server.",
-      lead: "Mỗi server Discord có thể dùng prefix riêng. Prefix mặc định là <code>!</code>. Dùng <code>!prefix ?</code> để đổi thành <code>?</code>.",
-      details: [
-        "Mặc định prefix là <code>!</code>.",
-        "Đổi prefix bằng <code>!prefix &lt;ký tự&gt;</code>.",
-        "Ví dụ: <code>!prefix ?</code> → sau đó dùng <code>?chat</code>, <code>?info</code>, <code>?help</code>, <code>?image</code>, <code>?ban</code>.",
-        "Server khác có thể dùng <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>, <code>.ban</code>.",
-        "Mỗi server (Guild) có prefix riêng, không ảnh hưởng lẫn nhau.",
-        "DM vẫn dùng mặc định <code>!</code>.",
-        "Prefix được lưu lại sau khi bot khởi động lại."
-      ],
-      perms: ["<strong>KHÔNG</strong> chỉ dành cho chủ bot.", "Administrator, Manage Server hoặc Manage Channels trong server đều dùng được.", "Quyền thuộc về server Discord, không phải chủ bot."],
-      examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
-    },
-    en: {
-      title: "Custom Server Prefix",
-      short: "Use a different prefix in each Discord server.",
-      lead: "Each Discord server can use its own prefix. The default prefix is <code>!</code>. Use <code>!prefix ?</code> to change it to <code>?</code>.",
-      details: [
-        "Default prefix is <code>!</code>.",
-        "Change the prefix with <code>!prefix &lt;char&gt;</code>.",
-        "Example: <code>!prefix ?</code> → then use <code>?chat</code>, <code>?info</code>, <code>?help</code>, <code>?image</code>, <code>?ban</code>.",
-        "Another server can use <code>!prefix .</code> → <code>.chat</code>, <code>.info</code>, <code>.help</code>, <code>.ban</code>.",
-        "Each Guild has its own prefix and does not affect other servers.",
-        "DM uses the default <code>!</code>.",
-        "The prefix is saved after bot restart."
-      ],
-      perms: ["NOT bot-owner-only.", "Administrator, Manage Server or Manage Channels in the server can use it.", "The permission belongs to the Discord server, not the bot owner."],
-      examples: ["!prefix ?", "?chat", "?info", "?help", "?ban"]
-    },
-    commands: [
-      { name: "!prefix", type: "prefix", isNew: true, vi: { d: "Đổi prefix của server hiện tại. Ví dụ: !prefix ?", p: "Administrator / Manage Server / Manage Channels" }, en: { d: "Change the current server's prefix. Example: !prefix ?", p: "Administrator / Manage Server / Manage Channels" } }
+      { name: "!log kick|voicekick", type: "prefix", vi: { d: "Xem lịch sử kick voice gần đây.", p: "Send Messages" }, en: { d: "View recent voice-kick history.", p: "Send Messages" } }
     ]
   }
 ];
@@ -746,37 +654,20 @@ const HELP_CATEGORIES = [
     }
   },
   {
-    id: "war", icon: "⚔️",
-    vi: { name: "War Ping / Backup Ping", desc: "Gọi người vào war hoặc gọi backup" },
-    en: { name: "War Ping / Backup Ping", desc: "Call people into a war or call for backup" },
+    id: "moderation", icon: "🛡️",
+    vi: { name: "Moderation", desc: "Moderation + Security" },
+    en: { name: "Moderation", desc: "Moderation + Security" },
     viBody: {
-      title: "War Ping / Backup Ping",
-      text: "Tạo yêu cầu War hoặc Backup, mở thread điều phối với các nút hành động.",
-      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show", "/callhacker hide"],
-      note: "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
+      title: "Moderation",
+      text: "Bộ lệnh kiểm duyệt và Security module: kick/mute/ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown, Backup.",
+      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete", "/debug-user", "/test-timeout", "/test-ban", "/diagnose-full"],
+      note: "kick/mute/ban chỉ **Server Owner**. Bot phải có role cao hơn mục tiêu."
     },
     enBody: {
-      title: "War Ping / Backup Ping",
-      text: "Create a War or Backup request and open a coordination thread with action buttons.",
-      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show", "/callhacker hide"],
-      note: "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
-    }
-  },
-  {
-    id: "event", icon: "🏆",
-    vi: { name: "Event", desc: "Tạo sự kiện" },
-    en: { name: "Event", desc: "Create events" },
-    viBody: {
-      title: "Tạo event",
-      text: "Gửi sự kiện, quản lý người tham gia và blacklist sự kiện.",
-      cmds: ["/event send", "/event test", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add", "/event blacklist remove", "/event blacklist list"],
-      note: "Cần quyền Manage Events để gửi và quản lý sự kiện."
-    },
-    enBody: {
-      title: "Create events",
-      text: "Send events, manage participants and the event blacklist.",
-      cmds: ["/event send", "/event test", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add", "/event blacklist remove", "/event blacklist list"],
-      note: "Manage Events permission is required to send and manage events."
+      title: "Moderation",
+      text: "Moderation and Security module: kick/mute/ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Auto-Lockdown, Backup.",
+      cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/unban • !unban", "/security", "/toggle", "/config", "/punishment", "/fallback", "/post-punish", "/decay", "/mute-duration", "/admin-mute-method", "/muted-role-name", "/setchannel", "/whitelist add|remove|list|role|channel", "/raid-config", "/spam-config", "/language", "/setup-mute-role", "/backup create|load|info|list|status|delete", "/debug-user", "/test-timeout", "/test-ban", "/diagnose-full"],
+      note: "kick/mute/ban are **Server Owner only**. The bot must have a higher role than the target."
     }
   },
   {
@@ -797,37 +688,54 @@ const HELP_CATEGORIES = [
     }
   },
   {
-    id: "serverinfo", icon: "📊",
-    vi: { name: "Server Information", desc: "Thông tin bot, server và người dùng" },
-    en: { name: "Server Information", desc: "Bot, server and user information" },
+    id: "war", icon: "⚔️",
+    vi: { name: "War Ping / Backup Ping", desc: "Gọi người vào war hoặc gọi backup" },
+    en: { name: "War Ping / Backup Ping", desc: "Call people into a war or call for backup" },
     viBody: {
-      title: "Server Information",
-      text: "Xem thông tin bot, server hiện tại và người dùng.",
-      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo"],
-      note: "`/info` và `!info` cung cấp cùng một bảng thông tin."
+      title: "War Ping / Backup Ping",
+      text: "Tạo yêu cầu War hoặc Backup, mở thread điều phối với các nút hành động. Cấu hình bằng /bot-config.",
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show|hide", "/endpermission allow|deny", "/bot-config view|help_channel|war_ping_role|backup_ping_role|joined_war_role|joined_backup_role|hacker_role"],
+      note: "Vai trò cấu hình: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
     },
     enBody: {
-      title: "Server Information",
-      text: "View bot, current-server and user information.",
-      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo"],
-      note: "`/info` and `!info` provide the same information panel."
+      title: "War Ping / Backup Ping",
+      text: "Create a War or Backup request and open a coordination thread with action buttons. Configure with /bot-config.",
+      cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all", "/trust • !trust", "/helppanel", "/callhacker show|hide", "/endpermission allow|deny", "/bot-config view|help_channel|war_ping_role|backup_ping_role|joined_war_role|joined_backup_role|hacker_role"],
+      note: "Configurable roles: War Ping Role, Backup Ping Role, Joined War Role, Joined Backup Role, Hacker Role."
     }
   },
   {
-    id: "prefix", icon: "🔧",
-    vi: { name: "Prefix riêng từng server", desc: "Đổi prefix riêng cho mỗi server" },
-    en: { name: "Custom Server Prefix", desc: "Set a different prefix per server" },
+    id: "event", icon: "🏆",
+    vi: { name: "Event", desc: "Tạo sự kiện" },
+    en: { name: "Event", desc: "Create events" },
     viBody: {
-      title: "Prefix riêng từng server",
-      text: "Mỗi server Discord có thể dùng prefix riêng. Mặc định là `!`. Dùng `!prefix ?` để đổi.",
-      cmds: ["!prefix", "!prefix ?", "!prefix ."],
-      note: "Không chỉ dành cho chủ bot. Cần quyền Administrator / Manage Server / Manage Channels."
+      title: "Tạo event",
+      text: "Gửi sự kiện, quản lý người tham gia và blacklist sự kiện.",
+      cmds: ["/event send", "/event test", "/event edit title|description", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add|remove|list"],
+      note: "Cần quyền Manage Events để gửi và quản lý sự kiện."
     },
     enBody: {
-      title: "Custom Server Prefix",
-      text: "Each Discord server can use its own prefix. Default is `!`. Use `!prefix ?` to change it.",
-      cmds: ["!prefix", "!prefix ?", "!prefix ."],
-      note: "Not bot-owner-only. Requires Administrator / Manage Server / Manage Channels."
+      title: "Create events",
+      text: "Send events, manage participants and the event blacklist.",
+      cmds: ["/event send", "/event test", "/event edit title|description", "/event participants", "/event count", "/event remove", "/event clear", "/event blacklist add|remove|list"],
+      note: "Manage Events permission is required to send and manage events."
+    }
+  },
+  {
+    id: "others", icon: "🛠️",
+    vi: { name: "Others", desc: "Information · Prefix · Language · Utilities" },
+    en: { name: "Others", desc: "Information · Prefix · Language · Utilities" },
+    viBody: {
+      title: "Others",
+      text: "Các lệnh tiện ích: xem thông tin, đổi prefix riêng server, đổi ngôn ngữ giao diện, mở Help Menu, xem lịch sử kick voice.",
+      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo", "!prefix", "/language • !language", "/help • !help", "!log kick|voicekick"],
+      note: "!prefix cần Administrator / Manage Server / Manage Channels. Các lệnh khác không cần quyền quản lý."
+    },
+    enBody: {
+      title: "Others",
+      text: "Utility commands: bot/server/user info, server-specific prefix, interface language, Help Menu, and voice-kick history.",
+      cmds: ["/info • !info", "/serverinfo • !serverinfo", "/userinfo • !userinfo", "!prefix", "/language • !language", "/help • !help", "!log kick|voicekick"],
+      note: "!prefix requires Administrator / Manage Server / Manage Channels. Other commands need no management permission."
     }
   }
 ];
@@ -839,60 +747,63 @@ const HELP_FEATURES = {
   chat: { icon: "🤖",
     vi: { title: "/chat • !chat", body: "Trò chuyện với AI trực tiếp trong Discord. Mỗi người dùng có lịch sử hội thoại riêng.", cmds: ["/chat • !chat"], perm: "Send Messages" },
     en: { title: "/chat • !chat", body: "Chat with the AI directly inside Discord. Each user keeps their own conversation history.", cmds: ["/chat • !chat"], perm: "Send Messages" } },
-  info: { icon: "ℹ️", isNew: true,
-    vi: { title: "/info • !info", body: "`!info` hoặc `/info` — Xem Nova và thông tin server hiện tại. Bao gồm uptime, độ trễ, AI, War/Backup, Ban Zone và chi tiết server.", cmds: ["/info • !info"], perm: "Send Messages" },
-    en: { title: "/info • !info", body: "`!info` or `/info` — View Nova and current-server information. Includes uptime, latency, AI, War/Backup, Ban Zone and server details.", cmds: ["/info • !info"], perm: "Send Messages" } },
-  prefix: { icon: "🔧", isNew: true,
-    vi: { title: "!prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" },
-    en: { title: "!prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
-  ban: { icon: "🔨", isNew: true,
-    vi: { title: "/ban • !ban", body: "Ban thành viên được chọn khỏi server. Bot cần quyền Ban Members và vai trò cao hơn mục tiêu.", cmds: ["/ban • !ban"], perm: "Ban Members" },
-    en: { title: "/ban • !ban", body: "Ban the selected member from the server. The bot needs Ban Members and a higher role than the target.", cmds: ["/ban • !ban"], perm: "Ban Members" } },
-  unban: { icon: "🔓", isNew: true,
-    vi: { title: "/unban • !unban", body: "Bỏ cấm người dùng bằng User ID. Cần quyền Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" },
-    en: { title: "/unban • !unban", body: "Unban a user using their User ID. Requires Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" } },
-  mute: { icon: "🔇", isNew: true,
-    vi: { title: "/mute • !mute", body: "Timeout thành viên. Thời lượng tối đa 28 ngày. Ví dụ: 10m, 2h, 7d. Cần quyền Moderate Members.", cmds: ["/mute • !mute"], perm: "Moderate Members" },
-    en: { title: "/mute • !mute", body: "Timeout a member. Maximum duration is 28 days. Examples: 10m, 2h, 7d. Requires Moderate Members.", cmds: ["/mute • !mute"], perm: "Moderate Members" } },
-  unmute: { icon: "🔊", isNew: true,
-    vi: { title: "/unmute • !unmute", body: "Gỡ timeout cho thành viên. Cần quyền Moderate Members.", cmds: ["/unmute • !unmute"], perm: "Moderate Members" },
-    en: { title: "/unmute • !unmute", body: "Remove a member's timeout. Requires Moderate Members.", cmds: ["/unmute • !unmute"], perm: "Moderate Members" } },
-  warping: { icon: "⚔️",
-    vi: { title: "War Ping / Backup Ping", body: "Tạo yêu cầu War/Backup, mở thread điều phối và dùng các nút WAR/BACKUP/WIN/LOSE/END.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" },
-    en: { title: "War Ping / Backup Ping", body: "Create a War/Backup request, open a coordination thread and use the WAR/BACKUP/WIN/LOSE/END buttons.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" } },
   image: { icon: "🎨",
     vi: { title: "/image • !image", body: "Tạo ảnh AI từ mô tả văn bản. Cocolink là nhà cung cấp chính, Gemini làm dự phòng.", cmds: ["/image • !image"], perm: "Send Messages, Attach Files" },
     en: { title: "/image • !image", body: "Generate an AI image from a text prompt. Cocolink is primary, Gemini is fallback.", cmds: ["/image • !image"], perm: "Send Messages, Attach Files" } },
-  event: { icon: "🏆",
-    vi: { title: "/event", body: "Gửi sự kiện, xem người tham gia, đếm, xoá và quản lý blacklist sự kiện.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" },
-    en: { title: "/event", body: "Send events, view participants, count, remove and manage the event blacklist.", cmds: ["/event send", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" } },
-  banzone: { icon: "☠️", isNew: true,
-    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được. `/banzone` và `!banzone` hỗ trợ cả ban và mute.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" },
-    en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it. `/banzone` and `!banzone` support both ban and mute.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" } },
-  setbanchannel: { icon: "🚫", isNew: true,
-    vi: { title: "/setbanchannel • !setbanchannel", body: "Bật/tắt Ban Zone cho kênh hiện tại bằng `true` hoặc `false`. Chỉ Server Owner dùng được.", cmds: ["/setbanchannel • !setbanchannel"], perm: "Server Owner" },
-    en: { title: "/setbanchannel • !setbanchannel", body: "Enable or disable Ban Zone for the current channel with `true` or `false`. Server Owner only.", cmds: ["/setbanchannel • !setbanchannel"], perm: "Server Owner" } },
-  bandebug: { icon: "🧪", isNew: true,
-    vi: { title: "/bandebug • !bandebug", body: "Kiểm tra Nova có thể xử lý một thành viên theo thứ bậc vai trò và quy tắc Ban Zone hay không. Dùng được bởi Manager (Administrator / Manage Server / Manage Channels).", cmds: ["/bandebug • !bandebug"], perm: "Manager" },
-    en: { title: "/bandebug • !bandebug", body: "Check whether Nova can act on a member under the Ban Zone role hierarchy and permission rules. Manager-accessible (Administrator / Manage Server / Manage Channels).", cmds: ["/bandebug • !bandebug"], perm: "Manager" } },
-  trust: { icon: "🤝", isNew: true,
-    vi: { title: "/trust • !trust", body: "Quản lý người dùng Trusted. Người dùng Trusted nhận quyền quản lý War/Backup theo hệ thống phân quyền của bot.", cmds: ["/trust • !trust"], perm: "Manager" },
-    en: { title: "/trust • !trust", body: "Manage Trusted users. Trusted users receive War/Backup management access according to the bot's permission system.", cmds: ["/trust • !trust"], perm: "Manager" } },
-  persona: { icon: "🎭",
-    vi: { title: "Persona", body: "Đổi phong cách trả lời của AI theo mã có sẵn hoặc mô tả tự do.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" },
-    en: { title: "Persona", body: "Change the AI reply style using a built-in code or a free-form description.", cmds: ["/persona • !persona", "!persona custom: <description>", "/mypersona • !mypersona", "/resetpersona • !resetpersona"], perm: "Send Messages" } },
-  config: { icon: "⚙️",
-    vi: { title: "/config", body: "Cấu hình kênh và vai trò cho hệ thống War/Backup và Help.", cmds: ["/config view", "/config help_channel", "/config war_ping_role", "/config backup_ping_role"], perm: "Manage Server / Manage Roles" },
-    en: { title: "/config", body: "Configure channels and roles for the War/Backup and Help systems.", cmds: ["/config view", "/config help_channel", "/config war_ping_role", "/config backup_ping_role"], perm: "Manage Server / Manage Roles" } },
-  help: { icon: "📖",
-    vi: { title: "/help • !help", body: "`!help` mở Help Menu chính. `!help <feature>` chỉ hiển thị hướng dẫn chi tiết của tính năng đó.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" },
-    en: { title: "/help • !help", body: "`!help` opens the main Categories Help Menu. `!help <feature>` shows only that feature's detailed help.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" } },
-  serverinfo: { icon: "📊", isNew: true,
+  info: { icon: "ℹ️", isNew: true,
+    vi: { title: "/info • !info", body: "`!info` hoặc `/info` — Xem Nova và thông tin server hiện tại. Bao gồm uptime, độ trễ, AI, War/Backup, Ban Zone và chi tiết server.", cmds: ["/info • !info"], perm: "Send Messages" },
+    en: { title: "/info • !info", body: "`!info` or `/info` — View Nova and current-server information. Includes uptime, latency, AI, War/Backup, Ban Zone and server details.", cmds: ["/info • !info"], perm: "Send Messages" } },
+  serverinfo: { icon: "🏠", isNew: true,
     vi: { title: "/serverinfo • !serverinfo", body: "Xem thông tin server: tên, ID, chủ sở hữu, thành viên, kênh, vai trò, boost, xác minh, tính năng, icon/banner.", cmds: ["/serverinfo • !serverinfo"], perm: "Send Messages" },
     en: { title: "/serverinfo • !serverinfo", body: "View server information: name, ID, owner, members, channels, roles, boosts, verification, features, icon/banner.", cmds: ["/serverinfo • !serverinfo"], perm: "Send Messages" } },
   userinfo: { icon: "👤", isNew: true,
     vi: { title: "/userinfo • !userinfo", body: "Xem thông tin người dùng: tài khoản, tham gia server, vai trò, trạng thái, nền tảng, hoạt động, biệt danh, boost, timeout.", cmds: ["/userinfo • !userinfo"], perm: "Send Messages" },
-    en: { title: "/userinfo • !userinfo", body: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", cmds: ["/userinfo • !userinfo"], perm: "Send Messages" } }
+    en: { title: "/userinfo • !userinfo", body: "View user information: account, server join, roles, status, platform, activity, nickname, boost, timeout.", cmds: ["/userinfo • !userinfo"], perm: "Send Messages" } },
+  prefix: { icon: "🔧", isNew: true,
+    vi: { title: "!prefix", body: "Đổi prefix của server hiện tại. Ví dụ: `!prefix ?` → sau đó dùng `?chat`, `?info`. Không chỉ dành cho chủ bot — cần quyền quản lý server.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" },
+    en: { title: "!prefix", body: "Change the current server's prefix. Example: `!prefix ?` → then use `?chat`, `?info`. Not bot-owner-only — requires server management permissions.", cmds: ["!prefix"], perm: "Administrator / Manage Server / Manage Channels" } },
+  language: { icon: "🌐", isNew: true,
+    vi: { title: "/language • !language", body: "Đặt ngôn ngữ giao diện bot riêng cho bạn.", cmds: ["/language • !language"], perm: "Send Messages" },
+    en: { title: "/language • !language", body: "Set your personal bot interface language.", cmds: ["/language • !language"], perm: "Send Messages" } },
+  ban: { icon: "🔨", isNew: true,
+    vi: { title: "/ban • !ban", body: "Ban member qua Security moderation engine. Chỉ **Server Owner**; bot phải có quyền Ban Members và role cao hơn target.", cmds: ["/ban • !ban"], perm: "Server Owner" },
+    en: { title: "/ban • !ban", body: "Ban a member via the Security moderation engine. **Server Owner only**; the bot needs Ban Members and a higher role than the target.", cmds: ["/ban • !ban"], perm: "Server Owner" } },
+  kick: { icon: "👢", isNew: true,
+    vi: { title: "/kick • !kick", body: "Kick member qua Security moderation engine. Chỉ **Server Owner**; bot phải có quyền Kick Members và role cao hơn target. Server Owner không thể bị kick.", cmds: ["/kick • !kick"], perm: "Server Owner" },
+    en: { title: "/kick • !kick", body: "Kick a member via the Security moderation engine. **Server Owner only**; the bot needs Kick Members and a higher role than the target. The Server Owner cannot be kicked.", cmds: ["/kick • !kick"], perm: "Server Owner" } },
+  mute: { icon: "🔇", isNew: true,
+    vi: { title: "/mute • !mute", body: "Security mute: Timeout khi có thể, fallback sang Muted Role cho admin theo config. Chỉ **Server Owner**.", cmds: ["/mute • !mute"], perm: "Server Owner" },
+    en: { title: "/mute • !mute", body: "Security mute: Timeout when possible, Muted Role fallback for admins by config. **Server Owner only**.", cmds: ["/mute • !mute"], perm: "Server Owner" } },
+  unmute: { icon: "🔊", isNew: true,
+    vi: { title: "/unmute • !unmute", body: "Gỡ Security mute, timeout/Muted Role và restore admin roles khi có state. Chỉ **Server Owner**.", cmds: ["/unmute • !unmute"], perm: "Server Owner" },
+    en: { title: "/unmute • !unmute", body: "Remove Security mute, timeout/Muted Role and restore saved admin roles. **Server Owner only**.", cmds: ["/unmute • !unmute"], perm: "Server Owner" } },
+  unban: { icon: "🔓",
+    vi: { title: "/unban • !unban", body: "Bỏ cấm người dùng bằng User ID. Cần quyền Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" },
+    en: { title: "/unban • !unban", body: "Unban a user using their User ID. Requires Ban Members.", cmds: ["/unban • !unban"], perm: "Ban Members" } },
+  moderation: { icon: "🛡️", isNew: true,
+    vi: { title: "Moderation & Security", body: "Nhóm lệnh kiểm duyệt + Security: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, debug/test.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" },
+    en: { title: "Moderation & Security", body: "Moderation + Security command set: kick, mute, ban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, debug/test.", cmds: ["/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" } },
+  banzone: { icon: "☠️", isNew: true,
+    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server. Whitelist theo từng server, chỉ chủ server quản lý được.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" },
+    en: { title: "Ban Zone", body: "Server protection system. Whitelist is per-server and only the server owner can manage it.", cmds: ["/banzone • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Manager" } },
+  warping: { icon: "⚔️",
+    vi: { title: "War Ping / Backup Ping", body: "Tạo yêu cầu War/Backup, mở thread điều phối và dùng các nút WAR/BACKUP/WIN/LOSE/END.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" },
+    en: { title: "War Ping / Backup Ping", body: "Create a War/Backup request, open a coordination thread and use the WAR/BACKUP/WIN/LOSE/END buttons.", cmds: ["WAR", "BACKUP", "WIN", "LOSE", "END", "/end all"], perm: "Manage Threads" } },
+  trust: { icon: "🤝", isNew: true,
+    vi: { title: "/trust • !trust", body: "Quản lý người dùng Trusted. Người dùng Trusted nhận quyền quản lý War/Backup theo hệ thống phân quyền của bot.", cmds: ["/trust • !trust"], perm: "Manager" },
+    en: { title: "/trust • !trust", body: "Manage Trusted users. Trusted users receive War/Backup management access according to the bot's permission system.", cmds: ["/trust • !trust"], perm: "Manager" } },
+  event: { icon: "🏆",
+    vi: { title: "/event", body: "Gửi sự kiện, xem người tham gia, đếm, xoá và quản lý blacklist sự kiện.", cmds: ["/event send", "/event edit title|description", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" },
+    en: { title: "/event", body: "Send events, view participants, count, remove and manage the event blacklist.", cmds: ["/event send", "/event edit title|description", "/event participants", "/event count", "/event blacklist list"], perm: "Manage Events" } },
+  botconfig: { icon: "⚙️",
+    vi: { title: "/bot-config", body: "Cấu hình kênh và vai trò cho hệ thống War/Backup và Help.", cmds: ["/bot-config view", "/bot-config help_channel", "/bot-config war_ping_role", "/bot-config backup_ping_role"], perm: "Manage Server / Manage Roles" },
+    en: { title: "/bot-config", body: "Configure channels and roles for the War/Backup and Help systems.", cmds: ["/bot-config view", "/bot-config help_channel", "/bot-config war_ping_role", "/bot-config backup_ping_role"], perm: "Manage Server / Manage Roles" } },
+  help: { icon: "📖",
+    vi: { title: "/help • !help", body: "`!help` mở Help Menu chính. `!help <feature>` chỉ hiển thị hướng dẫn chi tiết của tính năng đó.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" },
+    en: { title: "/help • !help", body: "`!help` opens the main Categories Help Menu. `!help <feature>` shows only that feature's detailed help.", cmds: ["/help • !help", "!help <feature>"], perm: "Send Messages" } },
+  log: { icon: "📜",
+    vi: { title: "!log kick|voicekick", body: "Xem lịch sử kick voice gần đây.", cmds: ["!log kick|voicekick"], perm: "Send Messages" },
+    en: { title: "!log kick|voicekick", body: "View recent voice-kick history.", cmds: ["!log kick|voicekick"], perm: "Send Messages" } }
 };
 
 /* ============================================================
@@ -1395,10 +1306,8 @@ function onModalKey(e) {
 }
 
 /* ============================================================
-   COMMAND DIRECTORY — INLINE SEARCH
+   COMMAND DIRECTORY — inline search, grouped by category
    ============================================================ */
-
-/* Chips: chỉ dùng để đổi activeCategory rồi render lại */
 function renderChips() {
   const wrap = $('#categoryChips');
   if (!wrap) return;
@@ -1419,7 +1328,6 @@ function renderChips() {
   });
 }
 
-/* Command card — KHÔNG có dòng ví dụ nữa */
 function cmdCard(c) {
   return `
     <article class="cmd-card reveal">
@@ -1435,7 +1343,6 @@ function cmdCard(c) {
     </article>`;
 }
 
-/* Render danh sách lệnh, tự lọc theo search value + activeCategory, giữ phân nhóm */
 function renderCommands() {
   const wrap = $('#commandGroups');
   if (!wrap) return;
@@ -1447,7 +1354,6 @@ function renderCommands() {
     ? FEATURES
     : FEATURES.filter(f => f.id === activeCategory);
 
-  // Nếu có từ khoá → lọc từng command. Chỉ giữ category còn command khớp.
   const groups = baseGroups.map(f => {
     if (!q) return { feature: f, commands: f.commands };
     const matched = f.commands.filter(c => {
@@ -1481,7 +1387,6 @@ function renderCommands() {
   observeReveal();
 }
 
-/* Search chỉ toggle nút × rồi gọi renderCommands */
 function applySearch() {
   const input = $('#searchInput');
   const clear = $('#searchClear');
@@ -1519,7 +1424,7 @@ function renderHelpSelect() {
 function renderHelpChips() {
   const wrap = $('#helpChips');
   if (!wrap) return;
-  const keys = ['chat', 'info', 'prefix', 'ban', 'unban', 'mute', 'unmute', 'bandebug', 'trust', 'warping', 'image', 'event', 'banzone', 'persona', 'config', 'help', 'serverinfo', 'userinfo'];
+  const keys = ['chat', 'info', 'prefix', 'ban', 'kick', 'mute', 'unmute', 'moderation', 'bandebug', 'trust', 'warping', 'image', 'event', 'banzone', 'language', 'help', 'serverinfo', 'userinfo', 'log'];
   wrap.innerHTML = keys.map(k => `<button type="button" class="chip" data-hf="${k}">!help ${esc(k)}</button>`).join('');
   $$('[data-hf]', wrap).forEach(b => {
     b.addEventListener('click', () => {
@@ -1703,7 +1608,6 @@ function init() {
   initImageFallback();
   initMobileMenu();
 
-  // Xoá hẳn ô #searchResults cũ để không còn hiện mục Help riêng
   const staleResults = document.getElementById('searchResults');
   if (staleResults && staleResults.parentNode) staleResults.parentNode.removeChild(staleResults);
 
@@ -1758,7 +1662,6 @@ function init() {
     renderHelpFeature('info');
   }
 
-  // AUTO-OPEN Update Log
   if (!isSnoozed()) {
     setTimeout(() => openUpdateLog(), 600);
   }
