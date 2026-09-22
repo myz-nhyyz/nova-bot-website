@@ -622,20 +622,28 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 .update-items{
   flex:1 1 auto;
   min-height:0;
-  padding:8px 0;
-}
-
-/* Wrapper cho toàn bộ lịch sử update (nhiều update panel) */
-.update-history{
-  flex:1 1 auto;
-  min-height:0;
   overflow-y:auto;
   overscroll-behavior:contain;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  padding-right:4px;
+  padding:8px 0;
   scrollbar-gutter:stable;
+}
+
+.update-item{
+  padding:14px 18px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.update-item:first-child{border-top:0}
+.update-item h3{
+  margin:0 0 6px;font-size:15.5px;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.update-item p{margin:0 0 8px;font-size:13.5px;color:var(--muted);line-height:1.6}
+.update-item p:last-of-type{margin-bottom:0}
+.update-cmds{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.update-cmds code{
+  font-family:var(--mono);font-size:12px;padding:3px 9px;
+  background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.32);
+  color:#e6e0ff;border-radius:7px;
 }
 
 /* Footer: checkbox trái + nút Okay phải */
