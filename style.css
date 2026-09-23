@@ -602,6 +602,7 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
   border:1px solid var(--stroke);
   overflow:hidden;
+  flex-shrink:0; /* ⭐ QUAN TRỌNG: ngăn flexbox co panel lại và cắt nội dung */
 }
 .update-panel-header{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
