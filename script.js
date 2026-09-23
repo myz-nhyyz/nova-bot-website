@@ -219,15 +219,6 @@ const UPDATE_LOG = [
     date: "23/09/2026",
     items: [
       {
-        icon: "☠️", isCurrent: true,
-        title: { vi: "Ban Zone đa server + Mode Ban/Mute", en: "Multi-server Ban Zone + Ban/Mute Mode" },
-        description: {
-          vi: "Ban Zone giờ lưu **riêng từng server**: mỗi server có kênh ban và chế độ riêng. Hỗ trợ 2 mode: `ban` (ban + xoá 24h toàn server) và `mute` (timeout theo duration + xoá 24h toàn server, tối đa 28 ngày). Nếu ai xoá kênh Ban Zone, bot tự tạo lại kênh, gửi lại panel và xử lý người xoá theo mode hiện tại.",
-          en: "Ban Zone is now stored **per server**: each server has its own ban channel and mode. Two modes supported: `ban` (ban + 24h server-wide cleanup) and `mute` (timeout for the configured duration + 24h server-wide cleanup, max 28 days). If someone deletes the Ban Zone channel, the bot recreates it, reposts the panel and processes the executor according to the current mode."
-        },
-        commands: ["/banzone ban|mute", "/setbanchannel true|false", "/banwhitelist", "/trusted banzone"]
-      },
-      {
         icon: "⚙️", isCurrent: true,
         title: { vi: "End Permission & End All", en: "End Permission & End All" },
         description: {
@@ -240,10 +231,10 @@ const UPDATE_LOG = [
         icon: "🛡️", isCurrent: true,
         title: { vi: "Security Module hoàn chỉnh", en: "Full Security Module" },
         description: {
-          vi: "Tích hợp đầy đủ các module Security: **Anti-Nuke**, **Anti-Raid**, **Anti-Spam**, **Bot-Watch**, **Auto-Lockdown / Auto-Restore** với whitelist role/kênh và cấu hình threshold. `/bandebug` chuyển sang **Bot Owner only** để tránh lộ chi tiết cấu hình Security của server.",
-          en: "Fully integrated Security modules: **Anti-Nuke**, **Anti-Raid**, **Anti-Spam**, **Bot-Watch**, **Auto-Lockdown / Auto-Restore** with role/channel whitelist and threshold configuration. `/bandebug` is now **Bot Owner only** to prevent leaking the server's Security configuration details."
+          vi: "Tích hợp đầy đủ các module Security: **Anti-Nuke**, **Anti-Raid**, **Anti-Spam**, **Bot-Watch**, **Auto-Lockdown / Auto-Restore** với whitelist role/kênh và cấu hình threshold. Ngoài ra còn có **Trusted Admin** để cấp quyền Moderation + Security config cho user khác.",
+          en: "Fully integrated Security modules: **Anti-Nuke**, **Anti-Raid**, **Anti-Spam**, **Bot-Watch**, **Auto-Lockdown / Auto-Restore** with role/channel whitelist and threshold configuration. Also added **Trusted Admin** to grant Moderation + Security config access to other users."
         },
-        commands: ["/bandebug", "/security", "/toggle", "/threshold", "/whitelist"]
+        commands: ["/security", "/toggle", "/threshold", "/whitelist", "/trusted admin"]
       },
       {
         icon: "🛠️", isCurrent: true,
@@ -477,14 +468,12 @@ const FEATURES = [
         "**Trusted Ban Zone** — <code>/trusted banzone add|remove|list</code> cho user khác dùng lệnh Ban Zone thay Server Owner.",
         "Whitelist theo từng server: whitelist ở Server A <strong>không</strong> ảnh hưởng Server B.",
         "Chỉ Server Owner hoặc Trusted Ban Zone quản lý whitelist qua <code>/banwhitelist</code>.",
-        "<code>/bandebug</code> / <code>!bandebug</code> kiểm tra bot có thể hành động lên thành viên được chọn — **chỉ Bot Owner** mới dùng được.",
         "Thứ bậc vai trò quan trọng — Server Owner không thể bị bot ban."
       ],
       perms: [
         "Manage Channels — để cấu hình kênh Ban Zone.",
         "Ban Members / Moderate Members — tuỳ chế độ đã chọn.",
-        "Chỉ <strong>Server Owner</strong> hoặc <strong>Trusted Ban Zone</strong> được dùng lệnh Ban Zone.",
-        "Bandebug: <strong>Bot Owner only</strong>."
+        "Chỉ <strong>Server Owner</strong> hoặc <strong>Trusted Ban Zone</strong> được dùng lệnh Ban Zone."
       ],
       examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/trusted banzone add user: @Mod", "/banwhitelist add @TrustedUser"]
     },
@@ -502,14 +491,12 @@ const FEATURES = [
         "**Trusted Ban Zone** — <code>/trusted banzone add|remove|list</code> lets another user use Ban Zone commands in place of the Server Owner.",
         "Whitelist is per-server: a whitelist in Server A does <strong>not</strong> affect Server B.",
         "Only the Server Owner or Trusted Ban Zone can manage the whitelist via <code>/banwhitelist</code>.",
-        "<code>/bandebug</code> / <code>!bandebug</code> tests whether the bot can act on the selected member — <strong>Bot Owner only</strong>.",
         "Role hierarchy matters — the Server Owner can never be banned by the bot."
       ],
       perms: [
         "Manage Channels — to configure the Ban Zone channel.",
         "Ban Members / Moderate Members — depending on the selected mode.",
-        "Only <strong>Server Owner</strong> or <strong>Trusted Ban Zone</strong> can use Ban Zone commands.",
-        "Bandebug: <strong>Bot Owner only</strong>."
+        "Only <strong>Server Owner</strong> or <strong>Trusted Ban Zone</strong> can use Ban Zone commands."
       ],
       examples: ["/setbanchannel value:true", "!setbanchannel true", "/banzone ban", "!banzone ban", "/banzone mute duration:10m", "!banzone mute 10m", "/trusted banzone add user: @Mod", "/banwhitelist add @TrustedUser"]
     },
@@ -517,8 +504,7 @@ const FEATURES = [
       { name: "/trusted banzone add|remove|list", type: "slash", isNew: true, vi: { d: "Cấp/thu hồi quyền dùng lệnh Ban Zone. Chỉ Server Owner.", p: "Server Owner" }, en: { d: "Grant/revoke Ban Zone command access. Server Owner only.", p: "Server Owner" } },
       { name: "/setbanchannel • !setbanchannel", type: "both", vi: { d: "Bật/tắt Ban Zone cho kênh hiện tại bằng true|false.", p: "Server Owner / Trusted Ban Zone" }, en: { d: "Enable or disable Ban Zone for the current channel with true|false.", p: "Server Owner / Trusted Ban Zone" } },
       { name: "/banzone ban|mute • !banzone", type: "both", isNew: true, vi: { d: "Chọn chế độ: ban hoặc mute <duration>.", p: "Server Owner / Trusted Ban Zone" }, en: { d: "Choose mode: ban or mute <duration>.", p: "Server Owner / Trusted Ban Zone" } },
-      { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server.", p: "Server Owner / Trusted Ban Zone" }, en: { d: "Manage the server's Ban Zone whitelist.", p: "Server Owner / Trusted Ban Zone" } },
-      { name: "/bandebug • !bandebug", type: "both", isNew: true, vi: { d: "Kiểm tra bot có thể xử lý user trong Ban Zone. Chỉ Bot Owner.", p: "Bot Owner only" }, en: { d: "Check whether the bot can act on the user in Ban Zone. Bot Owner only.", p: "Bot Owner only" } }
+      { name: "/banwhitelist add|remove|list", type: "slash", vi: { d: "Quản lý whitelist Ban Zone của server.", p: "Server Owner / Trusted Ban Zone" }, en: { d: "Manage the server's Ban Zone whitelist.", p: "Server Owner / Trusted Ban Zone" } }
     ]
   },
   {
@@ -712,14 +698,14 @@ const HELP_CATEGORIES = [
     viBody: {
       title: "Ban Zone",
       text: "Hệ thống bảo vệ server đa server: khi kênh bị xâm phạm, Nova xử lý người vi phạm theo chế độ đã cấu hình (ban hoặc mute). Nếu kênh bị xoá, bot tự khôi phục và xử lý người xoá.",
-      cmds: ["/trusted banzone add|remove|list", "/setbanchannel • !setbanchannel", "/banzone ban|mute • !banzone", "/banwhitelist add|remove|list", "/bandebug • !bandebug"],
-      note: "Whitelist theo từng server. Chỉ Server Owner hoặc Trusted Ban Zone quản lý được. Bandebug chỉ Bot Owner."
+      cmds: ["/trusted banzone add|remove|list", "/setbanchannel • !setbanchannel", "/banzone ban|mute • !banzone", "/banwhitelist add|remove|list"],
+      note: "Whitelist theo từng server. Chỉ Server Owner hoặc Trusted Ban Zone quản lý được."
     },
     enBody: {
       title: "Ban Zone",
       text: "Multi-server protection system: when a channel is compromised, Nova processes offenders according to the configured mode (ban or mute). If the channel is deleted, the bot recreates it and processes the executor.",
-      cmds: ["/trusted banzone add|remove|list", "/setbanchannel • !setbanchannel", "/banzone ban|mute • !banzone", "/banwhitelist add|remove|list", "/bandebug • !bandebug"],
-      note: "The whitelist is per-server. Only Server Owner or Trusted Ban Zone can manage it. Bandebug is Bot Owner only."
+      cmds: ["/trusted banzone add|remove|list", "/setbanchannel • !setbanchannel", "/banzone ban|mute • !banzone", "/banwhitelist add|remove|list"],
+      note: "The whitelist is per-server. Only Server Owner or Trusted Ban Zone can manage it."
     }
   },
   {
@@ -819,11 +805,8 @@ const HELP_FEATURES = {
     vi: { title: "Moderation & Security", body: "Nhóm lệnh kiểm duyệt + Security: kick, mute, ban, unban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, Trusted Admin.", cmds: ["/trusted admin", "/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" },
     en: { title: "Moderation & Security", body: "Moderation + Security command set: kick, mute, ban, unban, whitelist, Anti-Nuke, Anti-Raid, Anti-Spam, Bot-Watch, Backup, Trusted Admin.", cmds: ["/trusted admin", "/ban • !ban", "/kick • !kick", "/mute • !mute", "/unmute • !unmute", "/security", "/whitelist", "/backup"], perm: "Manager / Server Owner" } },
   banzone: { icon: "☠️", isNew: true,
-    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server đa server. Mode ban hoặc mute. Channel delete protection. Whitelist theo từng server.", cmds: ["/trusted banzone", "/banzone ban|mute • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Trusted Ban Zone / Bot Owner (bandebug)" },
-    en: { title: "Ban Zone", body: "Multi-server protection system. Ban or mute mode. Channel delete protection. Whitelist per server.", cmds: ["/trusted banzone", "/banzone ban|mute • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist", "/bandebug • !bandebug"], perm: "Server Owner / Trusted Ban Zone / Bot Owner (bandebug)" } },
-  bandebug: { icon: "🔍", isNew: true,
-    vi: { title: "/bandebug • !bandebug", body: "Kiểm tra bot có thể xử lý user đó trong Ban Zone hay không. **Chỉ Bot Owner** mới dùng được — ai khác bấm vào sẽ bị từ chối.", cmds: ["/bandebug • !bandebug"], perm: "Bot Owner only" },
-    en: { title: "/bandebug • !bandebug", body: "Check whether the bot can act on that user in Ban Zone. **Bot Owner only** — anyone else will be rejected.", cmds: ["/bandebug • !bandebug"], perm: "Bot Owner only" } },
+    vi: { title: "Ban Zone", body: "Hệ thống bảo vệ server đa server. Mode ban hoặc mute. Channel delete protection. Whitelist theo từng server.", cmds: ["/trusted banzone", "/banzone ban|mute • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist"], perm: "Server Owner / Trusted Ban Zone" },
+    en: { title: "Ban Zone", body: "Multi-server protection system. Ban or mute mode. Channel delete protection. Whitelist per server.", cmds: ["/trusted banzone", "/banzone ban|mute • !banzone", "/setbanchannel • !setbanchannel", "/banwhitelist"], perm: "Server Owner / Trusted Ban Zone" } },
   trusted: { icon: "🛡️", isNew: true,
     vi: { title: "/trusted admin|banzone add|remove|list", body: "`/trusted admin add user:@X` — cho X dùng Moderation + Security config, đồng thời miễn nhiễm mute/ban/kick.\n`/trusted banzone add user:@X` — cho X dùng Ban Zone commands.\nChỉ Server Owner quản lý được.", cmds: ["/trusted admin add|remove|list", "/trusted banzone add|remove|list"], perm: "Server Owner" },
     en: { title: "/trusted admin|banzone add|remove|list", body: "`/trusted admin add user:@X` — let X use Moderation + Security config, also immune to mute/ban/kick.\n`/trusted banzone add user:@X` — let X use Ban Zone commands.\nOnly Server Owner can manage.", cmds: ["/trusted admin add|remove|list", "/trusted banzone add|remove|list"], perm: "Server Owner" } },
@@ -1120,7 +1103,7 @@ function setLang(next, save = true) {
 }
 
 /* ============================================================
-   UPDATE LOG — render ALL panels
+   UPDATE LOG — sticky header + scrollable body + sticky footer
    ============================================================ */
 function renderUpdateLog() {
   const body = $('#updateBody');
@@ -1156,8 +1139,10 @@ function renderUpdateLog() {
   }).join('');
 
   body.innerHTML = `
-    <h2 class="update-head" id="updateTitle">✨ ${esc(UPDATE_LOG[0].id)}</h2>
-    <p class="update-sub">${esc(t('update.sub'))}</p>
+    <div class="update-header-sticky">
+      <h2 class="update-head" id="updateTitle">✨ ${esc(UPDATE_LOG[0].id)}</h2>
+      <p class="update-sub">${esc(t('update.sub'))}</p>
+    </div>
     <div class="update-history">${panelsHtml}</div>
     <div class="update-footer">
       <label class="update-snooze" for="snoozeCheck">
@@ -1475,7 +1460,7 @@ function renderHelpSelect() {
 function renderHelpChips() {
   const wrap = $('#helpChips');
   if (!wrap) return;
-  const keys = ['chat', 'info', 'serverinfo', 'userinfo', 'prefix', 'ban', 'kick', 'mute', 'unmute', 'unban', 'moderation', 'trusted', 'bandebug', 'banzone', 'endpermission', 'endall', 'trust', 'warping', 'image', 'event', 'language', 'help', 'log'];
+  const keys = ['chat', 'info', 'serverinfo', 'userinfo', 'prefix', 'ban', 'kick', 'mute', 'unmute', 'unban', 'moderation', 'trusted', 'banzone', 'endpermission', 'endall', 'trust', 'warping', 'image', 'event', 'language', 'help', 'log'];
   wrap.innerHTML = keys.map(k => `<button type="button" class="chip" data-hf="${k}">!help ${esc(k)}</button>`).join('');
   $$('[data-hf]', wrap).forEach(b => {
     b.addEventListener('click', () => {
