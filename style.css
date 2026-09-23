@@ -566,12 +566,28 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 }
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:22px;border-top:1px solid var(--stroke)}
 
-/* ---------- UPDATE LOG MODAL (khung đóng, nhiều panel) ---------- */
+/* ---------- UPDATE LOG MODAL (khung đóng, sticky header/footer) ---------- */
 .modal-panel-update{
   max-width:720px;
+  display:flex;
+  flex-direction:column;
+  max-height:min(86vh,860px);
+  overflow:hidden;
+  padding:0;
 }
 .modal-panel-update .modal-body{
-  padding:clamp(24px,4vw,36px);
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  padding:0;
+}
+
+/* Phần header cố định (chứa tiêu đề) */
+.update-header-sticky{
+  flex-shrink:0;
+  padding:clamp(24px,4vw,36px) clamp(24px,4vw,36px) 0;
 }
 
 .update-head{
@@ -609,12 +625,17 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   padding:8px 0;
 }
 
-/* Wrapper cho toàn bộ lịch sử update (nhiều update panel) */
+/* Wrapper cuộn cho toàn bộ lịch sử update */
 .update-history{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
   display:flex;
   flex-direction:column;
   gap:16px;
-  padding-right:4px;
+  padding:16px clamp(24px,4vw,36px);
+  scrollbar-gutter:stable;
 }
 
 .update-item{
@@ -635,11 +656,15 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
   color:#e6e0ff;border-radius:7px;
 }
 
-/* Footer: checkbox trái + nút Okay phải */
+/* Phần footer cố định (chứa checkbox và nút Okay) */
 .update-footer{
+  flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;gap:14px;
-  margin-top:18px;padding-top:16px;
+  margin-top:0;
+  padding:16px clamp(24px,4vw,36px) clamp(20px,3vw,28px);
   border-top:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(160deg, rgba(26,26,34,.98), rgba(14,14,20,.98));
+  border-radius:0 0 26px 26px;
 }
 
 .update-snooze{
@@ -669,7 +694,6 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.08);bo
 .update-snooze span{font-size:13.5px;color:var(--muted);line-height:1.5}
 .update-snooze input:focus-visible + span{color:var(--text)}
 
-/* Nút Okay trắng */
 .btn-okay{
   appearance:none;
   padding:10px 28px;border-radius:12px;
